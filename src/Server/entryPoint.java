@@ -10,6 +10,7 @@ public class EntryPoint{
      * @param args
      */
     public static void main(String[] args){
-        System.out.println("Amazing");
+        ServerController myController = ServerController.getInstance();
+        myController.doThis("job socketserver");
     }
 }

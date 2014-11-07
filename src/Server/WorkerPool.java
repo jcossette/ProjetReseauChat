@@ -1,31 +1,44 @@
 package Server;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
+ * This is the worker pool. Its function is to accept new jobs and dispatch them to available workers.
  * Created by Julien Cossette on 11/5/2014.
  */
 public class WorkerPool{
-    private WorkerPool instance;
-    private ConcurrentLinkedQueue<Job> JobQueue = new ConcurrentLinkedQueue<Job>();
+    private static WorkerPool instance;
+    private ConcurrentLinkedQueue<Job> jobQueue = new ConcurrentLinkedQueue<Job>();
+    private ConcurrentLinkedQueue<Worker> freeWorkers = new ConcurrentLinkedQueue<Worker>();
 
-    private boolean dynamicMode = true; //Dynamic mode enables the creation of new workers when the pool is empty.
-    private int maxDynamicWorker; //Maximum number of dynamic worker that can be spawned in dynamic mode.
-    private int staticWorkerCount; //Number of static worker that will always exist.
+    private int workerCount; //Number of static worker that will always exist.
 
     /**
      * Private constructor.
      */
     private WorkerPool(){
-        setMaxDynamicWorker(Runtime.getRuntime().availableProcessors() * 4);
-        setStaticWorkerCount(5);
+        workerCount = Runtime.getRuntime().availableProcessors() * 4;
+        init();
+    }
+
+    /**
+     * Initiates the pool's workers
+     */
+    private void init(){
+        Worker toInit;
+        for(int i = 0; i < workerCount; i++){
+            toInit = new Worker();
+            freeWorkers.offer(toInit);
+        }
     }
 
     /**
      * Starts or gets the instance of the singleton.
-     * @return
+     * @return The singleton instance
      */
-    public WorkerPool getInstance(){
+    public static WorkerPool getInstance(){
         if(instance == null){
             instance = new WorkerPool();
             return instance;
@@ -35,42 +48,32 @@ public class WorkerPool{
     }
 
     /**
-     * Retrieves the next job to be done by a worker.
-     * @return
+     * Offers a new job to the current job queue.
+     * @param toAdd A new job to give to the worker pool.
      */
-    public Job getJob(){
-        return JobQueue.poll();
+    public void addJob(Job toAdd){
+        jobQueue.offer(toAdd);
+        dispatch();
     }
 
     /**
-     * Offers a new job to the current job queue.
-     * @param toAdd
+     * Dispatches a worker to the next Job.
      */
-    public void addJob(Job toAdd){
-        JobQueue.offer(toAdd);
+    public void dispatch(){
+        if((freeWorkers.peek() != null) && (jobQueue.peek() != null)){
+            freeWorkers.poll().giveJob(jobQueue.poll());
+        }
     }
 
-    public boolean isDynamicMode(){
-        return dynamicMode;
+    /**
+     * This method is called by the workers when they finish a job.
+     * @param isDone The worker returning
+     */
+    public synchronized void punchIn(Worker isDone){
+        freeWorkers.offer(isDone);
+        if(!jobQueue.isEmpty()){
+            dispatch();
+        }
     }
 
-    public void setDynamicMode(boolean dynamicMode){
-        this.dynamicMode = dynamicMode;
-    }
-
-    public int getMaxDynamicWorker(){
-        return maxDynamicWorker;
-    }
-
-    public void setMaxDynamicWorker(int maxDynamicWorker){
-        this.maxDynamicWorker = maxDynamicWorker;
-    }
-
-    public int getStaticWorkerCount(){
-        return staticWorkerCount;
-    }
-
-    public void setStaticWorkerCount(int staticWorkerCount){
-        this.staticWorkerCount = staticWorkerCount;
-    }
 }
