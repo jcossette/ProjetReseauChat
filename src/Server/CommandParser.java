@@ -17,6 +17,7 @@ public class CommandParser{
      */
     private CommandParser(){
         myController = ServerController.getInstance();
+        initCommands();
     }
 
     /**
