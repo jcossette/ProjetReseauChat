@@ -6,8 +6,8 @@ import javax.swing.*;
 public class ClientGUI {
     private JPanel panel1;
     private JTabbedPane tabbedPane1;
-    private JTextField textField1;
-    private JButton button1;
-    private JList list1;
-    private JTextArea textArea1;
+    private JTextField textFieldInputText;
+    private JButton buttonSend;
+    private JList listName;
+    private JTextArea textAreaOutputText;
 }
