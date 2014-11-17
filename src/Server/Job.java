@@ -8,6 +8,7 @@ public abstract class Job{
 
     private int priority;
     private int numExecution;
+    protected ServerController myController;
 
     /**
      * This method executes the code of the job
@@ -28,5 +29,9 @@ public abstract class Job{
 
     public void setNumExecution(int numExecution){
         this.numExecution = numExecution;
+    }
+
+    public void assignController(ServerController myController){
+        this.myController = myController;
     }
 }
