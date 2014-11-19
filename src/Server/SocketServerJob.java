@@ -1,7 +1,11 @@
 package Server;
 
+import Server.ChatManager.Session;
+import Server.ChatManager.SessionManager;
+
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * This is the entry socket for the server. It allocates working sockets to new clients.
@@ -23,7 +27,6 @@ public class SocketServerJob extends Job{
      * @param port Port to be used.
      */
     public SocketServerJob(int port){
-
         this.port = port;
     }
 
@@ -33,9 +36,23 @@ public class SocketServerJob extends Job{
         }catch(IOException e){
             myController.writeMessage("Erreur de creation du socket server: " + e.getMessage());
         }
+        listen();
+    }
+
+    private void listen(){
+        Session newSession;
+        try {
+            Socket newSocketClient = mySocket.accept();
+            newSession = new Session(newSocketClient, myController);
+            SessionManager.getInstance().addSession(newSession);
+        }catch(IOException e){
+            myController.writeMessage("Erreur de creation de socket client: " + e.getMessage());
+        }
     }
 
     public void execute(){
-
+        while(run == true){
+            listen();
+        }
     }
 }

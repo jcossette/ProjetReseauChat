@@ -5,7 +5,7 @@ package Server;
  * Created by Julien Cossette on 11/5/2014.
  */
 public abstract class Job{
-
+    protected boolean run;
     private int priority;
     private int numExecution;
     protected ServerController myController;

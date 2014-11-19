@@ -4,19 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This classes parses String commands into actual commands.
+ * This class parses String commands into actual commands.
  * Created by Julien Cossette on 11/7/2014.
  */
 public class CommandParser{
     private static CommandParser instance;
     private ServerController myController;
-    private Map<String, Command> commands = new HashMap<String, Command>();
+    private Map<String, Command> commands;
 
     /**
      * Private constructor.
      */
     private CommandParser(){
         myController = ServerController.getInstance();
+        commands = new HashMap();
         initCommands();
     }
 

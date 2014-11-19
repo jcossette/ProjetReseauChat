@@ -7,6 +7,8 @@ import Server.Job;
  * Created by Julien Cossette on 11/10/2014.
  */
 public class ChatManagerJob extends Job {
+    private SessionManager mySessionManager;
+    private UserManager myUserManager;
 
     public void execute(){
 
