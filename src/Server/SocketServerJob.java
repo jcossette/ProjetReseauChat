@@ -49,6 +49,7 @@ public class SocketServerJob extends Job{
             newChannel = mySocketChannel.accept();
             newChannel.configureBlocking(false);
             myChatManagerJob.addToRegisterQueue(newChannel);
+            myChatManagerJob.notify();
         }catch(IOException e){
             myController.writeMessage("Erreur de creation de socket client: " + e.getMessage());
         }
