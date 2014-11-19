@@ -6,6 +6,7 @@ import Colis.Colis;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.channels.Channel;
 import java.nio.channels.SocketChannel;
 
 /**
@@ -35,4 +36,13 @@ public class Session {
 //            myController.writeMessage("Erreur d'ecriture sur le stream: " + e.getMessage());
 //        }
     }
+
+    /*public void receiveColis(SocketChannel receptionChannel){
+        try{
+            myInputStream = new ObjectInputStream(receptionChannel.socket().getInputStream());
+
+        }catch(IOException ie){
+            myController.writeMessage("Erreur d'ecriture sur le stream: " + e.getMessage());
+        }
+    }*/
 }

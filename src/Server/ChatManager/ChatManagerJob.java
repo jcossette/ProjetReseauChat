@@ -1,8 +1,11 @@
 package Server.ChatManager;
 
 import Server.Job;
+import Colis.Colis;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -20,9 +23,13 @@ public class ChatManagerJob extends Job {
     private ArrayList<Session> mySessions;
     private Queue<SocketChannel> registerQueue = new LinkedList();
     private UserManager myUserManager;
+    private ColisHandler myColisHandler;
     private Selector myChannelSelector;
+    private ObjectInputStream myInputStream;
+    private ObjectOutputStream myOutputStream;
 
     public ChatManagerJob(){
+        myColisHandler = ColisHandler.getInstance();
         mySessions = new ArrayList();
         myUserManager = new UserManager();
         try{
@@ -78,11 +85,11 @@ public class ChatManagerJob extends Job {
                     }
 
                     if(key.isReadable()){
-
+                        readChannel(key);
                     }
 
                     if(key.isWritable()){
-
+                        writeChannel(key);
                     }
 
                 }
@@ -90,6 +97,25 @@ public class ChatManagerJob extends Job {
         }catch(IOException e){
             myController.writeMessage("Erreur de vérification de l'état du selector: " + e.getMessage());
         }
+    }
+
+    private void readChannel(SelectionKey toRead){
+        Session sender = (Session)toRead.attachment();
+        Colis toHandle;
+        try{
+            SocketChannel mySocketChannel = (SocketChannel)toRead.channel();
+            myInputStream = new ObjectInputStream(mySocketChannel.socket().getInputStream());
+            toHandle = (Colis)myInputStream.readObject();
+            myColisHandler.handleColis(toHandle, sender);
+        }catch(IOException ie){
+            myController.writeMessage("Erreur d'ecriture sur le stream: " + ie.getMessage());
+        } catch (ClassNotFoundException cnfe) {
+            myController.writeMessage("Classe introuvable " + cnfe.getMessage());
+        }
+    }
+
+    private void writeChannel(SelectionKey toWrite){
+
     }
 
     private void registerNewSession(){
@@ -110,5 +136,6 @@ public class ChatManagerJob extends Job {
     public void addToRegisterQueue(SocketChannel myChannel){
         registerQueue.offer(myChannel);
     }
+
 
 }
