@@ -1,6 +1,8 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -64,6 +66,24 @@ public class ClientGUI extends JFrame
                     }
                 }
         );
+
+        tabbedPaneRoom.addChangeListener(new ChangeListener()
+        {
+            public void stateChanged(ChangeEvent e)
+            {
+                textAreaOutputText.setText("");
+                for(int i = 0; i<textAreaList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
+                {
+                    updateTextAreaFromList(textAreaList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
+                }
+
+                listName.clearSelection();
+                for(int i = 0; i<userNameList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
+                {
+                    updateNameFromList(userNameList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
+                }
+            }
+        });
     }
 
     public void updateText(String text, String name)
@@ -71,14 +91,14 @@ public class ClientGUI extends JFrame
         textAreaOutputText.append(name+" >  "+text+"\n");
     }
 
-    public void addNameToList(String name)
+    private void updateAddName(String name)
     {
         model = (DefaultListModel)listName.getModel();
         model.addElement(name);
         listName.setModel(model);
     }
 
-    public void removeNameToList(String name)
+    private void updateRemoveName(String name)
     {
         model = (DefaultListModel)listName.getModel();
 
@@ -87,6 +107,36 @@ public class ClientGUI extends JFrame
             if (model.getElementAt(i).equals(name))
             {
                 model.removeElementAt(i);
+            }
+        }
+
+        listName.setModel(model);
+    }
+
+    public void addNameToRoom(String room, String name)
+    {
+        for(int i = 0; i<roomList.size(); i++)
+        {
+            if (roomList.get(i).equals(room))
+            {
+                if(tabbedPaneRoom.getSelectedIndex() == i)
+                    updateAddName(name);
+                else
+                    userNameList.get(i).add(name);
+            }
+        }
+    }
+
+    public void removeNameFromRoom(String room, String name)
+    {
+        for(int i = 0; i<roomList.size(); i++)
+        {
+            if (roomList.get(i).equals(room))
+            {
+                if(tabbedPaneRoom.getSelectedIndex() == i)
+                    updateRemoveName(name);
+                else
+                    userNameList.get(i).remove(name);
             }
         }
     }
@@ -104,12 +154,12 @@ public class ClientGUI extends JFrame
 
         for(int i = 0; i<userNameList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
         {
-            updateNameList(userNameList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
+            updateNameFromList(userNameList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
         }
 
         for(int i = 0; i<textList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
         {
-            updateTextArea(textList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
+            updateTextAreaFromList(textList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
         }
     }
 
@@ -118,14 +168,14 @@ public class ClientGUI extends JFrame
         tabbedPaneRoom.addTab(roomName, new JLabel("test: "+roomName));
     }
 
-    private void updateNameList(String name)
+    private void updateNameFromList(String name)
     {
         model = (DefaultListModel)listName.getModel();
         model.addElement(name);
         listName.setModel(model);
     }
 
-    private void updateTextArea(String text)
+    private void updateTextAreaFromList(String text)
     {
         textAreaOutputText.append(text);
     }
