@@ -8,6 +8,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -33,15 +34,62 @@ public class ChatManagerJob extends Job {
 
     public void execute(){
         while(run == true){
-            if(!registerQueue.isEmpty()){
-                registerNewSession();
-            }
-            monitorChannels();
+            doTasks();
+            startWaiting();
         }
     }
 
-    private void monitorChannels(){
+    /**
+     * This method puts the thread into a waiting state until it is notified of a task to execute.
+     */
+    private void startWaiting(){
+        try{
+            this.wait();
+        }catch(InterruptedException ie){
+            myController.writeMessage("Thread interupted: " + ie.getMessage());
+        }
+    }
 
+    /**
+     * If we have new session to register this method will register them but only in groups of 5, after which it will
+     * manage its channels and then continue processing new sessions. Otherwise it will simply manage its channels.
+     */
+    private void doTasks(){
+        while(!registerQueue.isEmpty()){
+            registerNewSession();
+            monitorChannels();
+        }
+        monitorChannels();
+    }
+
+    /**
+     * This method verifies if any of the channel is ready to read or write and executes these actions.
+     */
+    private void monitorChannels(){
+        try {
+            if(myChannelSelector.select() > 0) {
+                Iterator selectedKeys = this.myChannelSelector.selectedKeys().iterator();
+                while(selectedKeys.hasNext()){
+                    SelectionKey key = (SelectionKey)selectedKeys.next();
+                    selectedKeys.remove();
+
+                    if (!key.isValid()) {
+                        continue;
+                    }
+
+                    if(key.isReadable()){
+
+                    }
+
+                    if(key.isWritable()){
+
+                    }
+
+                }
+            }
+        }catch(IOException e){
+            myController.writeMessage("Erreur de vérification de l'état du selector: " + e.getMessage());
+        }
     }
 
     private void registerNewSession(){
