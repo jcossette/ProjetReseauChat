@@ -1,8 +1,11 @@
 package GUI;
 
+import Client.ClientController;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Created by pewtroof on 2014-11-10.
@@ -14,9 +17,12 @@ public class ListServerGUI extends JFrame
     private JButton buttonDelete;
     private JPanel entryPanel;
     private JComboBox comboBoxServers;
+    private JTextField portField;
+    ClientController controller;
 
     public ListServerGUI()
     {
+
         setTitle("Form 1.1");
         setContentPane(entryPanel);
         setLocationRelativeTo(null);
@@ -28,9 +34,24 @@ public class ListServerGUI extends JFrame
         {
             public void actionPerformed(ActionEvent e)
             {
-                //Execute when button is pressed
-                new UserConnectionGUI();
-                setVisible(false);
+                String ip = comboBoxServers.getSelectedItem().toString();
+
+                controller = ClientController.getInstance();
+                try {
+                    controller.createSocket(ip, portField.getText());
+
+                    /**
+                     * Executes after socket is created
+                     * Initialize the serverListener thread and shows the UserConnectionGUI
+                     */
+                    controller.initListener();
+                    new UserConnectionGUI();
+                    setVisible(false);
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(null, "Échec de connection au serveur", "Ereurr",
+                            JOptionPane.ERROR_MESSAGE);
+                    e1.printStackTrace();
+                }
             }
         });
     }

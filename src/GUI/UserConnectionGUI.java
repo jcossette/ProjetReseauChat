@@ -1,6 +1,7 @@
 package GUI;
 
 import Client.ClientController;
+import Client.GUIController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,11 +17,14 @@ public class UserConnectionGUI extends JFrame
     private JButton buttonConnection;
     private JPanel entryPanel;
     private ClientController controller;
+    private GUIController guiController;
     private JPasswordField passwordFieldUser;
 
     public UserConnectionGUI()
     {
-        controller=ClientController.getInstance();
+        controller = ClientController.getInstance();
+        guiController = GUIController.getInstance();
+        guiController.setConnectionGui(this);
 
         setTitle("Form 1.1");
         setContentPane(entryPanel);
@@ -33,11 +37,15 @@ public class UserConnectionGUI extends JFrame
         {
             public void actionPerformed(ActionEvent e)
             {
-                //controller.connect(textFieldUsername.getText(), Arrays.toString(passwordFieldUser.getPassword()));
+                controller.connect(textFieldUsername.getText(), Arrays.toString(passwordFieldUser.getPassword()));
 
-                new ClientGUI();
-                setVisible(false);
+               /* new ClientGUI();
+                setVisible(false);*/
             }
         });
+    }
+
+    public void closeWindow(){
+        setVisible(false);
     }
 }

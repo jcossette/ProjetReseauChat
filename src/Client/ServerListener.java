@@ -3,7 +3,9 @@ package Client;
 import Colis.Colis;
 import Colis.TypeColisEnum;
 import GUI.ClientGUI;
+import GUI.UserConnectionGUI;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -19,8 +21,8 @@ public class ServerListener implements Runnable{
     ObjectInputStream in;
 
     public ServerListener(){
-        controller.getInstance();
-        guiController.getInstance();
+        controller = ClientController.getInstance();
+        guiController = GUIController.getInstance();
     }
 
     @Override
@@ -52,21 +54,30 @@ public class ServerListener implements Runnable{
         }
         else {
             ArrayList<String> resultList = colis.getParameters();
-        }
-        switch(type){
-            case updateText:
-                //clientGui.updateText(resultList.get(0), resultList.get(1), resultList.get(2));
-                break;
-            case updateRemoveUser:
-                //clientGui.updateRemoveUser(resultList.get(0), resultList.get(1));
-                break;
-            case updateAddUser:
-                //clientGui.updateAddUser(resultList.get(0), resultList.get(1));
-                break;
-            case error:
-                break;
-            default:
-                break;
+            switch (type) {
+                case updateText:
+                    //clientGui.updateText(resultList.get(0), resultList.get(1), resultList.get(2));
+                    break;
+                case updateRemoveUser:
+                    //clientGui.removeNameToRoom(resultList.get(0), resultList.get(1));
+                    break;
+                case updateAddUser:
+                    //clientGui.addNameFromRoom(resultList.get(0), resultList.get(1));
+                    break;
+                case error:
+                    break;
+                case acceptedConnection:
+                    UserConnectionGUI connectionGui = guiController.getConnectionGUI();
+                    new ClientGUI();
+                    connectionGui.closeWindow();
+                    break;
+                case refusedConnection:
+                    JOptionPane.showMessageDialog(null, resultList.get(0), "Ereurr",
+                            JOptionPane.ERROR_MESSAGE);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

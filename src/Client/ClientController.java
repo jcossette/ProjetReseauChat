@@ -13,16 +13,17 @@ import java.net.Socket;
  */
 public class ClientController {
     private static ClientController instance;
-    ObjectOutputStream out;
+    private ObjectOutputStream out;
     private TypeColisEnum typeColis;
-    int defaultPort = 1088;
+    private int defaultPort = 1088;
+    private int port;
     private Socket socketClient;
+    private ServerListener serverListener;
 
     /**
      * Private constructor
      */
     private ClientController() {
-
     }
 
     /**
@@ -39,10 +40,22 @@ public class ClientController {
     }
 
     /**
+     * Initie le thread Listener
+     */
+    public void initListener(){
+        serverListener = new ServerListener();
+    }
+
+    /**
      * Création du socket
      */
-    public void createSocket(String hostname) throws IOException {
-        socketClient = new Socket(hostname, defaultPort);
+    public void createSocket(String hostname, String enteredPort) throws IOException {
+        port = Integer.parseInt(enteredPort);
+        if (port < 1024 || port > 65535 ){
+            port = defaultPort;
+        }
+
+        socketClient = new Socket(hostname, port);
 
         out = new ObjectOutputStream(socketClient.getOutputStream());
     }

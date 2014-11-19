@@ -7,6 +7,8 @@ public enum TypeColisEnum
 {
     communication,      //String roomName, String message
     connection,         //String username, String password
+    acceptedConnection, //vide
+    refusedConnection,  //String message
     disconnection,      //vide
     fullUpdate,         //List<String> roomList, List<List<String>> userLists, List<List<String>> textLists
     listRequest,        //String roomName

@@ -1,6 +1,7 @@
 package Client;
 
 import GUI.ClientGUI;
+import GUI.UserConnectionGUI;
 
 /**
  * Created by fillioca on 2014-11-19.
@@ -8,6 +9,7 @@ import GUI.ClientGUI;
 public class GUIController {
     private static GUIController instance;
     private ClientGUI clientGui;
+    private UserConnectionGUI connectionGui;
 
     private GUIController(){
     }
@@ -25,9 +27,15 @@ public class GUIController {
         this.clientGui = clientGui;
     }
 
-
     public ClientGUI getClientGUI(){
         return clientGui;
     }
 
+    public void setConnectionGui(UserConnectionGUI connectionGui){
+        this.connectionGui = connectionGui;
+    }
+
+    public UserConnectionGUI getConnectionGUI(){
+        return connectionGui;
+    }
 }
