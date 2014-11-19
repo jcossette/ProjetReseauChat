@@ -30,6 +30,7 @@ public class ListServerGUI extends JFrame
             {
                 //Execute when button is pressed
                 new UserConnectionGUI();
+                setVisible(false);
             }
         });
     }

@@ -10,13 +10,12 @@ import java.awt.event.ActionListener;
 public class UserConnectionGUI extends JFrame
 {
     private JTextField textFieldUsername;
-    private JTextField textFieldPassword;
     private JButton buttonConnection;
     private JPanel entryPanel;
+    private JPasswordField passwordFieldUser;
 
     public UserConnectionGUI()
     {
-
         setTitle("Form 1.1");
         setContentPane(entryPanel);
         setLocationRelativeTo(null);
@@ -30,6 +29,7 @@ public class UserConnectionGUI extends JFrame
             {
                 //Execute when button is pressed
                 new ClientGUI();
+                setVisible(false);
             }
         });
     }
