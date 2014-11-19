@@ -35,7 +35,7 @@ public class ServerConsoleGUI extends JFrame
                     {
                         if(e.getKeyChar() == KeyEvent.VK_ENTER)
                         {
-                            if(!textFieldConsole.getText().equals(""))
+                            if(!textFieldConsole.getText().isEmpty())
                             {
                                 textAreaConsole.append(">  "+textFieldConsole.getText()+"\n");
                                 textFieldConsole.setText("");
