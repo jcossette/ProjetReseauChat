@@ -7,6 +7,7 @@ import GUI.ClientGUI;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fillioca on 2014-11-19.
@@ -45,15 +46,22 @@ public class ServerListener implements Runnable{
     public void handleColis(Colis colis){
         TypeColisEnum type = colis.getType();
         ClientGUI clientGui = guiController.getClientGUI();
-
-        ArrayList<String> resultList = colis.getParameters();
+        if (type == TypeColisEnum.fullUpdate){
+            ArrayList<List> fullUpdateList = colis.getFullUpdateParameters();
+            //clientGui.fullUpdate(fullUpdateList.get(0), fullUpdateList.get(1), fullUpdateList.get(2));
+        }
+        else {
+            ArrayList<String> resultList = colis.getParameters();
+        }
         switch(type){
             case updateText:
-                clientGui.updateText(resultList.get(0), resultList.get(1), resultList.get(2));
+                //clientGui.updateText(resultList.get(0), resultList.get(1), resultList.get(2));
                 break;
             case updateRemoveUser:
+                //clientGui.updateRemoveUser(resultList.get(0), resultList.get(1));
                 break;
             case updateAddUser:
+                //clientGui.updateAddUser(resultList.get(0), resultList.get(1));
                 break;
             case error:
                 break;

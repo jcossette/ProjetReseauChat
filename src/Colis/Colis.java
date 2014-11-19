@@ -1,5 +1,6 @@
 package Colis;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -17,13 +18,37 @@ public class Colis
         this.type = type;
     }
 
-    public void SetParameter(String parameter)
+    public void setParameter(String parameter)
     {
         colisQueue.add(parameter);
     }
 
-    public void SetParameter(List parameter)
+    public void setParameter(List parameter)
     {
         colisQueue.add(parameter);
+    }
+
+    public TypeColisEnum getType(){
+        return type;
+    }
+
+    public ArrayList<String> getParameters(){
+        ArrayList<String> resultList = new ArrayList<>();
+
+        while(!colisQueue.isEmpty()){
+            resultList.add((String)colisQueue.poll());
+        }
+
+        return resultList;
+    }
+
+    public ArrayList<List> getFullUpdateParameters(){
+        ArrayList<List> resultList = new ArrayList<>();
+
+        while(!colisQueue.isEmpty()){
+            resultList.add((List)colisQueue.poll());
+        }
+
+        return resultList;
     }
 }
