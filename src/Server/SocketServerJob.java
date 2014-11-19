@@ -1,11 +1,12 @@
 package Server;
 
+import Server.ChatManager.ChatManagerJob;
 import Server.ChatManager.Session;
-import Server.ChatManager.SessionManager;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 
 /**
  * This is the entry socket for the server. It allocates working sockets to new clients.
@@ -13,12 +14,14 @@ import java.net.Socket;
  */
 public class SocketServerJob extends Job{
     private int port;
-    private ServerSocket mySocket;
+    private ServerSocketChannel mySocketChannel;
+    private ChatManagerJob myChatManagerJob;
+    private SocketChannel newChannel;
 
     /**
      * Default constructor. Defaults the socket server at port 1337.
      */
-    public SocketServerJob(){
+    private SocketServerJob(){
         port = 1337;
     }
 
@@ -26,13 +29,15 @@ public class SocketServerJob extends Job{
      * Constructor with specified port.
      * @param port Port to be used.
      */
-    public SocketServerJob(int port){
+    public SocketServerJob(int port, ChatManagerJob chatManager){
+        this.myChatManagerJob = chatManager;
         this.port = port;
     }
 
     private void openSocket(){
         try{
-            mySocket = new ServerSocket(port);
+            mySocketChannel = ServerSocketChannel.open();
+            mySocketChannel.socket().bind(new InetSocketAddress(port));
         }catch(IOException e){
             myController.writeMessage("Erreur de creation du socket server: " + e.getMessage());
         }
@@ -40,11 +45,10 @@ public class SocketServerJob extends Job{
     }
 
     private void listen(){
-        Session newSession;
-        try {
-            Socket newSocketClient = mySocket.accept();
-            newSession = new Session(newSocketClient, myController);
-            SessionManager.getInstance().addSession(newSession);
+        try{
+            newChannel = mySocketChannel.accept();
+            newChannel.configureBlocking(false);
+            myChatManagerJob.addToRegisterQueue(newChannel);
         }catch(IOException e){
             myController.writeMessage("Erreur de creation de socket client: " + e.getMessage());
         }

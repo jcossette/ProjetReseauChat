@@ -1,31 +1,38 @@
 package Server.ChatManager;
 
 import Server.ServerController;
+import Colis.Colis;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.nio.channels.SocketChannel;
 
 /**
  * Created by coylter on 11/19/2014.
  */
 public class Session {
     User myUser;
-    Socket mySocket;
-    ServerController myController;
+    SocketChannel mySocketChannel;
     ObjectInputStream myInputStream;
     ObjectOutputStream myOutputStream;
 
-    public Session(Socket mySocket, ServerController myController){
+    public Session(){
         myUser = null;  //Anonymous Session at first
-        this.mySocket = mySocket;
-        this.myController = myController;
-        try {
-            myInputStream = new ObjectInputStream(this.mySocket.getInputStream());
-            myOutputStream = new ObjectOutputStream(this.mySocket.getOutputStream());
-        }catch(IOException e){
-            myController.writeMessage("Erreur de creation des streams: " + e.getMessage());
-        }
+//        this.mySocketChannel = mySocketChannel;
+//        try {
+//            myInputStream = new ObjectInputStream(this.mySocketChannel.socket().getInputStream());
+//            myOutputStream = new ObjectOutputStream(this.mySocketChannel.socket().getOutputStream());
+//        }catch(IOException e){
+//            myController.writeMessage("Erreur de creation des streams: " + e.getMessage());
+//        }
+    }
+
+    public void send(Colis toSend){
+//        try{
+//            myOutputStream.writeObject(toSend);
+//        }catch(IOException e){
+//            myController.writeMessage("Erreur d'ecriture sur le stream: " + e.getMessage());
+//        }
     }
 }
