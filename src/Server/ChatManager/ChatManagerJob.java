@@ -6,14 +6,10 @@ import Colis.Colis;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
+import java.net.InetSocketAddress;
+import java.nio.channels.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * This job runs a facade managing the different components of the chat server.
@@ -21,60 +17,48 @@ import java.util.Queue;
  */
 public class ChatManagerJob extends Job {
     private ArrayList<Session> mySessions;
-    private Queue<SocketChannel> registerQueue = new LinkedList();
     private UserManager myUserManager;
     private ColisHandler myColisHandler;
     private Selector myChannelSelector;
     private ObjectInputStream myInputStream;
     private ObjectOutputStream myOutputStream;
+    private int myPort;
 
-    public ChatManagerJob(){
-        myColisHandler = ColisHandler.getInstance();
-        mySessions = new ArrayList();
-        myUserManager = new UserManager();
+    public ChatManagerJob(int port){
+        this.myPort = port;
+        this.myColisHandler = ColisHandler.getInstance();
+        this.mySessions = new ArrayList();
+        this.myUserManager = new UserManager();
         try{
             myChannelSelector = Selector.open();
         }catch(IOException e){
             myController.writeMessage("Erreur de creation du channel selector: " + e.getMessage());
         }
+        initSocketServerChannel();
     }
 
     public void execute(){
         while(run == true){
-            doTasks();
-            startWaiting();
-        }
-    }
-
-    /**
-     * This method puts the thread into a waiting state until it is notified of a task to execute.
-     */
-    private void startWaiting(){
-        try{
-            this.wait();
-        }catch(InterruptedException ie){
-            myController.writeMessage("Thread interupted: " + ie.getMessage());
-        }
-    }
-
-    /**
-     * If we have new session to register this method will register them but only in groups of 5, after which it will
-     * manage its channels and then continue processing new sessions. Otherwise it will simply manage its channels.
-     */
-    private void doTasks(){
-        while(!registerQueue.isEmpty()){
-            registerNewSession();
             monitorChannels();
         }
-        monitorChannels();
+    }
+
+    private void initSocketServerChannel(){
+        try{
+            ServerSocketChannel myServerSocketChannel = ServerSocketChannel.open();
+            myServerSocketChannel.socket().bind(new InetSocketAddress(myPort));
+            myServerSocketChannel.register(myChannelSelector, SelectionKey.OP_ACCEPT);
+        }catch(IOException e){
+            myController.writeMessage("Erreur de creation du socket server: " + e.getMessage());
+        }
     }
 
     /**
      * This method verifies if any of the channel is ready to read or write and executes these actions.
      */
     private void monitorChannels(){
-        try {
-            if(myChannelSelector.select() > 0) {
+        try{
+            if(myChannelSelector.select() > 0){
                 Iterator selectedKeys = this.myChannelSelector.selectedKeys().iterator();
                 while(selectedKeys.hasNext()){
                     SelectionKey key = (SelectionKey)selectedKeys.next();
@@ -90,6 +74,10 @@ public class ChatManagerJob extends Job {
 
                     if(key.isWritable()){
                         writeChannel(key);
+                    }
+
+                    if(key.isAcceptable()){
+                        acceptChannel(key);
                     }
 
                 }
@@ -118,24 +106,24 @@ public class ChatManagerJob extends Job {
 
     }
 
-    private void registerNewSession(){
-        int registerLimit = 5;
-        while(!registerQueue.isEmpty() && registerLimit > 0){
-            SocketChannel myChannel = registerQueue.poll();
-            try {
-                Session newSession = new Session();
-                SelectionKey newKey = myChannel.register(myChannelSelector, SelectionKey.OP_READ & SelectionKey.OP_WRITE);
-                newKey.attach(newSession);
-            } catch (ClosedChannelException ce) {
-                myController.writeMessage("Le channel demandé est fermé: " + ce.getMessage());
-            }
-            registerLimit--;
+    private void acceptChannel(SelectionKey toAccept){
+        try{
+            ServerSocketChannel serverSocketChannel = (ServerSocketChannel)toAccept.channel();
+            SocketChannel newSocketChannel = serverSocketChannel.accept();
+            newSocketChannel.configureBlocking(false);
+            SelectionKey mySelKey = newSocketChannel.register(this.myChannelSelector, SelectionKey.OP_READ & SelectionKey.OP_WRITE);
+            Session newSession = new Session(mySelKey, this);
+            mySelKey.attach(newSession);
+        }catch(IOException ie){
+            myController.writeMessage("Erreur d'acceptation du socket: " + ie.getMessage());
         }
     }
 
-    public void addToRegisterQueue(SocketChannel myChannel){
-        registerQueue.offer(myChannel);
+    public void send(Colis toSend, SocketChannel toChannel){
+        try{
+            ObjectOutputStream myOutputStream = new ObjectOutputStream(toChannel.socket().getOutputStream());
+        }catch(IOException ie){
+            myController.writeMessage("Erreur d'envoie du Colis " + ie.getMessage());
+        }
     }
-
-
 }
