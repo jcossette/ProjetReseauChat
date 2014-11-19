@@ -49,12 +49,17 @@ public class ClientGUI extends JFrame
                         {
                             if(!textFieldInputText.getText().isEmpty())
                             {
-                                textAreaOutputText.append(">  "+textFieldInputText.getText()+"\n");
+                                textAreaOutputText.append("You >  "+textFieldInputText.getText()+"\n");
                                 textFieldInputText.setText("");
                             }
                         }
                     }
                 }
         );
+    }
+
+    public void updateText(String text, String name)
+    {
+        textAreaOutputText.append(name+" >  "+text+"\n");
     }
 }
