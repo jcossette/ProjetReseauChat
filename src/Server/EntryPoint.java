@@ -12,11 +12,10 @@ public class EntryPoint
      * The entry point
      * @param args
      */
-    public static void main(String[] args)
-    {
-        //ServerController myController = ServerController.getInstance();
-        //myController.doThis("job socketserver");
-
-        new ServerConsoleGUI();
+    public static void main(String[] args){
+        ServerController myController = ServerController.getInstance();
+        ServerConsoleGUI myGUI = new ServerConsoleGUI();
+        myGUI.assignController(myController);
+        myController.hookGUI(myGUI);
     }
 }

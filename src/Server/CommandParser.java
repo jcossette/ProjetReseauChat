@@ -1,7 +1,6 @@
 package Server;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class parses String commands into actual commands.
@@ -10,15 +9,12 @@ import java.util.Map;
 public class CommandParser{
     private static CommandParser instance;
     private ServerController myController;
-    private Map<String, Command> commands;
 
     /**
      * Private constructor.
      */
     private CommandParser(){
-        myController = ServerController.getInstance();
-        commands = new HashMap();
-        initCommands();
+
     }
 
     /**
@@ -34,15 +30,33 @@ public class CommandParser{
         }
     }
 
-    public void initCommands(){
-        commands.put("job", (String parameters) -> this.jobCommand(parameters));
-    }
-
     public String parseCommand(String toParse){
-        return "";
+        char[] toAnalyse = toParse.toCharArray();
+        Queue<String> parameters = new LinkedList();
+        String temp = "";
+        for(int i = 0; i < toAnalyse.length; i++){
+            if(toAnalyse[i] != ' '){
+                temp += toAnalyse[i];
+            }else{
+                parameters.offer(temp);
+                temp = "";
+            }
+        }
+        parameters.offer(temp);
+        return executeCommand(parameters);
     }
 
-    public String jobCommand(String parameters){
+    private String executeCommand(Queue<String> commandParameters){
+        String category = commandParameters.poll();
+        switch(category){
+            case "job":
+                return jobCommand(commandParameters);
+            default:
+                return "Command unknown";
+        }
+    }
+
+    public String jobCommand(Queue<String> commandParameters){
 
         return "";
     }

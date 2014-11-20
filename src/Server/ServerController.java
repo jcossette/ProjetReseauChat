@@ -8,13 +8,14 @@ public class ServerController{
     private static ServerController instance;
     private CommandParser myCommandParser;
     private Server myServer;
+    private ServerConsoleGUI myGUI;
 
     /**
      * Private constructor
      */
     private ServerController(){
-        myServer = Server.getInstance();
-        myCommandParser = CommandParser.getInstance();
+        this.myServer = Server.getInstance();
+        this.myCommandParser = CommandParser.getInstance();
     }
 
     /**
@@ -30,13 +31,17 @@ public class ServerController{
         }
     }
 
+    public void hookGUI(ServerConsoleGUI toHook){
+        this.myGUI = toHook;
+    }
+
     /**
      * Finds the requested command in the Map and executes it.
      * @param toExecute Text command to execute
      * @return Potential function return text.
      */
-    public void doThis(String toExecute){
-        myCommandParser.parseCommand(toExecute);
+    public String doThis(String toExecute){
+        return myCommandParser.parseCommand(toExecute);
     }
 
     /**

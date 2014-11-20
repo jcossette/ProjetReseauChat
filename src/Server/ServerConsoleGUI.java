@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
  */
 public class ServerConsoleGUI extends JFrame
 {
+    private ServerController myController;
     private JTextField textFieldConsole;
     private JPanel entryPanel;
     private JTextArea textAreaConsole;
@@ -29,23 +30,26 @@ public class ServerConsoleGUI extends JFrame
         setVisible(true);
 
         textFieldConsole.addKeyListener(
-                new KeyAdapter()
+            new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent e)
                 {
-                    public void keyPressed(KeyEvent e)
+                    if(e.getKeyChar() == KeyEvent.VK_ENTER)
                     {
-                        if(e.getKeyChar() == KeyEvent.VK_ENTER)
+                        if(!textFieldConsole.getText().isEmpty())
                         {
-                            if(!textFieldConsole.getText().isEmpty())
-                            {
-                                textAreaConsole.append(">  "+textFieldConsole.getText()+"\n");
-                                textFieldConsole.setText("");
-                            }
-
-                            //TODO: Send something here to someone there u no!
+                            String command = textFieldConsole.getText();
+                            textAreaConsole.append(">  " + myController.doThis(command) + "\n");
+                            textFieldConsole.setText("");
                         }
                     }
                 }
+            }
         );
+    }
+
+    public void assignController(ServerController toAssign){
+        this.myController = toAssign;
     }
 
 
