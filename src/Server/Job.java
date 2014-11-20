@@ -5,7 +5,7 @@ package Server;
  * Created by Julien Cossette on 11/5/2014.
  */
 public abstract class Job{
-    protected boolean run;
+    protected boolean run = true;
     private int priority;
     private int numExecution;
     protected ServerController myController;
@@ -33,5 +33,9 @@ public abstract class Job{
 
     public void assignController(ServerController myController){
         this.myController = myController;
+    }
+
+    public void stop(){
+        run = false;
     }
 }

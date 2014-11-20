@@ -38,9 +38,7 @@ public class ChatManagerJob extends Job {
     }
 
     public void execute(){
-        while(run == true){
-            monitorChannels();
-        }
+        monitorChannels();
     }
 
     private void initSocketServerChannel(){
@@ -59,7 +57,7 @@ public class ChatManagerJob extends Job {
      */
     private void monitorChannels(){
         try{
-            if(myChannelSelector.select() > 0){
+            if(myChannelSelector.select(1000) > 0){
                 Iterator selectedKeys = this.myChannelSelector.selectedKeys().iterator();
                 while(selectedKeys.hasNext()){
                     SelectionKey key = (SelectionKey)selectedKeys.next();

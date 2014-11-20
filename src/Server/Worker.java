@@ -8,15 +8,17 @@ public class Worker implements Runnable{
     private Job myJob;
     private Integer myJobID;
     private int status;
+    private Thread myThread;
 
     public Worker(WorkerPool myPool){
         this.myPool = myPool;
+        myThread = new Thread(this, "workerThread");
     }
 
     @Override
     public void run(){
-        if(myJob != null){
-            status = 1;
+        status = 1;
+        while(myJob.run == true){
             myJob.execute();
         }
         status = 0;
@@ -27,6 +29,7 @@ public class Worker implements Runnable{
         myJobID = ID;
         myJob = toGive;
         status = 1;
+        myThread.start();
     }
 
     /**
@@ -47,6 +50,7 @@ public class Worker implements Runnable{
 
     public void free(){
         myJob = null;
+        myJobID = null;
         status = 0;
     }
 }

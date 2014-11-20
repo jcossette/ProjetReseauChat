@@ -50,11 +50,17 @@ public class CommandParser{
             case "chatmanager":
                 myController.createChatManagerJob(commandParameters);
                 break;
+            case "test":
+                myController.createTestJob();
+                break;
             case "view":
                 myController.viewJobs();
                 break;
             case "workers":
                 myController.viewFreeWorkers();
+                break;
+            case "kill":
+                myController.killJob(commandParameters);
                 break;
             default:
                 myController.writeMessage("Command unknown");

@@ -5,27 +5,13 @@ package Server;
  * Created by Julien Cossette on 11/5/2014.
  */
 public class Server{
-    private static Server instance;
     private WorkerPool myWorkerPool;
 
     /**
      * Private constructor
      */
-    private Server(){
+    public Server(){
         myWorkerPool = new WorkerPool();
-    }
-
-    /**
-     * Starts or gets the instance of the singleton.
-     * @return
-     */
-    public static Server getInstance(){
-        if(instance == null){
-            instance = new Server();
-            return instance;
-        }else{
-            return instance;
-        }
     }
 
     /**
@@ -42,5 +28,9 @@ public class Server{
 
     public int countFreeWorkers(){
         return myWorkerPool.freeWorkers();
+    }
+
+    public void killJob(int toKill){
+        myWorkerPool.killJob(toKill);
     }
 }

@@ -66,7 +66,7 @@ public class WorkerPool{
      * @param isDone The worker returning
      */
     public synchronized void punchIn(Worker isDone){
-        removeCurrentJob(isDone.getCurrentJob());
+        removeCurrentJob(isDone.getCurrentJobID());
         isDone.free();
         freeWorkers.offer(isDone);
         if(!jobQueue.isEmpty()){
@@ -78,8 +78,8 @@ public class WorkerPool{
         currentJobs.put(newKey, toAdd);
     }
 
-    private synchronized void removeCurrentJob(Job toRemove){
-        currentJobs.remove(toRemove);
+    private synchronized void removeCurrentJob(Integer IDtoRemove){
+        currentJobs.remove(IDtoRemove);
     }
 
     public synchronized String listCurrentJobs(){
@@ -92,5 +92,14 @@ public class WorkerPool{
 
     public synchronized int freeWorkers(){
         return freeWorkers.size();
+    }
+
+    public synchronized void killJob(int IDtoKill){
+        for(Map.Entry<Integer, Job>  j : currentJobs.entrySet()){
+            if(j.getKey().intValue() == IDtoKill){
+                j.getValue().stop();
+                currentJobs.remove(j.getKey());
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@ public class ServerController{
      * Private constructor
      */
     private ServerController(){
-        this.myServer = Server.getInstance();
+        this.myServer = new Server();
         this.myCommandParser = new CommandParser(this);
     }
 
@@ -71,8 +71,13 @@ public class ServerController{
             addJob(newChatManager);
             writeMessage("Chat Manager Job created!");
         }catch(Exception e){
-            writeMessage("Chat Manager Job creation command error");
+            writeMessage("Chat Manager Job creation command error: " + e.toString());
         }
+    }
+
+    public void createTestJob(){
+        TestJob newTestJob = new TestJob();
+        addJob(newTestJob);
     }
 
     public void viewJobs(){
@@ -81,5 +86,14 @@ public class ServerController{
 
     public void viewFreeWorkers(){
         writeMessage("NUMBER OF FREE WORKERS: " + myServer.countFreeWorkers());
+    }
+
+    public void killJob(Queue<String> parameters){
+        try{
+            int IDtoKill = Integer.parseInt(parameters.poll());
+            myServer.killJob(IDtoKill);
+        }catch(Exception e){
+            writeMessage("Kill Job Command error: " + e.toString());
+        }
     }
 }
