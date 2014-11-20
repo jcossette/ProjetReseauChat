@@ -39,7 +39,7 @@ public class ServerConsoleGUI extends JFrame
                         if(!textFieldConsole.getText().isEmpty())
                         {
                             String command = textFieldConsole.getText();
-                            textAreaConsole.append(">  " + myController.doThis(command) + "\n");
+                            myController.doThis(command);
                             textFieldConsole.setText("");
                         }
                     }
@@ -50,6 +50,10 @@ public class ServerConsoleGUI extends JFrame
 
     public void assignController(ServerController toAssign){
         this.myController = toAssign;
+    }
+
+    public void writeToConsole(String toWrite){
+        textAreaConsole.append(">  " + toWrite + "\n");
     }
 
 

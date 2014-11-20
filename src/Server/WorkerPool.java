@@ -1,24 +1,25 @@
 package Server;
 
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This is the worker pool. Its function is to accept new jobs and dispatch them to available workers.
  * Created by Julien Cossette on 11/5/2014.
  */
 public class WorkerPool{
-    private static WorkerPool instance;
-    private ConcurrentLinkedQueue<Job> jobQueue = new ConcurrentLinkedQueue<Job>();
-    private ConcurrentLinkedQueue<Worker> freeWorkers = new ConcurrentLinkedQueue<Worker>();
+    private ConcurrentLinkedQueue<Job> jobQueue = new ConcurrentLinkedQueue();
+    private ConcurrentLinkedQueue<Worker> freeWorkers = new ConcurrentLinkedQueue();
+    private Map<Integer, Job> currentJobs = new HashMap();
+    private Queue<Integer> freeNumbers = new LinkedList();
+    private int jobTicker = 0;
 
     private int workerCount; //Number of static worker that will always exist.
 
     /**
      * Private constructor.
      */
-    private WorkerPool(){
+    public WorkerPool(){
         workerCount = Runtime.getRuntime().availableProcessors() * 4;
         init();
     }
@@ -29,21 +30,8 @@ public class WorkerPool{
     private void init(){
         Worker toInit;
         for(int i = 0; i < workerCount; i++){
-            toInit = new Worker();
+            toInit = new Worker(this);
             freeWorkers.offer(toInit);
-        }
-    }
-
-    /**
-     * Starts or gets the instance of the singleton.
-     * @return The singleton instance
-     */
-    public static WorkerPool getInstance(){
-        if(instance == null){
-            instance = new WorkerPool();
-            return instance;
-        }else{
-            return instance;
         }
     }
 
@@ -61,7 +49,15 @@ public class WorkerPool{
      */
     public void dispatch(){
         if((freeWorkers.peek() != null) && (jobQueue.peek() != null)){
-            freeWorkers.poll().giveJob(jobQueue.poll());
+            Integer key;
+            if(freeNumbers.isEmpty()){
+                key = new Integer(jobTicker++);
+            }else{
+                key = freeNumbers.poll();
+            }
+            Job toDispatch = jobQueue.poll();
+            freeWorkers.poll().giveJob(toDispatch, key);
+            addCurrentJob(toDispatch, key);
         }
     }
 
@@ -70,10 +66,31 @@ public class WorkerPool{
      * @param isDone The worker returning
      */
     public synchronized void punchIn(Worker isDone){
+        removeCurrentJob(isDone.getCurrentJob());
+        isDone.free();
         freeWorkers.offer(isDone);
         if(!jobQueue.isEmpty()){
             dispatch();
         }
     }
 
+    private synchronized void addCurrentJob(Job toAdd, Integer newKey){
+        currentJobs.put(newKey, toAdd);
+    }
+
+    private synchronized void removeCurrentJob(Job toRemove){
+        currentJobs.remove(toRemove);
+    }
+
+    public synchronized String listCurrentJobs(){
+        String compiledJobs = "LIST OF RUNNING JOBS: \n";
+        for(Map.Entry<Integer, Job>  j : currentJobs.entrySet()){
+            compiledJobs += "ID:" + j.getKey().intValue() + "   JOB:" + j.getValue() + "\n";
+        }
+        return compiledJobs;
+    }
+
+    public synchronized int freeWorkers(){
+        return freeWorkers.size();
+    }
 }

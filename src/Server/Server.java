@@ -12,7 +12,7 @@ public class Server{
      * Private constructor
      */
     private Server(){
-        myWorkerPool = myWorkerPool.getInstance();
+        myWorkerPool = new WorkerPool();
     }
 
     /**
@@ -34,5 +34,13 @@ public class Server{
      */
     public void giveJob(Job toGive){
         myWorkerPool.addJob(toGive);
+    }
+
+    public String listCurrentJobs(){
+        return myWorkerPool.listCurrentJobs();
+    }
+
+    public int countFreeWorkers(){
+        return myWorkerPool.freeWorkers();
     }
 }

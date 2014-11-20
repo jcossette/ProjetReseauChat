@@ -7,30 +7,16 @@ import java.util.*;
  * Created by Julien Cossette on 11/7/2014.
  */
 public class CommandParser{
-    private static CommandParser instance;
     private ServerController myController;
 
     /**
      * Private constructor.
      */
-    private CommandParser(){
-
+    public CommandParser(ServerController assignedController){
+        this.myController = assignedController;
     }
 
-    /**
-     * Starts or gets the instance of the singleton.
-     * @return
-     */
-    public static CommandParser getInstance(){
-        if(instance == null){
-            instance = new CommandParser();
-            return instance;
-        }else{
-            return instance;
-        }
-    }
-
-    public String parseCommand(String toParse){
+    public void parseCommand(String toParse){
         char[] toAnalyse = toParse.toCharArray();
         Queue<String> parameters = new LinkedList();
         String temp = "";
@@ -43,21 +29,36 @@ public class CommandParser{
             }
         }
         parameters.offer(temp);
-        return executeCommand(parameters);
+        executeCommand(parameters);
     }
 
-    private String executeCommand(Queue<String> commandParameters){
+    private void executeCommand(Queue<String> commandParameters){
         String category = commandParameters.poll();
         switch(category){
             case "job":
-                return jobCommand(commandParameters);
+                jobCommand(commandParameters);
+                break;
             default:
-                return "Command unknown";
+                myController.writeMessage("Command unknown");
+                break;
         }
     }
 
-    public String jobCommand(Queue<String> commandParameters){
-
-        return "";
+    private void jobCommand(Queue<String> commandParameters){
+        String jobType = commandParameters.poll();
+        switch(jobType){
+            case "chatmanager":
+                myController.createChatManagerJob(commandParameters);
+                break;
+            case "view":
+                myController.viewJobs();
+                break;
+            case "workers":
+                myController.viewFreeWorkers();
+                break;
+            default:
+                myController.writeMessage("Command unknown");
+                break;
+        }
     }
 }

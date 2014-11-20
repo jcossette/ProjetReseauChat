@@ -26,7 +26,7 @@ public class ChatManagerJob extends Job {
 
     public ChatManagerJob(int port){
         this.myPort = port;
-        this.myColisHandler = ColisHandler.getInstance();
+        this.myColisHandler = new ColisHandler();
         this.mySessions = new ArrayList();
         this.myUserManager = new UserManager();
         try{
@@ -46,6 +46,7 @@ public class ChatManagerJob extends Job {
     private void initSocketServerChannel(){
         try{
             ServerSocketChannel myServerSocketChannel = ServerSocketChannel.open();
+            myServerSocketChannel.configureBlocking(false);
             myServerSocketChannel.socket().bind(new InetSocketAddress(myPort));
             myServerSocketChannel.register(myChannelSelector, SelectionKey.OP_ACCEPT);
         }catch(IOException e){

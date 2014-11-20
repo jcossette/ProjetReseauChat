@@ -1,5 +1,9 @@
 package Server;
 
+import Server.ChatManager.ChatManagerJob;
+
+import java.util.Queue;
+
 /**
  * This is the Server Controller, it is the interface by which the console will pass commands to the underlying server.
  * Created by Julien Cossette on 11/5/2014.
@@ -15,7 +19,7 @@ public class ServerController{
      */
     private ServerController(){
         this.myServer = Server.getInstance();
-        this.myCommandParser = CommandParser.getInstance();
+        this.myCommandParser = new CommandParser(this);
     }
 
     /**
@@ -40,8 +44,8 @@ public class ServerController{
      * @param toExecute Text command to execute
      * @return Potential function return text.
      */
-    public String doThis(String toExecute){
-        return myCommandParser.parseCommand(toExecute);
+    public void doThis(String toExecute){
+        myCommandParser.parseCommand(toExecute);
     }
 
     /**
@@ -49,7 +53,7 @@ public class ServerController{
      * @param myMessage
      */
     public void writeMessage(String myMessage){
-        //Send message to console for write
+        myGUI.writeToConsole(myMessage);
     }
 
     /**
@@ -58,5 +62,24 @@ public class ServerController{
     private void addJob(Job toGive){
         toGive.assignController(this);
         myServer.giveJob(toGive);
+    }
+
+    public void createChatManagerJob(Queue<String> parameters){
+        try{
+            Integer port = Integer.parseInt(parameters.poll());
+            ChatManagerJob newChatManager = new ChatManagerJob(port);
+            addJob(newChatManager);
+            writeMessage("Chat Manager Job created!");
+        }catch(Exception e){
+            writeMessage("Chat Manager Job creation command error");
+        }
+    }
+
+    public void viewJobs(){
+        writeMessage(myServer.listCurrentJobs());
+    }
+
+    public void viewFreeWorkers(){
+        writeMessage("NUMBER OF FREE WORKERS: " + myServer.countFreeWorkers());
     }
 }
