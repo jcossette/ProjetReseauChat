@@ -9,9 +9,6 @@ import java.util.*;
 public class CommandParser{
     private ServerController myController;
 
-    /**
-     * Private constructor.
-     */
     public CommandParser(ServerController assignedController){
         this.myController = assignedController;
     }
@@ -29,14 +26,17 @@ public class CommandParser{
             }
         }
         parameters.offer(temp);
-        executeCommand(parameters);
+        selectServer(parameters);
     }
 
-    private void executeCommand(Queue<String> commandParameters){
-        String category = commandParameters.poll();
-        switch(category){
-            case "job":
-                jobCommand(commandParameters);
+    private void selectServer(Queue<String> commandParameters){
+        String server = commandParameters.poll();
+        switch(server){
+            case "start":
+                startServer(commandParameters);
+                break;
+            case "server":
+                executeCommand(commandParameters);
                 break;
             default:
                 myController.writeMessage("Command unknown");
@@ -44,15 +44,48 @@ public class CommandParser{
         }
     }
 
-    private void jobCommand(Queue<String> commandParameters){
-        String jobType = commandParameters.poll();
-        switch(jobType){
-            case "chatmanager":
-                myController.createChatManagerJob(commandParameters);
+    private void startServer(Queue<String> commandParameters){
+        String serverJobName = commandParameters.poll();
+        switch(serverJobName){
+            case "chatserver":
+                myController.startChatServerJob(commandParameters);
                 break;
+            default:
+                myController.writeMessage("Command unknown");
+                break;
+        }
+    }
+
+    private void executeCommand(Queue<String> commandParameters){
+        String category = commandParameters.poll();
+        switch(category){
+            case "addjob":
+                addJobCommand(commandParameters);
+                break;
+            case "job":
+                optionJobCommand(commandParameters);
+                break;
+            default:
+                myController.writeMessage("Command unknown");
+                break;
+        }
+    }
+
+    private void addJobCommand(Queue<String> commandParameters){
+        String jobCommand = commandParameters.poll();
+        switch(jobCommand){
             case "test":
                 myController.createTestJob();
                 break;
+            default:
+                myController.writeMessage("Command unknown");
+                break;
+        }
+    }
+
+    private void optionJobCommand(Queue<String> commandParameters){
+        String jobCommand = commandParameters.poll();
+        switch(jobCommand){
             case "view":
                 myController.viewJobs();
                 break;
@@ -61,9 +94,6 @@ public class CommandParser{
                 break;
             case "kill":
                 myController.killJob(commandParameters);
-                break;
-            default:
-                myController.writeMessage("Command unknown");
                 break;
         }
     }

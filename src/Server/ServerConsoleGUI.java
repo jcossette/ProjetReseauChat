@@ -3,7 +3,6 @@ package Server;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Created by pewtroof on 2014-11-19.

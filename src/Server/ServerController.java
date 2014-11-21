@@ -1,7 +1,5 @@
 package Server;
 
-import Server.ChatManager.ChatManagerJob;
-
 import java.util.Queue;
 
 /**
@@ -9,30 +7,15 @@ import java.util.Queue;
  * Created by Julien Cossette on 11/5/2014.
  */
 public class ServerController{
-    private static ServerController instance;
+    private ChatServer myServer;
     private CommandParser myCommandParser;
-    private Server myServer;
     private ServerConsoleGUI myGUI;
 
     /**
      * Private constructor
      */
-    private ServerController(){
-        this.myServer = new Server();
+    public ServerController(){
         this.myCommandParser = new CommandParser(this);
-    }
-
-    /**
-     * Starts or gets the instance of the singleton.
-     * @return Returns the instance of the controller.
-     */
-    public static ServerController getInstance(){
-        if(instance == null){
-            instance = new ServerController();
-            return instance;
-        }else{
-            return instance;
-        }
     }
 
     public void hookGUI(ServerConsoleGUI toHook){
@@ -40,7 +23,7 @@ public class ServerController{
     }
 
     /**
-     * Finds the requested command in the Map and executes it.
+     * Parses the requested command and executes it.
      * @param toExecute Text command to execute
      * @return Potential function return text.
      */
@@ -49,10 +32,10 @@ public class ServerController{
     }
 
     /**
-     * This method is called to display message in the server console.
+     * This method is called to display a message in the server console.
      * @param myMessage
      */
-    public void writeMessage(String myMessage){
+    public synchronized void writeMessage(String myMessage){
         myGUI.writeToConsole(myMessage);
     }
 
@@ -64,11 +47,12 @@ public class ServerController{
         myServer.giveJob(toGive);
     }
 
-    public void createChatManagerJob(Queue<String> parameters){
+    public void startChatServerJob(Queue<String> parameters){
         try{
             Integer port = Integer.parseInt(parameters.poll());
-            ChatManagerJob newChatManager = new ChatManagerJob(port);
-            addJob(newChatManager);
+            ChatServer newChatServer = new ChatServer(port);
+            this.myServer = newChatServer;
+            addJob(newChatServer);
             writeMessage("Chat Manager Job created!");
         }catch(Exception e){
             writeMessage("Chat Manager Job creation command error: " + e.toString());
@@ -92,6 +76,7 @@ public class ServerController{
         try{
             int IDtoKill = Integer.parseInt(parameters.poll());
             myServer.killJob(IDtoKill);
+            writeMessage("Job Stopped: " + IDtoKill);
         }catch(Exception e){
             writeMessage("Kill Job Command error: " + e.toString());
         }

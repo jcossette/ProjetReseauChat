@@ -18,9 +18,7 @@ public class Worker implements Runnable{
     @Override
     public void run(){
         status = 1;
-        while(myJob.run == true){
-            myJob.execute();
-        }
+        myJob.execute();
         status = 0;
         myPool.punchIn(this);
     }

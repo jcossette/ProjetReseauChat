@@ -10,8 +10,4 @@ public class ColisHandler {
     public ColisHandler(){
 
     }
-
-    public void handleColis(Colis toHandle, Session sender){
-
-    }
 }
