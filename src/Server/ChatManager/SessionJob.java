@@ -13,11 +13,12 @@ import java.nio.channels.SelectionKey;
  */
 public class SessionJob extends Job{
     private User myUser;
-    private ChatServer myChatManager;
+    private ChatServer myChatServer;
     private SelectionKey myKey;
 
-    public SessionJob(Socket myWorkingSocket){
-        myUser = null;  //Anonymous Session at first
+    public SessionJob(Socket myWorkingSocket, ChatServer myServer){
+        this.myChatServer = myServer;
+        this.myUser = null;  //Anonymous Session at first
     }
 
     public void send(Colis toSend){
@@ -27,5 +28,4 @@ public class SessionJob extends Job{
     public void execute(){
 
     }
-
 }

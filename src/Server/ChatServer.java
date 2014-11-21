@@ -1,17 +1,10 @@
 package Server;
 
-import Server.ChatManager.ColisHandler;
 import Server.ChatManager.SessionJob;
-import Server.ChatManager.UserManager;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.nio.channels.*;
 import java.util.ArrayList;
 
 /**
@@ -24,23 +17,10 @@ public class ChatServer extends Job{
     private WorkerPool myWorkerPool;
     private int myPort;
 
-    private UserManager myUserManager;
-    private ColisHandler myColisHandler;
-    private Selector myChannelSelector;
-    private ObjectInputStream myInputStream;
-    private ObjectOutputStream myOutputStream;
-
     public ChatServer(int port){
         this.myPort = port;
         this.mySessions = new ArrayList();
         this.myWorkerPool = new WorkerPool();
-
-        this.myUserManager = new UserManager();
-        try{
-            myChannelSelector = Selector.open();
-        }catch(IOException e){
-            myController.writeMessage("Erreur de creation du channel selector: " + e.getMessage());
-        }
         initSocketServer();
     }
 
@@ -66,7 +46,7 @@ public class ChatServer extends Job{
         while(run == true){
             try{
                 newClientSocket = this.myServerSocket.accept();
-                newSessionJob = new SessionJob(newClientSocket);
+                newSessionJob = new SessionJob(newClientSocket, this);
                 mySessions.add(newSessionJob);
             }catch(IOException ie){
                 //ZZZZzzzZZZzZzzzZz
@@ -74,7 +54,7 @@ public class ChatServer extends Job{
         }
     }
 
-    public void giveJob(Job toGive){
+    public synchronized void giveJob(Job toGive){
         myWorkerPool.addJob(toGive);
     }
 

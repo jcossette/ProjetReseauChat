@@ -39,7 +39,7 @@ public class WorkerPool{
      * Offers a new job to the current job queue.
      * @param toAdd A new job to give to the worker pool.
      */
-    public void addJob(Job toAdd){
+    public synchronized void addJob(Job toAdd){
         jobQueue.offer(toAdd);
         dispatch();
     }
