@@ -1,5 +1,6 @@
 package Colis;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Queue;
 /**
  * Created by pewtroof on 2014-11-17.
  */
-public class Colis
+public class Colis implements Serializable
 {
     Queue colisQueue = new LinkedList();
     TypeColisEnum type;

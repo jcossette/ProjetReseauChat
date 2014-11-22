@@ -1,5 +1,6 @@
 package Server;
 
+import Server.ChatManager.ChatManager;
 import Server.ChatManager.SessionJob;
 
 import java.io.IOException;
@@ -13,8 +14,10 @@ import java.util.ArrayList;
  */
 public class ChatServer extends Job{
     private ServerSocket myServerSocket;
+    private ChatManager myChatManager;
     private ArrayList<SessionJob> mySessions;
     private WorkerPool myWorkerPool;
+    private ServerController myController;
     private int myPort;
 
     public ChatServer(int port){
@@ -46,10 +49,11 @@ public class ChatServer extends Job{
         while(run == true){
             try{
                 newClientSocket = this.myServerSocket.accept();
-                newSessionJob = new SessionJob(newClientSocket, this);
-                mySessions.add(newSessionJob);
+                if(newClientSocket != null){
+                    new SessionJob(newClientSocket, this, myChatManager);
+                }
             }catch(IOException ie){
-                //ZZZZzzzZZZzZzzzZz
+                myController.writeMessage("newClientSocket is not null " + ie.getMessage());        //Temp message for testing
             }
         }
     }
@@ -68,5 +72,9 @@ public class ChatServer extends Job{
 
     public void killJob(int toKill){
         myWorkerPool.killJob(toKill);
+    }
+
+    public void writeMessage(String myMessage){
+        myController.writeMessage(myMessage);
     }
 }
