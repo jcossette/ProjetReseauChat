@@ -15,14 +15,14 @@ import java.util.ArrayList;
 public class ChatServer extends Job{
     private ServerSocket myServerSocket;
     private ChatManager myChatManager;
-    private ArrayList<SessionJob> mySessions;
     private WorkerPool myWorkerPool;
     private ServerController myController;
     private int myPort;
 
-    public ChatServer(int port){
+    public ChatServer(int port, ServerController myController){
+        this.myChatManager = ChatManager.getInstance();
+        this.myController = myController;
         this.myPort = port;
-        this.mySessions = new ArrayList();
         this.myWorkerPool = new WorkerPool();
         initSocketServer();
     }
@@ -34,7 +34,7 @@ public class ChatServer extends Job{
     private void initSocketServer(){
         try{
             myServerSocket = new ServerSocket(myPort);
-            myServerSocket.setSoTimeout(500);
+            myServerSocket.setSoTimeout(1500);
         }catch(IOException ie){
             myController.writeMessage("Erreur de creation du socket server: " + ie.getMessage());
         }
@@ -44,16 +44,17 @@ public class ChatServer extends Job{
      * This method verifies if any of the channel is ready to read or write and executes these actions.
      */
     private void acceptConnections(){
-        Socket newClientSocket = null;
+        Socket newClientSocket;
         SessionJob newSessionJob;
         while(run == true){
             try{
                 newClientSocket = this.myServerSocket.accept();
                 if(newClientSocket != null){
-                    new SessionJob(newClientSocket, this, myChatManager);
+                    newSessionJob = new SessionJob(newClientSocket, this, myChatManager);
+                    myChatManager.addSession(newSessionJob);
                 }
             }catch(IOException ie){
-                myController.writeMessage("newClientSocket is not null " + ie.getMessage());        //Temp message for testing
+                myController.writeMessage("Server listening for connections: " + ie.getMessage());        //Temp message for testing
             }
         }
     }

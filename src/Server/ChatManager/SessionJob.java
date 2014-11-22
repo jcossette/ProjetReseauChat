@@ -28,6 +28,7 @@ public class SessionJob extends Job{
         this.mySocket = myWorkingSocket;
         this.myChatServer = myServer;
         this.myUser = null;  //Anonymous Session at first
+        initStreams();
     }
 
     private void initStreams(){
@@ -40,7 +41,11 @@ public class SessionJob extends Job{
     }
 
     public void send(Colis toSend){
-
+        try{
+            outputStream.writeObject(toSend);
+        }catch(IOException ie){
+            myChatServer.writeMessage("Error writing to stream:" + myUser.getUsername());
+        }
     }
 
     public void execute(){
@@ -48,18 +53,21 @@ public class SessionJob extends Job{
     }
 
     private void monitorInputSocket(){
+        Colis received;
         while(run == true){
             try{
-                inputStream.readObject();
+                received = (Colis)inputStream.readObject();
+                myManager.reportColis(this, received);
             }catch(ClassNotFoundException cnfe){
                 myChatServer.writeMessage("Error reading from stream, Object not found:" + cnfe.getMessage());
             }catch(IOException ie){
-                myChatServer.writeMessage("Error reading from stream:" + ie.getMessage());
+                myChatServer.writeMessage("Error reading from stream:" + myUser.getUsername());
             }
         }
     }
 
-    private void reportColis(Colis toReport){
-
+    private User getUser(){
+        return myUser;
     }
+
 }

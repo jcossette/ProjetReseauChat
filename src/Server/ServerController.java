@@ -50,7 +50,7 @@ public class ServerController{
     public void startChatServerJob(Queue<String> parameters){
         try{
             Integer port = Integer.parseInt(parameters.poll());
-            ChatServer newChatServer = new ChatServer(port);
+            ChatServer newChatServer = new ChatServer(port, this);
             this.myServer = newChatServer;
             addJob(newChatServer);
             writeMessage("Chat Manager Job created!");

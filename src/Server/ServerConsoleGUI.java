@@ -53,7 +53,9 @@ public class ServerConsoleGUI extends JFrame
 
     public void writeToConsole(String toWrite){
         textAreaConsole.append(">  " + toWrite + "\n");
+        textAreaConsole.setCaretPosition(textAreaConsole.getDocument().getLength());
     }
+
 
 
 }
