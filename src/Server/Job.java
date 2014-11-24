@@ -6,7 +6,6 @@ package Server;
  */
 public abstract class Job{
     protected boolean run = true;
-    private int priority;
     private int numExecution;
     protected ServerController myController;
 
