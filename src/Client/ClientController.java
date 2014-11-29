@@ -78,12 +78,11 @@ public class ClientController {
     /**
      * Demande de connection
      */
-    public void connect(String userName, String password) {
+    public void connect(String userName) {
         typeColis = TypeColisEnum.connection;
 
         Colis colisToSend = new Colis(typeColis);
         colisToSend.addParameter(userName);
-        colisToSend.addParameter(password);
 
         sendColis(colisToSend);
     }

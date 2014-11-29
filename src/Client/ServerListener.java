@@ -38,11 +38,11 @@ public class ServerListener implements Runnable{
         }
         while(true){
             Colis receivedColis;
-            System.out.println("wow");
+            System.out.println("Wow");
             try {
                 receivedColis = (Colis)in.readObject();
                 if (receivedColis != null){
-                    System.out.println("not null colis received");
+                    System.out.println("Not null colis received");
                 }
                 handleColis(receivedColis);
             } catch (IOException e) {
@@ -53,12 +53,12 @@ public class ServerListener implements Runnable{
         }
     }
 
-    public void handleColis(Colis colis){
+    public void handleColis(Colis colis) {
         TypeColisEnum type = colis.getType();
         ClientGUI clientGui = guiController.getClientGUI();
         if (type == TypeColisEnum.fullUpdate){
             ArrayList<List> fullUpdateList = colis.getFullUpdateParameters();
-            //clientGui.fullUpdate(fullUpdateList.get(0), fullUpdateList.get(1), fullUpdateList.get(2));
+            clientGui.fullUpdate(fullUpdateList.get(0), fullUpdateList.get(1), fullUpdateList.get(2));
         }
         else {
             ArrayList<String> resultList = colis.getParameters();
@@ -73,7 +73,7 @@ public class ServerListener implements Runnable{
                     clientGui.removeNameFromAllRooms(resultList.get(0));
                     break;
                 case updateAddUser:
-                    //clientGui.addNameFromRoom(resultList.get(0), resultList.get(1));
+                    clientGui.addNameToRoom(resultList.get(0), resultList.get(1));
                     break;
                 case error:
                     break;
@@ -83,7 +83,7 @@ public class ServerListener implements Runnable{
                     connectionGui.closeWindow();
                     break;
                 case refusedConnection:
-                    JOptionPane.showMessageDialog(null, resultList.get(0), "Ereur",
+                    JOptionPane.showMessageDialog(null, resultList.get(0), "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                     break;
                 default:
