@@ -57,12 +57,13 @@ public class SessionJob extends Job{
         while(run == true){
             try{
                 received = (Colis)inputStream.readObject();
+                myChatServerJob.writeMessage("ÒKAY");
                 ColisClient newColisClient = new ColisClient(received, this);
                 myManager.reportColis(newColisClient);
             }catch(ClassNotFoundException cnfe){
-                myChatServerJob.writeMessage("Error reading from stream, Object not found:" + cnfe.getMessage());
+                myChatServerJob.writeMessage("Error reading from stream, Object not found: " + cnfe.getMessage());
             }catch(IOException ie){
-                myChatServerJob.writeMessage("Error reading from stream:" + myUser.getUsername());
+                myChatServerJob.writeMessage("Error reading from stream: " + this.toString());
             }
         }
     }
