@@ -1,5 +1,7 @@
 package GUI;
 
+import Client.ClientController;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -20,6 +22,9 @@ public class ClientGUI extends JFrame
     private JButton buttonSend;
     private JList listName;
     private JTextArea textAreaOutputText;
+    private JButton buttonAddRoom;
+
+    private ClientController clientController;
 
     private DefaultListModel<String> model;
     private List<List<String>> textAreaList;
@@ -28,7 +33,10 @@ public class ClientGUI extends JFrame
 
     public ClientGUI()
     {
+        model = new DefaultListModel<String>();
         listName = new JList(model);
+
+        clientController = ClientController.getInstance();
 
         setTitle("Form 1.1");
         setContentPane(entryPanel);
@@ -42,11 +50,7 @@ public class ClientGUI extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 //Execute when button is pressed
-                if(!textFieldInputText.getText().isEmpty())
-                {
-                    textAreaOutputText.append(">  "+textFieldInputText.getText()+"\n");
-                    textFieldInputText.setText("");
-                }
+                sendCommunication();
             }
         });
 
@@ -57,11 +61,7 @@ public class ClientGUI extends JFrame
                     {
                         if(e.getKeyChar() == KeyEvent.VK_ENTER)
                         {
-                            if(!textFieldInputText.getText().isEmpty())
-                            {
-                                textAreaOutputText.append("You >  "+textFieldInputText.getText()+"\n");
-                                textFieldInputText.setText("");
-                            }
+                            sendCommunication();
                         }
                     }
                 }
@@ -84,6 +84,21 @@ public class ClientGUI extends JFrame
                 }
             }
         });
+        buttonAddRoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clientController.getRoomList();
+            }
+        });
+    }
+
+    private void sendCommunication(){
+        if(!textFieldInputText.getText().isEmpty())
+        {
+            clientController.communication(getCurrentRoom(), textFieldInputText.getText());
+            textAreaOutputText.append("You >  "+textFieldInputText.getText()+"\n");
+            textFieldInputText.setText("");
+        }
     }
 
     public String getCurrentRoom(){

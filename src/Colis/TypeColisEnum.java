@@ -10,6 +10,7 @@ public enum TypeColisEnum
     acceptedConnection, //vide
     refusedConnection,  //String message
     disconnection,      //vide
+    getFullUpdate,      //vide
     fullUpdate,         //List<String> roomList, List<List<String>> userLists, List<List<String>> textLists
     listRequest,        //String roomName
     updateText,         //String roomName, String textToUpdate, String userName
@@ -17,7 +18,8 @@ public enum TypeColisEnum
     updateRemoveUserFromRoom,   //String roomName, String username
     updateRemoveUser,   //String username
     createRoom,         //String roomName
+    joinRoom,           //String roomName
+    roomInfos,           //Room room
     getRoomList,        //List<String> roomList
-    error,              //String message
-    joinRoom            //String roomName
+    error                 //String message
 }

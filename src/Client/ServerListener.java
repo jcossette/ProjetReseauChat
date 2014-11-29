@@ -3,6 +3,7 @@ package Client;
 import Colis.Colis;
 import Colis.TypeColisEnum;
 import GUI.ClientGUI;
+import GUI.RoomSelectionGUI;
 import GUI.UserConnectionGUI;
 
 import javax.swing.*;
@@ -44,11 +45,13 @@ public class ServerListener implements Runnable{
             System.out.println("Wow");
             try {
                 receivedColis = (Colis)in.readObject();
+                System.out.println("Colis received");
                 if (receivedColis != null){
                     System.out.println("Not null colis received");
                 }
                 handleColis(receivedColis);
             } catch (SocketException e) {
+                System.out.println("Connection with server lost");
                 running = false;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -58,16 +61,25 @@ public class ServerListener implements Runnable{
         }
     }
 
-
-
     public void handleColis(Colis colis) {
         TypeColisEnum type = colis.getType();
-        ClientGUI clientGui = guiController.getClientGUI();
+        ClientGUI clientGui;
         if (type == TypeColisEnum.fullUpdate){
+            clientGui = new ClientGUI();
             ArrayList<List> fullUpdateList = colis.getFullUpdateParameters();
             clientGui.fullUpdate(fullUpdateList.get(0), fullUpdateList.get(1), fullUpdateList.get(2));
         }
+        else if(type == TypeColisEnum.getRoomList) {
+            ArrayList<String> roomList = (ArrayList<String>)colis.popParameter();
+            new RoomSelectionGUI(roomList);
+        }
+        else if(type == TypeColisEnum.roomInfos) {
+            clientGui = guiController.getClientGUI();
+            ArrayList<String> roomList = (ArrayList<String>)colis.popParameter();
+            new RoomSelectionGUI(roomList);
+        }
         else {
+            clientGui = guiController.getClientGUI();
             ArrayList<String> resultList = colis.getParameters();
             switch (type) {
                 case updateText:
@@ -86,8 +98,8 @@ public class ServerListener implements Runnable{
                     break;
                 case acceptedConnection:
                     UserConnectionGUI connectionGui = guiController.getConnectionGUI();
-                    new ClientGUI();
                     connectionGui.closeWindow();
+                    controller.getFullUpdate();
                     break;
                 case refusedConnection:
                     JOptionPane.showMessageDialog(null, resultList.get(0), "Erreur",

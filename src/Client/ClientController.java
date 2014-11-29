@@ -112,7 +112,7 @@ public class ClientController {
     /**
      *  Création d'une nouvelle room
      */
-    public void createRooom(String roomName){
+    public void createRoom(String roomName){
         typeColis = TypeColisEnum.createRoom;
 
         Colis colisToSend = new Colis(typeColis);
@@ -161,8 +161,8 @@ public class ClientController {
     /**
      * Demande de fullUpdate (un refresh de la page)
      */
-    public void fullUpdate(){
-        typeColis = TypeColisEnum.fullUpdate;
+    public void getFullUpdate(){
+        typeColis = TypeColisEnum.getFullUpdate;
 
         Colis colisToSend = new Colis(typeColis);
 

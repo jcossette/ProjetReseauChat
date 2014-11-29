@@ -38,7 +38,7 @@ public class UserConnectionGUI extends JFrame
             {
                 controller.connect(textFieldUsername.getText());
 
-               /* new ClientGUI();
+                /*new ClientGUI();
                 setVisible(false);*/
             }
         });
@@ -46,5 +46,6 @@ public class UserConnectionGUI extends JFrame
 
     public void closeWindow(){
         setVisible(false);
+        this.dispose();
     }
 }
