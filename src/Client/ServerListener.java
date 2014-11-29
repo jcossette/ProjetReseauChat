@@ -8,6 +8,7 @@ import GUI.UserConnectionGUI;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +21,12 @@ public class ServerListener implements Runnable{
     GUIController guiController;
     Thread myThread;
     ObjectInputStream in;
+    boolean running;
 
     public ServerListener(){
         controller = ClientController.getInstance();
         guiController = GUIController.getInstance();
+        running = true;
 
         myThread = new Thread(this, "serverListener");
         myThread.start();
@@ -36,7 +39,7 @@ public class ServerListener implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        while(true){
+        while(running == true){
             Colis receivedColis;
             System.out.println("Wow");
             try {
@@ -45,6 +48,8 @@ public class ServerListener implements Runnable{
                     System.out.println("Not null colis received");
                 }
                 handleColis(receivedColis);
+            } catch (SocketException e) {
+                running = false;
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -52,6 +57,8 @@ public class ServerListener implements Runnable{
             }
         }
     }
+
+
 
     public void handleColis(Colis colis) {
         TypeColisEnum type = colis.getType();

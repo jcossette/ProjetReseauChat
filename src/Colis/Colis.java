@@ -38,7 +38,7 @@ public class Colis implements Serializable
         return resultList;
     }
 
-    public Object popParemeter(){
+    public Object popParameter(){
         return colisQueue.poll();
     }
 
