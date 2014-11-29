@@ -40,7 +40,7 @@ public class SessionJob extends Job{
         }
     }
 
-    public void send(Colis toSend){
+    public synchronized void send(Colis toSend){
         try{
             outputStream.writeObject(toSend);
         }catch(IOException ie){

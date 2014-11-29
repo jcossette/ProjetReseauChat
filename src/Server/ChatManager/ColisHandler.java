@@ -12,7 +12,8 @@ public class ColisHandler {
 
 
     public ColisHandler(){
-
+        myUserManager = new UserManager();
+        myRoomManager = new RoomManager();
     }
 
     public void handleColis(ColisClient toHandle){
@@ -28,11 +29,14 @@ public class ColisHandler {
 
     private void handleConnection(ColisClient toHandle){
         String username = toHandle.getMyColis().popParemeter();
-        String password = toHandle.getMyColis().popParemeter();
-
         if(myUserManager.hasUser(username)){
             Colis returnDeny = new Colis(TypeColisEnum.refusedConnection);
-            //returnDeny.addParameter()
+            returnDeny.addParameter("Connection refusé: Username en utilisation");
+            toHandle.getMySession().send(returnDeny);
+        }else{
+            Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
+            returnAccept.addParameter("Connection accepté: Username = " + username);
+            toHandle.getMySession().send(returnAccept);
         }
     }
 
