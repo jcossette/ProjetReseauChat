@@ -60,16 +60,16 @@ public class ServerListener implements Runnable{
         }
     }
 
-
-
     public void handleColis(Colis colis) {
         TypeColisEnum type = colis.getType();
-        ClientGUI clientGui = guiController.getClientGUI();
+        ClientGUI clientGui;
         if (type == TypeColisEnum.fullUpdate){
+            clientGui = new ClientGUI();
             ArrayList<List> fullUpdateList = colis.getFullUpdateParameters();
             clientGui.fullUpdate(fullUpdateList.get(0), fullUpdateList.get(1), fullUpdateList.get(2));
         }
         else {
+            clientGui = guiController.getClientGUI();
             ArrayList<String> resultList = colis.getParameters();
             switch (type) {
                 case updateText:
@@ -88,8 +88,8 @@ public class ServerListener implements Runnable{
                     break;
                 case acceptedConnection:
                     UserConnectionGUI connectionGui = guiController.getConnectionGUI();
-                    new ClientGUI();
                     connectionGui.closeWindow();
+                    controller.getFullUpdate();
                     break;
                 case refusedConnection:
                     JOptionPane.showMessageDialog(null, resultList.get(0), "Erreur",

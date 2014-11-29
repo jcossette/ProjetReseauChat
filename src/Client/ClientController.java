@@ -161,8 +161,8 @@ public class ClientController {
     /**
      * Demande de fullUpdate (un refresh de la page)
      */
-    public void fullUpdate(){
-        typeColis = TypeColisEnum.fullUpdate;
+    public void getFullUpdate(){
+        typeColis = TypeColisEnum.getFullUpdate;
 
         Colis colisToSend = new Colis(typeColis);
 

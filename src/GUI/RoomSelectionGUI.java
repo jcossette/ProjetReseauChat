@@ -11,4 +11,13 @@ public class RoomSelectionGUI {
     private JTextField textFieldCreateRoom;
     private JButton buttonCreateRoom;
     private JButton buttonAnnuler;
+
+    public RoomSelectionGUI(){
+        /*setTitle("Form 1.1");
+        setContentPane(entryPanel);
+        setLocationRelativeTo(null);
+        pack();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setVisible(true);*/
+    }
 }

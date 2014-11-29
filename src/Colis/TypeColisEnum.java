@@ -10,6 +10,7 @@ public enum TypeColisEnum
     acceptedConnection, //vide
     refusedConnection,  //String message
     disconnection,      //vide
+    getFullUpdate,      //vide
     fullUpdate,         //List<String> roomList, List<List<String>> userLists, List<List<String>> textLists
     listRequest,        //String roomName
     updateText,         //String roomName, String textToUpdate, String userName
