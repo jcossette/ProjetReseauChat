@@ -20,6 +20,7 @@ public class ClientGUI extends JFrame
     private JButton buttonSend;
     private JList listName;
     private JTextArea textAreaOutputText;
+    private JButton buttonAddRoom;
 
     private DefaultListModel<String> model;
     private List<List<String>> textAreaList;
