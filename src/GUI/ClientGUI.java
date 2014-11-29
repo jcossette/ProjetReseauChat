@@ -28,6 +28,7 @@ public class ClientGUI extends JFrame
 
     public ClientGUI()
     {
+        model = new DefaultListModel<String>();
         listName = new JList(model);
 
         setTitle("Form 1.1");

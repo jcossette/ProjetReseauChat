@@ -44,11 +44,13 @@ public class ServerListener implements Runnable{
             System.out.println("Wow");
             try {
                 receivedColis = (Colis)in.readObject();
+                System.out.println("Colis received");
                 if (receivedColis != null){
                     System.out.println("Not null colis received");
                 }
                 handleColis(receivedColis);
             } catch (SocketException e) {
+                System.out.println("Connection with server lost");
                 running = false;
             } catch (IOException e) {
                 e.printStackTrace();
