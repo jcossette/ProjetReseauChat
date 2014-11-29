@@ -28,7 +28,7 @@ public class ColisHandler {
     }
 
     private void handleConnection(ColisClient toHandle){
-        String username = toHandle.getMyColis().popParemeter();
+        String username = (String)toHandle.getMyColis().popParameter();
         if(myUserManager.hasUser(username)){
             Colis returnDeny = new Colis(TypeColisEnum.refusedConnection);
             returnDeny.addParameter("Connection refusé: Username en utilisation");
