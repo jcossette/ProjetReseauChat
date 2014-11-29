@@ -18,11 +18,15 @@ public class ServerListener implements Runnable{
 
     ClientController controller;
     GUIController guiController;
+    Thread myThread;
     ObjectInputStream in;
 
     public ServerListener(){
         controller = ClientController.getInstance();
         guiController = GUIController.getInstance();
+
+        myThread = new Thread(this, "serverListener");
+        myThread.start();
     }
 
     @Override
@@ -34,8 +38,12 @@ public class ServerListener implements Runnable{
         }
         while(true){
             Colis receivedColis;
+            System.out.println("wow");
             try {
                 receivedColis = (Colis)in.readObject();
+                if (receivedColis != null){
+                    System.out.println("not null colis received");
+                }
                 handleColis(receivedColis);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -56,10 +64,13 @@ public class ServerListener implements Runnable{
             ArrayList<String> resultList = colis.getParameters();
             switch (type) {
                 case updateText:
-                    //clientGui.updateText(resultList.get(0), resultList.get(1), resultList.get(2));
+                    clientGui.updateText(resultList.get(0), resultList.get(1), resultList.get(2));
+                    break;
+                case updateRemoveUserFromRoom:
+                    clientGui.removeNameFromRoom(resultList.get(0), resultList.get(1));
                     break;
                 case updateRemoveUser:
-                    //clientGui.removeNameToRoom(resultList.get(0), resultList.get(1));
+                    clientGui.updateRemoveName(resultList.get(0));
                     break;
                 case updateAddUser:
                     //clientGui.addNameFromRoom(resultList.get(0), resultList.get(1));
@@ -72,7 +83,7 @@ public class ServerListener implements Runnable{
                     connectionGui.closeWindow();
                     break;
                 case refusedConnection:
-                    JOptionPane.showMessageDialog(null, resultList.get(0), "Ereurr",
+                    JOptionPane.showMessageDialog(null, resultList.get(0), "Ereur",
                             JOptionPane.ERROR_MESSAGE);
                     break;
                 default:

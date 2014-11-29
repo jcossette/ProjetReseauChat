@@ -12,9 +12,10 @@ public enum TypeColisEnum
     disconnection,      //vide
     fullUpdate,         //List<String> roomList, List<List<String>> userLists, List<List<String>> textLists
     listRequest,        //String roomName
-    updateText,         //String roomName, String textToUpdate
+    updateText,         //String roomName, String textToUpdate, String userName
     updateAddUser,      //String roomName, String username
-    updateRemoveUser,   //String roomName, String username
+    updateRemoveUserFromRoom,   //String roomName, String username
+    updateRemoveUser,   //String username
     createRoom,         //String roomName
     getRoomList,        //List<String> roomList
     error,              //String message
