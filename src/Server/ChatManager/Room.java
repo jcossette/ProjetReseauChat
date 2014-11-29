@@ -1,6 +1,7 @@
 package Server.ChatManager;
 
 import java.util.ArrayList;
+import java.util.Deque;
 
 /**
  * Created by Julien Cossette on 11/29/2014.
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 public class Room{
     private String name;
     private ArrayList<User> myUsers;
+    private Deque<String> messageChain;
 
     public Room(){
 
@@ -27,5 +29,13 @@ public class Room{
 
     public void addUser(User toAdd){
         myUsers.add(toAdd);
+    }
+
+    public Deque<String> getMessageChain(){
+        return messageChain;
+    }
+
+    public void addMessage(String message){
+        messageChain.offer(message);
     }
 }
