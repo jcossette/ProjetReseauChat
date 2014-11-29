@@ -2,6 +2,7 @@ package GUI;
 
 import Client.ClientController;
 import Server.ChatManager.Room;
+import Server.ChatManager.User;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -10,8 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pewtroof on 2014-11-05.
@@ -29,9 +30,12 @@ public class ClientGUI extends JFrame
     private ClientController clientController;
 
     private DefaultListModel<String> model;
-    private List<List<String>> textAreaList;
+    /*private List<Deque<String>> textAreaList;
     private List<List<String>> userNameList;
-    private List<String> roomList;
+    private List<String> roomList;*/
+
+    private List<Room> roomList;
+    private Map<JPanel, Room> roomMap;
 
     public ClientGUI()
     {
@@ -73,17 +77,11 @@ public class ClientGUI extends JFrame
         {
             public void stateChanged(ChangeEvent e)
             {
-                textAreaOutputText.setText("");
-                for(int i = 0; i<textAreaList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
-                {
-                    updateTextAreaFromList(textAreaList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
-                }
+                model.clear();
 
-                listName.clearSelection();
-                for(int i = 0; i<userNameList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
-                {
-                    updateNameFromList(userNameList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
-                }
+                Room room = roomMap.get(tabbedPaneRoom.getSelectedComponent());
+
+                fillTab(room);
             }
         });
         buttonAddRoom.addActionListener(new ActionListener() {
@@ -97,26 +95,23 @@ public class ClientGUI extends JFrame
     private void sendCommunication(){
         if(!textFieldInputText.getText().isEmpty())
         {
-            clientController.communication(getCurrentRoom(), textFieldInputText.getText());
-            textAreaOutputText.append("You >  "+textFieldInputText.getText()+"\n");
-            textFieldInputText.setText("");
+            clientController.communication(getCurrentRoom().getName(), textFieldInputText.getText());
         }
     }
 
-    public String getCurrentRoom(){
-        String currentRoom = roomList.get(tabbedPaneRoom.getSelectedIndex());
+    public Room getCurrentRoom(){
+        Room currentRoom = roomList.get(tabbedPaneRoom.getSelectedIndex());
         return currentRoom;
     }
 
-    public void updateText(String roomName, String text, String name)
+    public void updateText(String roomName, String text)
     {
-        for(int i = 0; i<roomList.size(); i++)
-        {
-            if (roomList.get(i).equals(roomName))
-            {
-                textAreaList.get(i).add(name + " >  " + text + "\n");
-                textAreaOutputText.append(name + " >  " + text + "\n");
-            }
+        Room toUpdate = getRoom(roomName);
+
+        toUpdate.addMessage(text);
+
+        if (isCurrentRoom(toUpdate)){
+            textAreaOutputText.append(text + "\n");
         }
     }
 
@@ -129,8 +124,6 @@ public class ClientGUI extends JFrame
 
     public  void updateRemoveName(String userName)
     {
-        model = (DefaultListModel)listName.getModel();
-
         for(int i = 0; i<model.getSize(); i++)
         {
             if (model.getElementAt(i).equals(userName))
@@ -142,88 +135,67 @@ public class ClientGUI extends JFrame
         listName.setModel(model);
     }
 
-    public void addNameToRoom(String room, String name)
+    public void addNameToRoom(String roomName, User user)
     {
-        for(int i = 0; i<roomList.size(); i++)
-        {
-            if (roomList.get(i).equals(room))
-            {
-                if(tabbedPaneRoom.getSelectedIndex() == i) {
-                    updateAddName(name);
+        Room room = getRoom(roomName);
+        if(isCurrentRoom(room)) {
+                    updateAddName(user.getUsername());
                 }
-                userNameList.get(i).add(name);
-            }
-        }
+       room.addUser(user);
     }
 
-    public void removeNameFromRoom(String room, String name)
+    public void removeNameFromRoom(String roomName, User user)
     {
-        for(int i = 0; i<roomList.size(); i++)
-        {
-            if (roomList.get(i).equals(room))
-            {
-                if (tabbedPaneRoom.getSelectedIndex() == i)
-                    updateRemoveName(name);
-               userNameList.get(i).remove(name);
-            }
+        Room room = getRoom(roomName);
+        if(isCurrentRoom(room)) {
+            updateRemoveName(user.getUsername());
+        }
+        room.removeUser(user);
+    }
+
+    public void removeNameFromAllRooms(User user) {
+        for (Room room : roomList){
+            removeNameFromRoom(room.getName(), user);
         }
     }
 
-    public void removeNameFromAllRooms(String name) {
-        for(int i = 0; i<roomList.size(); i++)
-        {
-            for (int j = 0; j < userNameList.get(i).size(); j ++) {
-                if (userNameList.get(i).get(j).equals(name))
-                {
-                    if (getCurrentRoom().equals(roomList.get(i))) {
-                        updateRemoveName(name);
-                    }
-                        userNameList.get(i).remove(name);
-                }
-            }
-        }
-    }
-
-    public void fullUpdate(List<String> roomNameList, List<List<String>> userNameList, List<List<String>> textList)
+    public void fullUpdate(List<Room> roomList)
     {
-        this.roomList = roomNameList;
-        this.userNameList = userNameList;
-        this.textAreaList = textList;
-
-        for(int i = 0; i<roomList.size(); i++)
-        {
-            updateAllRoom(roomList.get(i));
+        this.roomList = roomList;
+        Room lobby = roomList.get(0);
+        for (Room room : roomList) {
+            createRoom(room);
         }
 
-        for(int i = 0; i<userNameList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
-        {
-            updateNameFromList(userNameList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
+        fillTab(lobby);
+    }
+
+    private void fillTab(Room room){
+        for(User user : room.getMyUsers()) {
+            updateNameFromList(user.getUsername());
         }
 
-        for(int i = 0; i<textList.get(tabbedPaneRoom.getSelectedIndex()).size(); i++)
-        {
-            updateTextAreaFromList(textList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
+        for(String line : room.getMessageChain()){
+            updateTextAreaFromList(line);
         }
     }
 
-    public void createRoom(String roomName){
-        tabbedPaneRoom.addTab(roomName,new JLabel("test: "+roomName));
-        ArrayList<String> emptyList = new ArrayList<>();
-        this.userNameList.add(emptyList);
-        this.textAreaList.add(emptyList);
-        this.roomList.add(roomName);
+    private void createRoom(Room room){
+        JPanel panel = new JPanel();
+        panel.add(textAreaOutputText);
+        tabbedPaneRoom.addTab(room.getName(), panel);
+
+        roomMap.put(panel, room);
     }
 
-    public void joinRoom(Room room, List<String> userNameList){
-        tabbedPaneRoom.addTab(room.getName(),new JLabel("test: "+room.getName()));
-        this.userNameList.add(userNameList);
-        //this.textAreaList.add(room.getMessageChain);
-        this.roomList.add(room.getName());
-    }
 
-    private void updateAllRoom(String roomName)
-    {
-        tabbedPaneRoom.addTab(roomName, new JLabel("test: "+roomName));
+    public void joinRoom(Room room){
+        createRoom(room);
+
+        for (User user : room.getMyUsers()){
+            updateNameFromList(user.getUsername());
+        }
+        this.roomList.add(room);
     }
 
     private void updateNameFromList(String name)
@@ -236,5 +208,26 @@ public class ClientGUI extends JFrame
     private void updateTextAreaFromList(String text)
     {
         textAreaOutputText.append(text);
+    }
+
+    private Room getRoom(String roomName){
+        Room room = new Room();
+
+        for (Room r : roomList){
+            if (r.getName().equals(roomName)){
+                room = r;
+                break;
+            }
+        }
+
+        return room;
+    }
+
+    private boolean isCurrentRoom(Room room){
+        if (room.getName().equals(getCurrentRoom().getName())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

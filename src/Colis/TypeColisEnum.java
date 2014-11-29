@@ -11,15 +11,15 @@ public enum TypeColisEnum
     refusedConnection,  //String message
     disconnection,      //vide
     getFullUpdate,      //vide
-    fullUpdate,         //List<String> roomList, List<List<String>> userLists, List<List<String>> textLists
+    fullUpdate,         //List<Room> roomList, List<User> userLists
     listRequest,        //String roomName
-    updateText,         //String roomName, String textToUpdate, String userName
-    updateAddUser,      //String roomName, String username
-    updateRemoveUserFromRoom,   //String roomName, String username
-    updateRemoveUser,   //String username
+    updateText,         //String roomName, String textToUpdate
+    updateAddUser,      //String room, User user
+    updateRemoveUserFromRoom,   //String room, User user
+    updateRemoveUser,   //User user
     createRoom,         //String roomName
     joinRoom,           //String roomName
-    roomInfos,           //Room room
+    roomInfos,          //Room room
     getRoomList,        //List<String> roomList
     error                 //String message
 }

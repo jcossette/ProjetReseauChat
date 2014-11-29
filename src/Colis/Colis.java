@@ -28,27 +28,7 @@ public class Colis implements Serializable
         return type;
     }
 
-    public ArrayList<String> getParameters(){
-        ArrayList<String> resultList = new ArrayList<>();
-
-        while(!colisQueue.isEmpty()){
-            resultList.add((String) colisQueue.poll());
-        }
-
-        return resultList;
-    }
-
     public Object popParameter(){
         return colisQueue.poll();
-    }
-
-    public ArrayList<List> getFullUpdateParameters(){
-        ArrayList<List> resultList = new ArrayList<>();
-
-        while(!colisQueue.isEmpty()){
-            resultList.add((List)colisQueue.poll());
-        }
-
-        return resultList;
     }
 }

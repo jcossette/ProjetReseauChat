@@ -5,6 +5,8 @@ import Colis.TypeColisEnum;
 import GUI.ClientGUI;
 import GUI.RoomSelectionGUI;
 import GUI.UserConnectionGUI;
+import Server.ChatManager.Room;
+import Server.ChatManager.User;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -66,8 +68,8 @@ public class ServerListener implements Runnable{
         ClientGUI clientGui;
         if (type == TypeColisEnum.fullUpdate){
             clientGui = new ClientGUI();
-            ArrayList<List> fullUpdateList = colis.getFullUpdateParameters();
-            clientGui.fullUpdate(fullUpdateList.get(0), fullUpdateList.get(1), fullUpdateList.get(2));
+
+            clientGui.fullUpdate((ArrayList<Room>) colis.popParameter());
         }
         else if(type == TypeColisEnum.getRoomList) {
             ArrayList<String> roomList = (ArrayList<String>)colis.popParameter();
@@ -75,24 +77,22 @@ public class ServerListener implements Runnable{
         }
         else if(type == TypeColisEnum.roomInfos) {
             clientGui = guiController.getClientGUI();
-            ArrayList<String> roomList = (ArrayList<String>)colis.popParameter();
-            new RoomSelectionGUI(roomList);
+            clientGui.joinRoom((Room) colis.popParameter());
         }
         else {
             clientGui = guiController.getClientGUI();
-            ArrayList<String> resultList = colis.getParameters();
             switch (type) {
                 case updateText:
-                    clientGui.updateText(resultList.get(0), resultList.get(1), resultList.get(2));
+                    clientGui.updateText((String)colis.popParameter(), (String)colis.popParameter());
                     break;
                 case updateRemoveUserFromRoom:
-                    clientGui.removeNameFromRoom(resultList.get(0), resultList.get(1));
+                    clientGui.removeNameFromRoom((String)colis.popParameter(), (User)colis.popParameter());
                     break;
                 case updateRemoveUser:
-                    clientGui.removeNameFromAllRooms(resultList.get(0));
+                    clientGui.removeNameFromAllRooms((User)colis.popParameter());
                     break;
                 case updateAddUser:
-                    clientGui.addNameToRoom(resultList.get(0), resultList.get(1));
+                    clientGui.addNameToRoom((String) colis.popParameter(), (User)colis.popParameter());
                     break;
                 case error:
                     break;
@@ -102,7 +102,7 @@ public class ServerListener implements Runnable{
                     controller.getFullUpdate();
                     break;
                 case refusedConnection:
-                    JOptionPane.showMessageDialog(null, resultList.get(0), "Erreur",
+                    JOptionPane.showMessageDialog(null, (String)colis.popParameter(), "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                     break;
                 default:

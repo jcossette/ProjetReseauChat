@@ -1,6 +1,7 @@
 package GUI;
 
 import Client.ClientController;
+import Client.GUIController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
