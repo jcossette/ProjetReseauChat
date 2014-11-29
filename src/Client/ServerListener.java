@@ -102,7 +102,7 @@ public class ServerListener implements Runnable{
                     controller.getFullUpdate();
                     break;
                 case refusedConnection:
-                    JOptionPane.showMessageDialog(null, (String)colis.popParameter(), "Erreur",
+                    JOptionPane.showMessageDialog(null, colis.popParameter(), "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                     break;
                 default:

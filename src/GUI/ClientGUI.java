@@ -30,9 +30,6 @@ public class ClientGUI extends JFrame
     private ClientController clientController;
 
     private DefaultListModel<String> model;
-    /*private List<Deque<String>> textAreaList;
-    private List<List<String>> userNameList;
-    private List<String> roomList;*/
 
     private List<Room> roomList;
     private Map<JPanel, Room> roomMap;

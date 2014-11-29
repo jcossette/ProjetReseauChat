@@ -21,7 +21,7 @@ public class Colis implements Serializable
 
     public void addParameter(Object parameter)
     {
-        colisQueue.offer(parameter);
+        colisQueue.add(parameter);
     }
 
     public TypeColisEnum getType(){
