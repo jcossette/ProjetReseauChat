@@ -2,6 +2,7 @@ package Server.ChatManager;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * Created by Julien Cossette on 11/29/2014.
@@ -10,13 +11,21 @@ public class Room{
     private String name;
     private ArrayList<User> myUsers;
     private Deque<String> messageChain;
+    private Integer myID;
+    private static int IDticker = 0;
 
     public Room(){
-
+        messageChain = new LinkedList();
+        myUsers = new ArrayList();
+        myID = new Integer(IDticker++);
     }
 
     public String getName(){
         return name;
+    }
+
+    public Integer getID(){
+        return myID;
     }
 
     public void setName(String myName){

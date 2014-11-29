@@ -1,12 +1,13 @@
 package Server.ChatManager;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Julien Cossette on 11/29/2014.
  */
 public class RoomManager{
-    private ArrayList<Room> myRooms;
+    private Map<Integer, Room> myRooms;
 
     public RoomManager(){
         initLobby();
@@ -15,19 +16,15 @@ public class RoomManager{
     private void initLobby(){
         Room lobby = new Room();
         lobby.setName("Lobby");
-        myRooms.add(lobby);
+        myRooms.put(lobby.getID(), lobby);
     }
 
     public ArrayList<Room> getRoomList(){
-        return myRooms;
+        ArrayList<Room> myRoomList = new ArrayList(myRooms.values());
+        return myRoomList;
     }
 
-    public Room getRoom(String name){
-        for(Room r : myRooms){
-            if(r.getName().equals(name)){
-                return r;
-            }
-        }
-        return null;
+    public Room getRoom(Integer ID){
+        return myRooms.get(ID);
     }
 }
