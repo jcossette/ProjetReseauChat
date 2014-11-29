@@ -18,7 +18,6 @@ public class UserConnectionGUI extends JFrame
     private JPanel entryPanel;
     private ClientController controller;
     private GUIController guiController;
-    private JPasswordField passwordFieldUser;
 
     public UserConnectionGUI()
     {
@@ -37,7 +36,7 @@ public class UserConnectionGUI extends JFrame
         {
             public void actionPerformed(ActionEvent e)
             {
-                controller.connect(textFieldUsername.getText(), Arrays.toString(passwordFieldUser.getPassword()));
+                controller.connect(textFieldUsername.getText());
 
                /* new ClientGUI();
                 setVisible(false);*/

@@ -6,7 +6,7 @@ package Colis;
 public enum TypeColisEnum
 {
     communication,      //String roomName, String message
-    connection,         //String username, String password
+    connection,         //String username
     acceptedConnection, //vide
     refusedConnection,  //String message
     disconnection,      //vide

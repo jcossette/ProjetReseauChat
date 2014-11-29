@@ -131,10 +131,10 @@ public class ClientGUI extends JFrame
         {
             if (roomList.get(i).equals(room))
             {
-                if(tabbedPaneRoom.getSelectedIndex() == i)
+                if(tabbedPaneRoom.getSelectedIndex() == i) {
                     updateAddName(name);
-                else
-                    userNameList.get(i).add(name);
+                }
+                userNameList.get(i).add(name);
             }
         }
     }

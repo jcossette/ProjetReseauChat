@@ -19,7 +19,7 @@ public class Colis implements Serializable
         this.type = type;
     }
 
-    public void addParameter(String parameter)
+    public void addParameter(Object parameter)
     {
         colisQueue.offer(parameter);
     }
@@ -32,14 +32,14 @@ public class Colis implements Serializable
         ArrayList<String> resultList = new ArrayList<>();
 
         while(!colisQueue.isEmpty()){
-            resultList.add((String)colisQueue.poll());
+            resultList.add((String) colisQueue.poll());
         }
 
         return resultList;
     }
 
-    public String popParemeter(){
-        return (String) colisQueue.poll();
+    public Object popParemeter(){
+        return colisQueue.poll();
     }
 
     public ArrayList<List> getFullUpdateParameters(){
