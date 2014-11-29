@@ -1,6 +1,7 @@
 package Server.ChatManager;
 
 import Colis.Colis;
+import Colis.TypeColisEnum;
 
 /**
  * Created by coylter on 11/19/2014.
@@ -26,7 +27,13 @@ public class ColisHandler {
     }
 
     private void handleConnection(ColisClient toHandle){
+        String username = toHandle.getMyColis().popParemeter();
+        String password = toHandle.getMyColis().popParemeter();
 
+        if(myUserManager.hasUser(username)){
+            Colis returnDeny = new Colis(TypeColisEnum.refusedConnection);
+            //returnDeny.addParameter()
+        }
     }
 
 }
