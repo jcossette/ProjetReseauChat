@@ -37,10 +37,17 @@ public class ColisHandler {
             returnDeny.addParameter("Connection refusé: Username en utilisation");
             toHandle.getMySession().send(returnDeny);
         }else{
+            User newUser = new User(username);
+            toHandle.getMySession().setUser(newUser);
             Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
             returnAccept.addParameter("Connection accepté: Username = " + username);
+            joinRoom("Lobby" , newUser);
             toHandle.getMySession().send(returnAccept);
         }
+    }
+
+    private void joinRoom(String roomToJoin, User userToJoin){
+        myRoomManager.getRoom(roomToJoin).addUser(userToJoin);
     }
 
     private void handleFullUpdate(ColisClient toHandle){

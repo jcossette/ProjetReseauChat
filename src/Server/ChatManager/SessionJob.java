@@ -76,4 +76,7 @@ public class SessionJob extends Job{
         return myUser;
     }
 
+    public void setUser(User toSet){
+        this.myUser = toSet;
+    }
 }

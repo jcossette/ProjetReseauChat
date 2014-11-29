@@ -21,4 +21,13 @@ public class RoomManager{
     public ArrayList<Room> getRoomList(){
         return myRooms;
     }
+
+    public Room getRoom(String name){
+        for(Room r : myRooms){
+            if(r.getName().equals(name)){
+                return r;
+            }
+        }
+        return null;
+    }
 }
