@@ -70,7 +70,7 @@ public class ServerListener implements Runnable{
                     clientGui.removeNameFromRoom(resultList.get(0), resultList.get(1));
                     break;
                 case updateRemoveUser:
-                    clientGui.updateRemoveName(resultList.get(0));
+                    clientGui.removeNameFromAllRooms(resultList.get(0));
                     break;
                 case updateAddUser:
                     //clientGui.addNameFromRoom(resultList.get(0), resultList.get(1));

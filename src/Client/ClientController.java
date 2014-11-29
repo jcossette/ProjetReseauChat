@@ -82,8 +82,8 @@ public class ClientController {
         typeColis = TypeColisEnum.connection;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.setParameter(userName);
-        colisToSend.setParameter(password);
+        colisToSend.addParameter(userName);
+        colisToSend.addParameter(password);
 
         sendColis(colisToSend);
     }
@@ -117,7 +117,7 @@ public class ClientController {
         typeColis = TypeColisEnum.createRoom;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.setParameter(roomName);
+        colisToSend.addParameter(roomName);
 
         sendColis(colisToSend);
     }
@@ -129,7 +129,7 @@ public class ClientController {
         typeColis = TypeColisEnum.joinRoom;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.setParameter(roomName);
+        colisToSend.addParameter(roomName);
 
         sendColis(colisToSend);
     }
@@ -141,8 +141,8 @@ public class ClientController {
         typeColis = TypeColisEnum.communication;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.setParameter(roomName);
-        colisToSend.setParameter(message);
+        colisToSend.addParameter(roomName);
+        colisToSend.addParameter(message);
 
         sendColis(colisToSend);
     }
@@ -154,7 +154,7 @@ public class ClientController {
         typeColis = TypeColisEnum.listRequest;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.setParameter(roomName);
+        colisToSend.addParameter(roomName);
 
         sendColis(colisToSend);
     }

@@ -147,21 +147,20 @@ public class ClientGUI extends JFrame
             {
                 if (tabbedPaneRoom.getSelectedIndex() == i)
                     updateRemoveName(name);
-                else
-                    userNameList.get(i).remove(name);
+               userNameList.get(i).remove(name);
             }
         }
     }
 
-    public void removeNameFromAllRooms(String name){
+    public void removeNameFromAllRooms(String name) {
         for(int i = 0; i<roomList.size(); i++)
         {
-            for (int j = 0; j < userNameList.get(i).size(); j ++){
+            for (int j = 0; j < userNameList.get(i).size(); j ++) {
                 if (userNameList.get(i).get(j).equals(name))
                 {
-                    if (tabbedPaneRoom.getSelectedIndex() == i)
+                    if (getCurrentRoom().equals(roomList.get(i))) {
                         updateRemoveName(name);
-                    else
+                    }
                         userNameList.get(i).remove(name);
                 }
             }
