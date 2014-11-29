@@ -86,9 +86,21 @@ public class ClientGUI extends JFrame
         });
     }
 
-    public void updateText(String text, String name)
+    public String getCurrentRoom(){
+        String currentRoom = roomList.get(tabbedPaneRoom.getSelectedIndex());
+        return currentRoom;
+    }
+
+    public void updateText(String roomName, String text, String name)
     {
-        textAreaOutputText.append(name+" >  "+text+"\n");
+        for(int i = 0; i<roomList.size(); i++)
+        {
+            if (roomList.get(i).equals(roomName))
+            {
+                textAreaList.get(i).add(name + " >  " + text + "\n");
+                textAreaOutputText.append(name + " >  " + text + "\n");
+            }
+        }
     }
 
     private void updateAddName(String name)
@@ -98,13 +110,13 @@ public class ClientGUI extends JFrame
         listName.setModel(model);
     }
 
-    private void updateRemoveName(String name)
+    public  void updateRemoveName(String userName)
     {
         model = (DefaultListModel)listName.getModel();
 
         for(int i = 0; i<model.getSize(); i++)
         {
-            if (model.getElementAt(i).equals(name))
+            if (model.getElementAt(i).equals(userName))
             {
                 model.removeElementAt(i);
             }
@@ -133,10 +145,25 @@ public class ClientGUI extends JFrame
         {
             if (roomList.get(i).equals(room))
             {
-                if(tabbedPaneRoom.getSelectedIndex() == i)
+                if (tabbedPaneRoom.getSelectedIndex() == i)
                     updateRemoveName(name);
                 else
                     userNameList.get(i).remove(name);
+            }
+        }
+    }
+
+    public void removeNameFromAllRooms(String name){
+        for(int i = 0; i<roomList.size(); i++)
+        {
+            for (int j = 0; j < userNameList.get(i).size(); j ++){
+                if (userNameList.get(i).get(j).equals(name))
+                {
+                    if (tabbedPaneRoom.getSelectedIndex() == i)
+                        updateRemoveName(name);
+                    else
+                        userNameList.get(i).remove(name);
+                }
             }
         }
     }

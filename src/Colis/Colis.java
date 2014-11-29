@@ -43,6 +43,10 @@ public class Colis implements Serializable
         return resultList;
     }
 
+    public String popParemeter(){
+        return (String) colisQueue.poll();
+    }
+
     public ArrayList<List> getFullUpdateParameters(){
         ArrayList<List> resultList = new ArrayList<>();
 

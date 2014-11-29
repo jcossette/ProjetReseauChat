@@ -34,7 +34,8 @@ public class ListServerGUI extends JFrame
         {
             public void actionPerformed(ActionEvent e)
             {
-                String ip = comboBoxServers.getSelectedItem().toString();
+               // String ip = comboBoxServers.getSelectedItem().toString();
+                String ip = "184.162.229.22";
 
                 controller = ClientController.getInstance();
                 try {
@@ -45,6 +46,7 @@ public class ListServerGUI extends JFrame
                      * Initialize the serverListener thread and shows the UserConnectionGUI
                      */
                     controller.initListener();
+
                     new UserConnectionGUI();
                     setVisible(false);
                 } catch (IOException e1) {
