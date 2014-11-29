@@ -9,7 +9,13 @@ public class RoomManager{
     private ArrayList<Room> myRooms;
 
     public RoomManager(){
+        initLobby();
+    }
 
+    private void initLobby(){
+        Room lobby = new Room();
+        lobby.setName("Lobby");
+        myRooms.add(lobby);
     }
 
     public ArrayList<Room> getRoomList(){
