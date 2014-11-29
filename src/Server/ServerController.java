@@ -7,7 +7,7 @@ import java.util.Queue;
  * Created by Julien Cossette on 11/5/2014.
  */
 public class ServerController{
-    private ChatServer myServer;
+    private ChatServerJob myServer;
     private CommandParser myCommandParser;
     private ServerConsoleGUI myGUI;
 
@@ -50,9 +50,9 @@ public class ServerController{
     public void startChatServerJob(Queue<String> parameters){
         try{
             Integer port = Integer.parseInt(parameters.poll());
-            ChatServer newChatServer = new ChatServer(port, this);
-            this.myServer = newChatServer;
-            addJob(newChatServer);
+            ChatServerJob newChatServerJob = new ChatServerJob(port, this);
+            this.myServer = newChatServerJob;
+            addJob(newChatServerJob);
             writeMessage("Chat Manager Job created!");
         }catch(Exception e){
             writeMessage("Chat Manager Job creation command error: " + e.toString());

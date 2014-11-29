@@ -11,7 +11,7 @@ import java.net.Socket;
  * Created by Julien Cossette on 11/21/2014.
  */
 public class TestInjector{
-    private static int port = 2800;
+    private static int port = 2500;
     private static String IP = "localhost";
     private static ObjectOutputStream myOutputStream;
 
@@ -25,7 +25,7 @@ public class TestInjector{
             Socket mySocket = new Socket(IP, port);
             myOutputStream = new ObjectOutputStream(mySocket.getOutputStream());
         }catch(IOException ie){
-            //Blah
+            System.out.println("Fail to open stream");
         }
     }
 
@@ -34,7 +34,7 @@ public class TestInjector{
         try{
             myOutputStream.writeObject(toSend);
         }catch(IOException ie){
-            //Blah
+            System.out.println("Fail to send Colis");
         }
     }
 

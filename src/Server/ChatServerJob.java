@@ -1,26 +1,26 @@
 package Server;
 
-import Server.ChatManager.ChatManager;
+import Server.ChatManager.ChatManagerJob;
 import Server.ChatManager.SessionJob;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * This job runs a facade managing the different components of the chat server.
  * Created by Julien Cossette on 11/10/2014.
  */
-public class ChatServer extends Job{
+public class ChatServerJob extends Job{
     private ServerSocket myServerSocket;
-    private ChatManager myChatManager;
+    private ChatManagerJob myChatManagerJob;
     private WorkerPool myWorkerPool;
     private ServerController myController;
     private int myPort;
 
-    public ChatServer(int port, ServerController myController){
-        this.myChatManager = ChatManager.getInstance();
+    public ChatServerJob(int port, ServerController myController){
+        this.myChatManagerJob = ChatManagerJob.getInstance();
+        this.myChatManagerJob.assignController(myController);
         this.myController = myController;
         this.myPort = port;
         this.myWorkerPool = new WorkerPool();
@@ -50,8 +50,9 @@ public class ChatServer extends Job{
             try{
                 newClientSocket = this.myServerSocket.accept();
                 if(newClientSocket != null){
-                    newSessionJob = new SessionJob(newClientSocket, this, myChatManager);
-                    myChatManager.addSession(newSessionJob);
+                    newSessionJob = new SessionJob(newClientSocket, this, myChatManagerJob);
+                    myChatManagerJob.addSession(newSessionJob);
+                    myWorkerPool.addJob(newSessionJob);
                 }
             }catch(IOException ie){
                 myController.writeMessage("Server listening for connections: " + ie.getMessage());        //Temp message for testing

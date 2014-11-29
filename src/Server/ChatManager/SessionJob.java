@@ -1,7 +1,7 @@
 package Server.ChatManager;
 
 import Colis.Colis;
-import Server.ChatServer;
+import Server.ChatServerJob;
 import Server.Job;
 
 import java.io.IOException;
@@ -16,17 +16,17 @@ import java.nio.channels.SelectionKey;
  */
 public class SessionJob extends Job{
     private User myUser;
-    private ChatServer myChatServer;
-    private ChatManager myManager;
+    private ChatServerJob myChatServerJob;
+    private ChatManagerJob myManager;
     private SelectionKey myKey;
     private Socket mySocket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
-    public SessionJob(Socket myWorkingSocket, ChatServer myServer, ChatManager myManager){
-        this.myManager = ChatManager.getInstance();
+    public SessionJob(Socket myWorkingSocket, ChatServerJob myServer, ChatManagerJob myManager){
+        this.myManager = ChatManagerJob.getInstance();
         this.mySocket = myWorkingSocket;
-        this.myChatServer = myServer;
+        this.myChatServerJob = myServer;
         this.myUser = null;  //Anonymous Session at first
         initStreams();
     }
@@ -36,7 +36,7 @@ public class SessionJob extends Job{
             inputStream = new ObjectInputStream(mySocket.getInputStream());
             outputStream = new ObjectOutputStream(mySocket.getOutputStream());
         }catch(IOException ie){
-            myChatServer.writeMessage("Session failed to open stream:" + myUser.getUsername());
+            myChatServerJob.writeMessage("Session failed to open stream:" + myUser.getUsername());
         }
     }
 
@@ -44,7 +44,7 @@ public class SessionJob extends Job{
         try{
             outputStream.writeObject(toSend);
         }catch(IOException ie){
-            myChatServer.writeMessage("Error writing to stream:" + myUser.getUsername());
+            myChatServerJob.writeMessage("Error writing to stream:" + myUser.getUsername());
         }
     }
 
@@ -57,16 +57,17 @@ public class SessionJob extends Job{
         while(run == true){
             try{
                 received = (Colis)inputStream.readObject();
-                myManager.reportColis(this, received);
+                ColisClient newColisClient = new ColisClient(received, this);
+                myManager.reportColis(newColisClient);
             }catch(ClassNotFoundException cnfe){
-                myChatServer.writeMessage("Error reading from stream, Object not found:" + cnfe.getMessage());
+                myChatServerJob.writeMessage("Error reading from stream, Object not found:" + cnfe.getMessage());
             }catch(IOException ie){
-                myChatServer.writeMessage("Error reading from stream:" + myUser.getUsername());
+                myChatServerJob.writeMessage("Error reading from stream:" + myUser.getUsername());
             }
         }
     }
 
-    private User getUser(){
+    public User getUser(){
         return myUser;
     }
 
