@@ -3,6 +3,8 @@ package Server.ChatManager;
 import Colis.Colis;
 import Colis.TypeColisEnum;
 
+import java.util.ArrayList;
+
 /**
  * Created by coylter on 11/19/2014.
  */
@@ -21,8 +23,8 @@ public class ColisHandler {
             case connection:
                 handleConnection(toHandle);
                 break;
-            /*case getFullUpdate:
-                handleFullUpdate(toHandle);*/
+            case getFullUpdate:
+                handleFullUpdate(toHandle);
             default:
                 break;
         }
@@ -42,7 +44,12 @@ public class ColisHandler {
     }
 
     private void handleFullUpdate(ColisClient toHandle){
-
+        ArrayList<Room> roomList = myRoomManager.getRoomList();
+        ArrayList<User> userList = myUserManager.getUserList();
+        Colis fullUpdateColis = new Colis(TypeColisEnum.fullUpdate);
+        fullUpdateColis.addParameter(roomList);
+        fullUpdateColis.addParameter(userList);
+        toHandle.getMySession().send(fullUpdateColis);
     }
 
 }
