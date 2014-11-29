@@ -1,6 +1,7 @@
 package GUI;
 
 import Client.ClientController;
+import Server.ChatManager.Room;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -202,6 +204,21 @@ public class ClientGUI extends JFrame
         {
             updateTextAreaFromList(textList.get(tabbedPaneRoom.getSelectedIndex()).get(i));
         }
+    }
+
+    public void createRoom(String roomName){
+        tabbedPaneRoom.addTab(roomName,new JLabel("test: "+roomName));
+        ArrayList<String> emptyList = new ArrayList<>();
+        this.userNameList.add(emptyList);
+        this.textAreaList.add(emptyList);
+        this.roomList.add(roomName);
+    }
+
+    public void joinRoom(Room room, List<String> userNameList){
+        tabbedPaneRoom.addTab(room.getName(),new JLabel("test: "+room.getName()));
+        this.userNameList.add(userNameList);
+        //this.textAreaList.add(room.getMessageChain);
+        this.roomList.add(room.getName());
     }
 
     private void updateAllRoom(String roomName)
