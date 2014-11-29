@@ -19,14 +19,9 @@ public class Colis implements Serializable
         this.type = type;
     }
 
-    public void setParameter(String parameter)
+    public void addParameter(String parameter)
     {
-        colisQueue.add(parameter);
-    }
-
-    public void setParameter(List parameter)
-    {
-        colisQueue.add(parameter);
+        colisQueue.offer(parameter);
     }
 
     public TypeColisEnum getType(){
