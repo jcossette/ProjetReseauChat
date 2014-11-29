@@ -87,8 +87,7 @@ public class ClientGUI extends JFrame
         buttonAddRoom.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //clientController.getRoomList();
-                new RoomSelectionGUI();
+                clientController.getRoomList();
             }
         });
     }

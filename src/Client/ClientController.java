@@ -112,7 +112,7 @@ public class ClientController {
     /**
      *  Création d'une nouvelle room
      */
-    public void createRooom(String roomName){
+    public void createRoom(String roomName){
         typeColis = TypeColisEnum.createRoom;
 
         Colis colisToSend = new Colis(typeColis);

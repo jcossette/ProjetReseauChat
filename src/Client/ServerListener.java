@@ -3,6 +3,7 @@ package Client;
 import Colis.Colis;
 import Colis.TypeColisEnum;
 import GUI.ClientGUI;
+import GUI.RoomSelectionGUI;
 import GUI.UserConnectionGUI;
 
 import javax.swing.*;
@@ -67,6 +68,15 @@ public class ServerListener implements Runnable{
             clientGui = new ClientGUI();
             ArrayList<List> fullUpdateList = colis.getFullUpdateParameters();
             clientGui.fullUpdate(fullUpdateList.get(0), fullUpdateList.get(1), fullUpdateList.get(2));
+        }
+        else if(type == TypeColisEnum.getRoomList) {
+            ArrayList<String> roomList = (ArrayList<String>)colis.popParameter();
+            new RoomSelectionGUI(roomList);
+        }
+        else if(type == TypeColisEnum.roomInfos) {
+            clientGui = guiController.getClientGUI();
+            ArrayList<String> roomList = (ArrayList<String>)colis.popParameter();
+            new RoomSelectionGUI(roomList);
         }
         else {
             clientGui = guiController.getClientGUI();

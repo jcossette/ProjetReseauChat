@@ -18,7 +18,8 @@ public enum TypeColisEnum
     updateRemoveUserFromRoom,   //String roomName, String username
     updateRemoveUser,   //String username
     createRoom,         //String roomName
-    joinRoom         ,   //String roomName
+    joinRoom,           //String roomName
+    roomInfos,           //Room room
     getRoomList,        //List<String> roomList
     error                 //String message
 }
