@@ -41,13 +41,13 @@ public class ColisHandler {
             toHandle.getMySession().setUser(newUser);
             Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
             returnAccept.addParameter("Connection accepté: Username = " + username);
-            joinRoom("Lobby" , newUser);
+            joinRoom(0 , newUser);
             toHandle.getMySession().send(returnAccept);
         }
     }
 
-    private void joinRoom(String roomToJoin, User userToJoin){
-        myRoomManager.getRoom(roomToJoin).addUser(userToJoin);
+    private void joinRoom(Integer ID, User userToJoin){
+        myRoomManager.getRoom(ID).addUser(userToJoin);
     }
 
     private void handleFullUpdate(ColisClient toHandle){
