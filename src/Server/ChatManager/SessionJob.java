@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.channels.SelectionKey;
 
 
@@ -36,7 +37,7 @@ public class SessionJob extends Job{
             inputStream = new ObjectInputStream(mySocket.getInputStream());
             outputStream = new ObjectOutputStream(mySocket.getOutputStream());
         }catch(IOException ie){
-            myChatServerJob.writeMessage("Session failed to open stream:" + myUser.getUsername());
+            myChatServerJob.writeMessage("Session failed to open stream:" + this.toString());
         }
     }
 
@@ -44,7 +45,7 @@ public class SessionJob extends Job{
         try{
             outputStream.writeObject(toSend);
         }catch(IOException ie){
-            myChatServerJob.writeMessage("Error writing to stream:" + myUser.getUsername());
+            myChatServerJob.writeMessage("Error writing to stream:" + this.toString());
         }
     }
 
@@ -56,10 +57,13 @@ public class SessionJob extends Job{
         Colis received;
         while(run == true){
             try{
-                received = (Colis)inputStream.readObject();
-                myChatServerJob.writeMessage("ÒKAY");
+                received = (Colis) inputStream.readObject();
                 ColisClient newColisClient = new ColisClient(received, this);
                 myManager.reportColis(newColisClient);
+            }catch(SocketException se){
+                myChatServerJob.writeMessage("Lost connection to: " + this.toString());
+                myManager.removeSession(this);
+                run = false;
             }catch(ClassNotFoundException cnfe){
                 myChatServerJob.writeMessage("Error reading from stream, Object not found: " + cnfe.getMessage());
             }catch(IOException ie){

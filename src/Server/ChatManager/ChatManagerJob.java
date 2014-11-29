@@ -21,6 +21,7 @@ public class ChatManagerJob extends Job{
     private ChatManagerJob(){
         toTreat = new ArrayBlockingQueue(1024);
         mySessions = new ArrayList();
+        myColisHandler = new ColisHandler();
     }
 
     public void assignController(ServerController myController){
@@ -42,11 +43,14 @@ public class ChatManagerJob extends Job{
 
     private void processColisQueue(){
         while(run == true){
-            ColisClient toProcess = toTreat.poll();
-            myColisHandler.handleColis(toProcess);
+            try{
+                ColisClient toProcess = toTreat.take();
+                myColisHandler.handleColis(toProcess);
+            }catch(InterruptedException ie){
+                myController.writeMessage("Erreur de lecture de la file de colis a traiter");
+            }
         }
     }
-
 
     public synchronized void reportColis(ColisClient toOffer){
         myController.writeMessage(
@@ -60,5 +64,9 @@ public class ChatManagerJob extends Job{
 
     public void addSession(SessionJob newSession){
         mySessions.add(newSession);
+    }
+
+    public void removeSession(SessionJob toRemove){
+        mySessions.remove(toRemove);
     }
 }

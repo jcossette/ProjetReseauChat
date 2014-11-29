@@ -17,7 +17,6 @@ public class ColisHandler {
     }
 
     public void handleColis(ColisClient toHandle){
-        System.out.println("treating a colis!");
         switch(toHandle.getMyColis().getType()){
             case connection:
                 handleConnection(toHandle);
