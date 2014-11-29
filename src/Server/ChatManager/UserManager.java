@@ -21,4 +21,12 @@ public class UserManager {
         return false;
     }
 
+    public ArrayList<String> getUserList(){
+        ArrayList<String> toReturn = new ArrayList();
+        for(User u : myUsers){
+            toReturn.add(u.getUsername());
+        }
+        return toReturn;
+    }
+
 }

@@ -21,6 +21,8 @@ public class ColisHandler {
             case connection:
                 handleConnection(toHandle);
                 break;
+            /*case getFullUpdate:
+                handleFullUpdate(toHandle);*/
             default:
                 break;
         }
@@ -37,6 +39,10 @@ public class ColisHandler {
             returnAccept.addParameter("Connection accepté: Username = " + username);
             toHandle.getMySession().send(returnAccept);
         }
+    }
+
+    private void handleFullUpdate(ColisClient toHandle){
+
     }
 
 }
