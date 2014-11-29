@@ -40,6 +40,10 @@ public class Room{
         myUsers.add(toAdd);
     }
 
+    public void removeUser(User toRemove){
+        myUsers.remove(toRemove);
+    }
+
     public Deque<String> getMessageChain(){
         return messageChain;
     }

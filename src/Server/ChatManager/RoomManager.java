@@ -1,6 +1,7 @@
 package Server.ChatManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -10,6 +11,7 @@ public class RoomManager{
     private Map<Integer, Room> myRooms;
 
     public RoomManager(){
+        myRooms = new HashMap();
         initLobby();
     }
 

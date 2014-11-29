@@ -19,7 +19,6 @@ public class SessionJob extends Job{
     private User myUser;
     private ChatServerJob myChatServerJob;
     private ChatManagerJob myManager;
-    private SelectionKey myKey;
     private Socket mySocket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;

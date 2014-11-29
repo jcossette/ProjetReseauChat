@@ -13,7 +13,6 @@ import java.util.concurrent.BlockingQueue;
 public class ChatManagerJob extends Job{
     private static ChatManagerJob instance;
     private ColisHandler myColisHandler;
-    private UserManager myUserManager;
     private ArrayList<SessionJob> mySessions;
     private BlockingQueue<ColisClient> toTreat;
     private ServerController myController;
