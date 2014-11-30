@@ -7,10 +7,12 @@ import Server.ChatManager.User;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ public class ClientGUI extends JFrame
     private JList listName;
     private JTextArea textAreaOutputText;
     private JButton buttonAddRoom;
+    private JPanel lobbyPanel;
 
     private ClientController clientController;
 
@@ -47,6 +50,8 @@ public class ClientGUI extends JFrame
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
+
+        roomMap = new HashMap();
 
         buttonSend.addActionListener(new ActionListener()
         {
@@ -92,7 +97,8 @@ public class ClientGUI extends JFrame
     private void sendCommunication(){
         if(!textFieldInputText.getText().isEmpty())
         {
-            clientController.communication(getCurrentRoom().getName(), textFieldInputText.getText());
+            clientController.communication(getCurrentRoom().getID(), textFieldInputText.getText());
+            textFieldInputText.setText("");
         }
     }
 
@@ -160,8 +166,13 @@ public class ClientGUI extends JFrame
     {
         this.roomList = roomList;
         Room lobby = roomList.get(0);
+
         for (Room room : roomList) {
-            createRoom(room);
+            if (room.getName().equals(lobby.getName())){
+                roomMap.put(lobbyPanel, room);
+            } else {
+                createRoom(room);
+            }
         }
 
         fillTab(lobby);
@@ -178,7 +189,7 @@ public class ClientGUI extends JFrame
     }
 
     private void createRoom(Room room){
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new BorderLayout());
         panel.add(textAreaOutputText);
         tabbedPaneRoom.addTab(room.getName(), panel);
 
@@ -197,7 +208,7 @@ public class ClientGUI extends JFrame
 
     private void updateNameFromList(String name)
     {
-        model = (DefaultListModel)listName.getModel();
+        //model = (DefaultListModel)listName.getModel();
         model.addElement(name);
         listName.setModel(model);
     }

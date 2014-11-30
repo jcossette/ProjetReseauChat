@@ -136,11 +136,11 @@ public class ClientController {
     /**
      *  Envoi d'un message dans une room donnée
      */
-    public void communication(String roomName, String message){
+    public void communication(Integer roomId, String message){
         typeColis = TypeColisEnum.communication;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.addParameter(roomName);
+        colisToSend.addParameter(roomId);
         colisToSend.addParameter(message);
 
         sendColis(colisToSend);
