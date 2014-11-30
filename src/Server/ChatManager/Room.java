@@ -1,5 +1,6 @@
 package Server.ChatManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -7,7 +8,7 @@ import java.util.LinkedList;
 /**
  * Created by Julien Cossette on 11/29/2014.
  */
-public class Room{
+public class Room implements Serializable{
     private String name;
     private ArrayList<User> myUsers;
     private Deque<String> messageChain;

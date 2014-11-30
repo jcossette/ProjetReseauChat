@@ -24,8 +24,8 @@ public class ChatServerJob extends Job{
         this.myController = myController;
         this.myPort = port;
         this.myWorkerPool = new WorkerPool();
-        myWorkerPool.addJob(myChatManagerJob);
         initSocketServer();
+        myWorkerPool.addJob(myChatManagerJob);
     }
 
     public void execute(){

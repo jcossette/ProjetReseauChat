@@ -56,7 +56,7 @@ public class SessionJob extends Job{
         Colis received;
         while(run == true){
             try{
-                received = (Colis) inputStream.readObject();
+                received = (Colis)inputStream.readObject();
                 ColisClient newColisClient = new ColisClient(received, this);
                 myManager.reportColis(newColisClient);
             }catch(SocketException se){

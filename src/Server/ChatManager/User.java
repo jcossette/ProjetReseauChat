@@ -1,9 +1,11 @@
 package Server.ChatManager;
 
+import java.io.Serializable;
+
 /**
  * Created by coylter on 11/19/2014.
  */
-public class User {
+public class User implements Serializable{
     private String username;
 
     public User(String newName){
