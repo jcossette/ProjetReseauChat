@@ -43,6 +43,12 @@ public class SessionJob extends Job{
     public synchronized void send(Colis toSend){
         try{
             outputStream.writeObject(toSend);
+            myChatServerJob.writeMessage(
+                "SENT COLIS // Type: " +
+                toSend.getType().toString() +
+                " // Sent by: " +
+                this.toString()
+            );
         }catch(IOException ie){
             myChatServerJob.writeMessage("Error writing to stream:" + this.toString());
         }

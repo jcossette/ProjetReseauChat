@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * This job runs a facade managing the different components of the chat server.
+ * This job runs the socket server and creates new Session job for each new connection.
  * Created by Julien Cossette on 11/10/2014.
  */
 public class ChatServerJob extends Job{
@@ -42,7 +42,7 @@ public class ChatServerJob extends Job{
     }
 
     /**
-     * This method verifies if any of the channel is ready to read or write and executes these actions.
+     * This listens for connection on the socket server and serves a new Socket and Session to the new connection.
      */
     private void acceptConnections(){
         Socket newClientSocket;
@@ -77,7 +77,7 @@ public class ChatServerJob extends Job{
         myWorkerPool.killJob(toKill);
     }
 
-    public void writeMessage(String myMessage){
+    public synchronized void writeMessage(String myMessage){
         myController.writeMessage(myMessage);
     }
 }

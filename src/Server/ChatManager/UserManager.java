@@ -25,4 +25,8 @@ public class UserManager {
         return myUsers;
     }
 
+    public void removeUser(User toRemove){
+        myUsers.remove(toRemove);
+    }
+
 }

@@ -8,6 +8,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
+ * This class is responsible for managing the chat logic itself, it uses its ColisHandler to process each received Colis
+ * and dispatches Colis to update clients. Each Individual SessionJob(Thread) must report the reception of a Colis which
+ * is then processed by this class using a Queue of Colis to treat. Serialization is necessary to maintain a stable
+ * order of message.
  * Created by Julien Cossette on 11/22/2014.
  */
 public class ChatManagerJob extends Job{
@@ -53,7 +57,7 @@ public class ChatManagerJob extends Job{
 
     public synchronized void reportColis(ColisClient toOffer){
         myController.writeMessage(
-            "Colis type: " +
+            "RECEIVED COLIS // Type: " +
             toOffer.getMyColis().getType().toString() +
             " // Sent by: " +
             toOffer.getMySession().toString()
@@ -65,7 +69,8 @@ public class ChatManagerJob extends Job{
         mySessions.add(newSession);
     }
 
-    public void removeSession(SessionJob toRemove){
+    public synchronized void removeSession(SessionJob toRemove){
         mySessions.remove(toRemove);
+        myColisHandler.removeUser(toRemove.getUser());
     }
 }

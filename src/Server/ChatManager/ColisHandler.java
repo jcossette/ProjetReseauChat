@@ -12,7 +12,6 @@ public class ColisHandler {
     private UserManager myUserManager;
     private RoomManager myRoomManager;
 
-
     public ColisHandler(){
         myUserManager = new UserManager();
         myRoomManager = new RoomManager();
@@ -41,13 +40,13 @@ public class ColisHandler {
             toHandle.getMySession().setUser(newUser);
             Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
             returnAccept.addParameter("Connection accepté: Username = " + username);
-            joinRoom(0 , newUser);
+            autoLobby(newUser);
             toHandle.getMySession().send(returnAccept);
         }
     }
 
-    private void joinRoom(Integer ID, User userToJoin){
-        myRoomManager.getRoom(ID).addUser(userToJoin);
+    private void autoLobby(User userToJoin){
+        myRoomManager.getRoom(0).addUser(userToJoin);
     }
 
     private void handleFullUpdate(ColisClient toHandle){
@@ -57,6 +56,13 @@ public class ColisHandler {
         fullUpdateColis.addParameter(roomList);
         fullUpdateColis.addParameter(userList);
         toHandle.getMySession().send(fullUpdateColis);
+    }
+
+    public void removeUser(User toRemove){
+        for(Room r : toRemove.getMyRooms()){
+            r.removeUser(toRemove);
+        }
+        myUserManager.removeUser(toRemove);
     }
 
 }

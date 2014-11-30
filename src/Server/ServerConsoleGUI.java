@@ -25,8 +25,8 @@ public class ServerConsoleGUI extends JFrame
         setContentPane(entryPanel);
         setLocationRelativeTo(null);
         pack();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         textFieldConsole.addKeyListener(
             new KeyAdapter()
