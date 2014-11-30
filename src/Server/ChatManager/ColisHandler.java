@@ -27,7 +27,7 @@ public class ColisHandler {
             case getFullUpdate:
                 handleFullUpdate(toHandle);
                 break;
-            case updateText:
+            case communication:
                 handleUpdateText(toHandle);
                 break;
             case getRoomList:
@@ -62,7 +62,7 @@ public class ColisHandler {
             toHandle.getMySession().setUser(newUser);
             Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
             returnAccept.addParameter("Connection accepté: Username = " + username);
-            addUser(newUser);
+            addNewUser(newUser, toHandle.getMySession());
             toHandle.getMySession().send(returnAccept);
         }
     }
@@ -76,10 +76,10 @@ public class ColisHandler {
         toHandle.getMySession().send(fullUpdateColis);
     }
 
-    private void addUser(User toAdd){
+    private void addNewUser(User toAdd, SessionJob mySession){
         toAdd.addRoom(myRoomManager.getRoom(0));
         myRoomManager.getRoom(0).addUser(toAdd);
-        myUserManager.addUser(toAdd);
+        myUserManager.addUser(toAdd, mySession);
     }
 
     public void removeUser(User toRemove){

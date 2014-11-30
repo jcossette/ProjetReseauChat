@@ -34,8 +34,9 @@ public class UserManager {
         return myUsers;
     }
 
-    public void addUser(User toAdd){
+    public void addUser(User toAdd, SessionJob mySession){
         myUsers.add(toAdd);
+        userSessions.put(toAdd, mySession);
     }
 
     public void removeUser(User toRemove){
