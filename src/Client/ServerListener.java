@@ -71,8 +71,8 @@ public class ServerListener implements Runnable{
 
             clientGui.fullUpdate((ArrayList<Room>) colis.popParameter());
         }
-        else if(type == TypeColisEnum.getRoomList) {
-            ArrayList<String> roomList = (ArrayList<String>)colis.popParameter();
+        else if(type == TypeColisEnum.roomList) {
+            ArrayList<Room> roomList = (ArrayList<Room>)colis.popParameter();
             new RoomSelectionGUI(roomList);
         }
         else if(type == TypeColisEnum.roomInfos) {

@@ -1,7 +1,6 @@
 package GUI;
 
 import Client.ClientController;
-import Client.GUIController;
 import Server.ChatManager.Room;
 
 import javax.swing.*;
@@ -32,12 +31,13 @@ public class RoomSelectionGUI extends JFrame{
         clientController = ClientController.getInstance();
 
         for (Room room : roomList){
-            comboBoxJoinRoom.addItem(room.getName());
+            comboBoxJoinRoom.addItem(room);
         }
         buttonJoin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clientController.joinRoom(comboBoxJoinRoom.getSelectedItem().toString());
+                Room roomToJoin = (Room)comboBoxJoinRoom.getSelectedItem();
+                clientController.joinRoom(roomToJoin.getID());
                 closeWindow();
             }
         });
@@ -45,6 +45,12 @@ public class RoomSelectionGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 clientController.createRoom(textFieldCreateRoom.getText());
+                closeWindow();
+            }
+        });
+        buttonAnnuler.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 closeWindow();
             }
         });

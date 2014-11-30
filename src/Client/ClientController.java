@@ -124,11 +124,11 @@ public class ClientController {
     /**
      *  Demande pour joiner une room
      */
-    public void joinRoom(String roomName){
+    public void joinRoom(Integer roomId){
         typeColis = TypeColisEnum.joinRoom;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.addParameter(roomName);
+        colisToSend.addParameter(roomId);
 
         sendColis(colisToSend);
     }
