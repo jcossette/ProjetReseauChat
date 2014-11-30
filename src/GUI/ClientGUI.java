@@ -208,9 +208,14 @@ public class ClientGUI extends JFrame
 
     private void updateNameFromList(String name)
     {
-        //model = (DefaultListModel)listName.getModel();
-        model.addElement(name);
-        listName.setModel(model);
+        model = (DefaultListModel)listName.getModel();
+        //model.addElement(name);
+        //listName.setModel(model);
+
+        model.insertElementAt(name, 0);
+        //Select the new item and make it visible.
+        listName.setSelectedIndex(0);
+        listName.ensureIndexIsVisible(0);
     }
 
     private void updateTextAreaFromList(String text)
