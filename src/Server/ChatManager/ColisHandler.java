@@ -15,6 +15,8 @@ public class ColisHandler {
     public ColisHandler(){
         myUserManager = new UserManager();
         myRoomManager = new RoomManager();
+        myUserManager.setPartnerRoomManager(myRoomManager);
+        myRoomManager.setPartnerUserManager(myUserManager);
     }
 
     public void handleColis(ColisClient toHandle){

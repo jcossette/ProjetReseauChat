@@ -10,10 +10,15 @@ import java.util.Map;
 public class UserManager {
     private ArrayList<User> myUsers;
     private Map<User, SessionJob> userSessions;
+    private RoomManager myRoomManager;
 
     public UserManager(){
         myUsers = new ArrayList();
         userSessions = new HashMap();
+    }
+
+    public void setPartnerRoomManager(RoomManager toPartner){
+        this.myRoomManager = toPartner;
     }
 
     public boolean hasUser(String username){
@@ -35,6 +40,10 @@ public class UserManager {
 
     public void removeUser(User toRemove){
         myUsers.remove(toRemove);
+    }
+
+    public SessionJob getUserSession(User toGet){
+        return userSessions.get(toGet);
     }
 
 }

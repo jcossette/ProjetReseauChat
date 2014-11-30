@@ -9,8 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.channels.SelectionKey;
-
 
 /**
  * Created by Julien Cossette on 11/19/2014.
@@ -84,4 +82,5 @@ public class SessionJob extends Job{
     public void setUser(User toSet){
         this.myUser = toSet;
     }
+
 }
