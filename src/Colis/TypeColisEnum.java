@@ -20,6 +20,7 @@ public enum TypeColisEnum
     createRoom,         //String roomName
     joinRoom,           //String roomName
     roomInfos,          //Room room
-    getRoomList,        //List<String> roomList
-    error                 //String message
+    getRoomList,        //vide
+    RoomList,           //List<Room> roomList
+    error               //String message
 }

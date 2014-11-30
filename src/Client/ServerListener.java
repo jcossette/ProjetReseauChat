@@ -3,6 +3,7 @@ package Client;
 import Colis.Colis;
 import Colis.TypeColisEnum;
 import GUI.ClientGUI;
+import GUI.ListServerGUI;
 import GUI.RoomSelectionGUI;
 import GUI.UserConnectionGUI;
 import Server.ChatManager.Room;
@@ -44,17 +45,16 @@ public class ServerListener implements Runnable{
         }
         while(running == true){
             Colis receivedColis;
-            System.out.println("Wow");
             try {
                 receivedColis = (Colis)in.readObject();
                 System.out.println("Colis received");
-                if (receivedColis != null){
-                    System.out.println("Not null colis received");
-                }
                 handleColis(receivedColis);
             } catch (SocketException e) {
                 System.out.println("Connection with server lost");
                 running = false;
+                JOptionPane.showMessageDialog(null, "Connection to server lost", "Erreur",
+                        JOptionPane.ERROR_MESSAGE);
+                guiController.getClientGUI().dispose();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

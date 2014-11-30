@@ -39,8 +39,7 @@ public class ClientGUI extends JFrame
 
     public ClientGUI()
     {
-        model = new DefaultListModel<String>();
-        listName = new JList(model);
+        model = (DefaultListModel)listName.getModel();
 
         clientController = ClientController.getInstance();
 
@@ -120,7 +119,7 @@ public class ClientGUI extends JFrame
 
     private void updateAddName(String name)
     {
-        model = (DefaultListModel)listName.getModel();
+        //model = (DefaultListModel)listName.getModel();
         model.addElement(name);
         listName.setModel(model);
     }
@@ -208,14 +207,7 @@ public class ClientGUI extends JFrame
 
     private void updateNameFromList(String name)
     {
-        model = (DefaultListModel)listName.getModel();
-        //model.addElement(name);
-        //listName.setModel(model);
-
-        model.insertElementAt(name, 0);
-        //Select the new item and make it visible.
-        listName.setSelectedIndex(0);
-        listName.ensureIndexIsVisible(0);
+        model.addElement(name);
     }
 
     private void updateTextAreaFromList(String text)
