@@ -21,6 +21,6 @@ public enum TypeColisEnum
     joinRoom,           //String roomName
     roomInfos,          //Room room
     getRoomList,        //vide
-    RoomList,           //List<Room> roomList
+    roomList,           //List<Room> roomList
     error               //String message
 }
