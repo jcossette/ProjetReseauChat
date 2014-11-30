@@ -12,6 +12,7 @@ public class User implements Serializable{
     private ArrayList<Room> myRooms;
 
     public User(String newName){
+        myRooms = new ArrayList();
         this.username = newName;
     }
 

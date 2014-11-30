@@ -24,9 +24,29 @@ public class ColisHandler {
                 break;
             case getFullUpdate:
                 handleFullUpdate(toHandle);
+                break;
+            case updateText:
+                handleUpdateText(toHandle);
+                break;
+            case getRoomList:
+                handleGetRoomList(toHandle);
+                break;
             default:
                 break;
         }
+    }
+
+    private void handleGetRoomList(ColisClient toHandle){
+        Colis toSend = new Colis(TypeColisEnum.roomInfos);
+        toSend.addParameter(myRoomManager.getRoomList());
+        toHandle.getMySession().send(toSend);
+    }
+
+    private void handleUpdateText(ColisClient toHandle){
+        User sender = toHandle.getMySession().getUser();
+        Integer roomID = (Integer)toHandle.getMyColis().popParameter();
+        String message = (String)toHandle.getMyColis().popParameter();
+        myRoomManager.appendText(roomID, sender.getUsername() + ":= " + message);
     }
 
     private void handleConnection(ColisClient toHandle){
@@ -40,13 +60,9 @@ public class ColisHandler {
             toHandle.getMySession().setUser(newUser);
             Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
             returnAccept.addParameter("Connection accepté: Username = " + username);
-            autoLobby(newUser);
+            addUser(newUser);
             toHandle.getMySession().send(returnAccept);
         }
-    }
-
-    private void autoLobby(User userToJoin){
-        myRoomManager.getRoom(0).addUser(userToJoin);
     }
 
     private void handleFullUpdate(ColisClient toHandle){
@@ -56,6 +72,12 @@ public class ColisHandler {
         fullUpdateColis.addParameter(roomList);
         fullUpdateColis.addParameter(userList);
         toHandle.getMySession().send(fullUpdateColis);
+    }
+
+    private void addUser(User toAdd){
+        toAdd.addRoom(myRoomManager.getRoom(0));
+        myRoomManager.getRoom(0).addUser(toAdd);
+        myUserManager.addUser(toAdd);
     }
 
     public void removeUser(User toRemove){

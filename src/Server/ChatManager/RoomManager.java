@@ -29,4 +29,8 @@ public class RoomManager{
     public Room getRoom(Integer ID){
         return myRooms.get(ID);
     }
+
+    public void appendText(Integer roomID, String message){
+
+    }
 }
