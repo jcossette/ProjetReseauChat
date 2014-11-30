@@ -31,6 +31,9 @@ public class RoomManager{
     }
 
     public void appendText(Integer roomID, String message){
-
+        Room toAppendTo = myRooms.get(roomID);
+        toAppendTo.addMessage(message);
+        ArrayList<User> concernedUsers = toAppendTo.getMyUsers();
+        //for(
     }
 }
