@@ -37,7 +37,7 @@ public class ColisHandler {
     }
 
     private void handleGetRoomList(ColisClient toHandle){
-        Colis toSend = new Colis(TypeColisEnum.roomInfos);
+        Colis toSend = new Colis(TypeColisEnum.roomList);
         toSend.addParameter(myRoomManager.getRoomList());
         toHandle.getMySession().send(toSend);
     }
