@@ -52,4 +52,9 @@ public class Room implements Serializable{
     public void addMessage(String message){
         messageChain.offer(message);
     }
+
+    @Override
+    public String toString(){
+        return name;
+    }
 }
