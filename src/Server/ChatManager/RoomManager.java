@@ -66,4 +66,13 @@ public class RoomManager{
         updateColis.addParameter(text);
         destination.send(updateColis);
     }
+
+    public Room createRoom(String roomName, User userToAdd){
+        Room newRoom = new Room();
+        newRoom.setName(roomName);
+        newRoom.addUser(userToAdd);
+        myRooms.put(newRoom.getID(), newRoom);
+
+        return newRoom;
+    }
 }

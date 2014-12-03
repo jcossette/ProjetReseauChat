@@ -94,6 +94,9 @@ public class ServerListener implements Runnable{
                 case updateAddUser:
                     clientGui.addNameToRoom((String) colis.popParameter(), (User)colis.popParameter());
                     break;
+                case joinRoom:
+                    clientGui.joinRoom((Room) colis.popParameter());
+                    break;
                 case error:
                     break;
                 case acceptedConnection:

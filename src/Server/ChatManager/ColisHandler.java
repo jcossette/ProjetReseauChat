@@ -34,6 +34,12 @@ public class ColisHandler {
             case getRoomList:
                 handleGetRoomList(toHandle);
                 break;
+            case createRoom:
+                handleCreateRoom(toHandle);
+                break;
+            case joinRoom:
+                handleJoinRoom(toHandle);
+                break;
             default:
                 break;
         }
@@ -81,6 +87,33 @@ public class ColisHandler {
         fullUpdateColis.addParameter(roomList);
         fullUpdateColis.addParameter(userList);
         toHandle.getMySession().send(fullUpdateColis);
+    }
+
+    private void handleCreateRoom(ColisClient toHandle){
+        SessionJob session = toHandle.getMySession();
+        Room newRoom = myRoomManager.createRoom((String)toHandle.getMyColis().popParameter(), session.getUser());
+
+        Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
+        colisToSend.addParameter(newRoom);
+
+        session.send(colisToSend);
+    }
+
+    private void handleJoinRoom(ColisClient toHandle){
+        SessionJob session = toHandle.getMySession();
+
+        int roomID = (int)toHandle.getMyColis().popParameter();
+        Room roomToJoin = myRoomManager.getRoom(roomID);
+
+        //Envoi un update user sur la room aux autres users deja la
+        myRoomManager.updateUser(roomID, session.getUser());
+
+        roomToJoin.addUser(session.getUser());
+
+        Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
+        colisToSend.addParameter(roomToJoin);
+
+        session.send(colisToSend);
     }
 
     private void addNewUser(User toAdd, SessionJob mySession){

@@ -18,7 +18,9 @@ public class RoomSelectionGUI extends JFrame{
     private JButton buttonCreateRoom;
     private JButton buttonAnnuler;
     private JPanel addRoomPanel;
+
     private ClientController clientController;
+
 
     public RoomSelectionGUI(ArrayList<Room> roomList){
         setTitle("Form 1.1");

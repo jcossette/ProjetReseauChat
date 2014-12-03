@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +33,12 @@ public class ClientGUI extends JFrame
     private JPanel lobbyPanel;
 
     private ClientController clientController;
-    private GUIController guiController;
 
     private DefaultListModel<String> model;
 
     private List<Room> roomList;
-    private Map<JPanel, Room> roomMap;
+
+    private Map<JTextArea, Room> roomMap;
 
     public ClientGUI()
     {
@@ -49,9 +50,10 @@ public class ClientGUI extends JFrame
         setContentPane(entryPanel);
         setLocationRelativeTo(null);
         pack();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
+        roomList = new ArrayList();
         roomMap = new HashMap();
 
         buttonSend.addActionListener(new ActionListener()
@@ -82,7 +84,8 @@ public class ClientGUI extends JFrame
             {
                 model.clear();
 
-                Room room = roomMap.get(tabbedPaneRoom.getSelectedComponent());
+                Room room = roomList.get(tabbedPaneRoom.getSelectedIndex());
+                //Room room = roomMap.get(tabbedPaneRoom.getSelectedComponent());
 
                 fillTab(room);
             }
@@ -168,17 +171,17 @@ public class ClientGUI extends JFrame
 
     public void fullUpdate(List<Room> roomList)
     {
-        this.roomList = roomList;
         Room lobby = roomList.get(0);
+        this.roomList.add(lobby);
 
-        for (Room room : roomList) {
+        /*for (Room room : roomList) {
             if (room.getName().equals(lobby.getName())){
-                roomMap.put(lobbyPanel, room);
-            } else {
-                createRoom(room);
-            }
-        }
 
+            } else {
+                createRoomTab(room);
+            }
+        }*/
+        //roomMap.put(textAreaOutputText, lobby);
         fillTab(lobby);
     }
 
@@ -187,27 +190,29 @@ public class ClientGUI extends JFrame
             updateNameFromList(user.getUsername());
         }
 
+        textAreaOutputText.setText(""); // A changer pour mettre le textarea du tab de la room a ""
         for(String line : room.getMessageChain()){
             updateTextAreaFromList(line);
         }
     }
 
-    private void createRoom(Room room){
+    private void createRoomTab(Room room){
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(textAreaOutputText);
+        JTextArea textArea = new JTextArea();
+        panel.add(textArea);
         tabbedPaneRoom.addTab(room.getName(), panel);
 
-        roomMap.put(panel, room);
+        roomList.add(room);
+        roomMap.put(textArea, room);
     }
 
 
     public void joinRoom(Room room){
-        createRoom(room);
+        createRoomTab(room);
 
         for (User user : room.getMyUsers()){
             updateNameFromList(user.getUsername());
         }
-        this.roomList.add(room);
     }
 
     private void updateNameFromList(String name)
@@ -217,6 +222,7 @@ public class ClientGUI extends JFrame
 
     private void updateTextAreaFromList(String text)
     {
+        //Gerer les diff/rentes rooms
         textAreaOutputText.append(text + "\n");
     }
 
@@ -239,5 +245,9 @@ public class ClientGUI extends JFrame
         } else {
             return false;
         }
+    }
+
+    public void setRoomList(List<Room> roomList){
+        this.roomList = roomList;
     }
 }
