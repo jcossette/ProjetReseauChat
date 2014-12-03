@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class ColisHandler {
     private UserManager myUserManager;
     private RoomManager myRoomManager;
+    private ChatManagerJob chatManager;
 
     public ColisHandler(){
         myUserManager = new UserManager();
@@ -58,10 +59,16 @@ public class ColisHandler {
             returnDeny.addParameter("Connection refusé: Username en utilisation");
             toHandle.getMySession().send(returnDeny);
         }else{
+            chatManager = ChatManagerJob.getInstance();
+
             User newUser = new User(username);
             toHandle.getMySession().setUser(newUser);
             Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
             returnAccept.addParameter("Connection accepté: Username = " + username);
+
+            //Update la liste des users de tous les client quand il y a une nouvelle connection
+            myRoomManager.updateUser(0, newUser);
+
             addNewUser(newUser, toHandle.getMySession());
             toHandle.getMySession().send(returnAccept);
         }

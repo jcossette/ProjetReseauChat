@@ -68,7 +68,7 @@ public class ServerListener implements Runnable{
         ClientGUI clientGui;
         if (type == TypeColisEnum.fullUpdate){
             clientGui = new ClientGUI();
-
+            guiController.setClientGui(clientGui);
             clientGui.fullUpdate((ArrayList<Room>) colis.popParameter());
         }
         else if(type == TypeColisEnum.roomList) {

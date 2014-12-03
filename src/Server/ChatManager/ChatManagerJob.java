@@ -1,5 +1,6 @@
 package Server.ChatManager;
 
+import Colis.Colis;
 import Server.Job;
 import Server.ServerController;
 
@@ -45,13 +46,13 @@ public class ChatManagerJob extends Job{
     }
 
     private void processColisQueue(){
-        while(run == true){
-            try{
-                ColisClient toProcess = toTreat.take();
-                myColisHandler.handleColis(toProcess);
-            }catch(InterruptedException ie){
-                myController.writeMessage("Erreur de lecture de la file de colis a traiter");
-            }
+            while(run == true){
+                try{
+                    ColisClient toProcess = toTreat.take();
+                    myColisHandler.handleColis(toProcess);
+                }catch(InterruptedException ie){
+                    myController.writeMessage("Erreur de lecture de la file de colis a traiter");
+                }
         }
     }
 
@@ -73,4 +74,18 @@ public class ChatManagerJob extends Job{
         mySessions.remove(toRemove);
         myColisHandler.removeUser(toRemove.getUser());
     }
+
+    public void sendToAll(Colis colisToSend){
+        for (SessionJob session : mySessions){
+            session.send(colisToSend);
+        }
+    }
+
+    /*public void sendToAllExceptCurrent(SessionJob session, Colis colisToSend){
+        for (SessionJob s : mySessions){
+            if (s == session) {
+                session.send(colisToSend);
+            }
+        }
+    }*/
 }

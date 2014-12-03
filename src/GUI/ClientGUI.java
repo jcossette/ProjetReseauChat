@@ -1,6 +1,7 @@
 package GUI;
 
 import Client.ClientController;
+import Client.GUIController;
 import Server.ChatManager.Room;
 import Server.ChatManager.User;
 
@@ -31,6 +32,7 @@ public class ClientGUI extends JFrame
     private JPanel lobbyPanel;
 
     private ClientController clientController;
+    private GUIController guiController;
 
     private DefaultListModel<String> model;
 
@@ -96,6 +98,9 @@ public class ClientGUI extends JFrame
     private void sendCommunication(){
         if(!textFieldInputText.getText().isEmpty())
         {
+            if (textFieldInputText.getText().equals("list")){
+                clientController.listRequest(getCurrentRoom().getID());
+            }
             clientController.communication(getCurrentRoom().getID(), textFieldInputText.getText());
             textFieldInputText.setText("");
         }
@@ -212,7 +217,7 @@ public class ClientGUI extends JFrame
 
     private void updateTextAreaFromList(String text)
     {
-        textAreaOutputText.append(text);
+        textAreaOutputText.append(text + "\n");
     }
 
     private Room getRoom(String roomName){

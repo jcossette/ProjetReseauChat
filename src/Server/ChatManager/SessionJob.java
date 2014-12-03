@@ -1,6 +1,7 @@
 package Server.ChatManager;
 
 import Colis.Colis;
+import Colis.TypeColisEnum;
 import Server.ChatServerJob;
 import Server.Job;
 
@@ -65,7 +66,11 @@ public class SessionJob extends Job{
                 myManager.reportColis(newColisClient);
             }catch(SocketException se){
                 myChatServerJob.writeMessage("Lost connection to: " + this.toString());
+                Colis disconnectColis = new Colis(TypeColisEnum.updateRemoveUser);
+                disconnectColis.addParameter(myUser);
+
                 myManager.removeSession(this);
+                myManager.sendToAll(disconnectColis);
                 run = false;
             }catch(ClassNotFoundException cnfe){
                 myChatServerJob.writeMessage("Error reading from stream, Object not found: " + cnfe.getMessage());

@@ -47,6 +47,19 @@ public class RoomManager{
         }
     }
 
+    public void updateUser(Integer roomID, User user){
+        Room toUpdate = getRoom(roomID);
+        ArrayList<User> concernedUsers = toUpdate.getMyUsers();
+
+        Colis updateUserColis = new Colis(TypeColisEnum.updateAddUser);
+        updateUserColis.addParameter(toUpdate.getName());
+        updateUserColis.addParameter(user);
+
+        for (User u : concernedUsers){
+            myUserManager.getUserSession(u).send(updateUserColis);
+        }
+    }
+
     private void sendUpdateColis(SessionJob destination, Room concernedRoom, String text){
         Colis updateColis = new Colis(TypeColisEnum.updateText);
         updateColis.addParameter(concernedRoom.getName());

@@ -149,11 +149,11 @@ public class ClientController {
     /**
      * Demande de la liste des usagers dans la room
      */
-    public void listRequest(String roomName){
+    public void listRequest(Integer roomId){
         typeColis = TypeColisEnum.listRequest;
 
         Colis colisToSend = new Colis(typeColis);
-        colisToSend.addParameter(roomName);
+        colisToSend.addParameter(roomId);
 
         sendColis(colisToSend);
     }
