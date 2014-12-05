@@ -38,7 +38,7 @@ public class ClientGUI extends JFrame
 
     private List<Room> roomList;
 
-    private Map<JTextArea, Room> roomMap;
+    private Map<Room, JTextArea> roomMap;
 
     public ClientGUI()
     {
@@ -114,16 +114,21 @@ public class ClientGUI extends JFrame
         return currentRoom;
     }
 
-    public void updateText(String roomName, String text)
+    public void updateText(Integer roomID, String text)
     {
-        Room toUpdate = getRoom(roomName);
+        Room toUpdate = getRoom(roomID);
 
         toUpdate.addMessage(text);
 
-        if (isCurrentRoom(toUpdate)){
+        JTextArea toUpdateField = roomMap.get(toUpdate);
+        toUpdateField.append(text + "\n");
+        toUpdateField.repaint();
+
+        /*if (isCurrentRoom(toUpdate)){
             textAreaOutputText.append(text + "\n");
-        }
+        }*/
     }
+
 
     private void updateAddName(String name)
     {
@@ -181,7 +186,7 @@ public class ClientGUI extends JFrame
                 createRoomTab(room);
             }
         }*/
-        //roomMap.put(textAreaOutputText, lobby);
+        roomMap.put(lobby, textAreaOutputText);
         fillTab(lobby);
     }
 
@@ -203,7 +208,7 @@ public class ClientGUI extends JFrame
         tabbedPaneRoom.addTab(room.getName(), panel);
 
         roomList.add(room);
-        roomMap.put(textArea, room);
+        roomMap.put(room, textArea);
     }
 
 
@@ -236,6 +241,17 @@ public class ClientGUI extends JFrame
             }
         }
 
+        return room;
+    }
+
+    private Room getRoom(Integer ID){
+        Room room = null;
+        for (Room r : roomList){
+            if (r.getID() == ID){
+                room = r;
+                break;
+            }
+        }
         return room;
     }
 

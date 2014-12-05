@@ -68,7 +68,6 @@ public class SessionJob extends Job{
                 myChatServerJob.writeMessage("Lost connection to: " + this.toString());
                 Colis disconnectColis = new Colis(TypeColisEnum.updateRemoveUser);
                 disconnectColis.addParameter(myUser);
-
                 myManager.removeSession(this);
                 myManager.sendToAll(disconnectColis);
                 run = false;

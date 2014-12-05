@@ -81,11 +81,4 @@ public class ChatManagerJob extends Job{
         }
     }
 
-    /*public void sendToAllExceptCurrent(SessionJob session, Colis colisToSend){
-        for (SessionJob s : mySessions){
-            if (s == session) {
-                session.send(colisToSend);
-            }
-        }
-    }*/
 }

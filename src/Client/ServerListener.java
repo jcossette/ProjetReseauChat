@@ -83,7 +83,7 @@ public class ServerListener implements Runnable{
             clientGui = guiController.getClientGUI();
             switch (type) {
                 case updateText:
-                    clientGui.updateText((String)colis.popParameter(), (String)colis.popParameter());
+                    clientGui.updateText((Integer)colis.popParameter(), (String)colis.popParameter());
                     break;
                 case updateRemoveUserFromRoom:
                     clientGui.removeNameFromRoom((String)colis.popParameter(), (User)colis.popParameter());

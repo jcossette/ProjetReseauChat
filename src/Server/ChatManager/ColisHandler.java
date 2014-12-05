@@ -6,12 +6,13 @@ import Colis.TypeColisEnum;
 import java.util.ArrayList;
 
 /**
- * Created by coylter on 11/19/2014.
+ * This class handles colis sent by users. It operates by receiving a Colis/Session data object representing the colis
+ * that the server received and the client sending the colis. This class routes and treats the colis according to its type.
+ * Created by Julien Cossette on 11/19/2014.
  */
 public class ColisHandler {
     private UserManager myUserManager;
     private RoomManager myRoomManager;
-    private ChatManagerJob chatManager;
 
     public ColisHandler(){
         myUserManager = new UserManager();
@@ -65,16 +66,10 @@ public class ColisHandler {
             returnDeny.addParameter("Connection refusé: Username en utilisation");
             toHandle.getMySession().send(returnDeny);
         }else{
-            chatManager = ChatManagerJob.getInstance();
-
             User newUser = new User(username);
             toHandle.getMySession().setUser(newUser);
             Colis returnAccept = new Colis(TypeColisEnum.acceptedConnection);
             returnAccept.addParameter("Connection accepté: Username = " + username);
-
-            //Update la liste des users de tous les client quand il y a une nouvelle connection
-            myRoomManager.updateUser(0, newUser);
-
             addNewUser(newUser, toHandle.getMySession());
             toHandle.getMySession().send(returnAccept);
         }
@@ -89,31 +84,33 @@ public class ColisHandler {
         toHandle.getMySession().send(fullUpdateColis);
     }
 
+    /**
+     * Handles the creation of a new room as requested by a user.
+     * @param toHandle The Colis and its relation session
+     */
     private void handleCreateRoom(ColisClient toHandle){
-        SessionJob session = toHandle.getMySession();
-        Room newRoom = myRoomManager.createRoom((String)toHandle.getMyColis().popParameter(), session.getUser());
-
-        Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
-        colisToSend.addParameter(newRoom);
-
-        session.send(colisToSend);
+        SessionJob requestingSession = toHandle.getMySession();
+        Room newRoom = myRoomManager.createRoom((String)toHandle.getMyColis().popParameter(), requestingSession.getUser());
+        //Automatically join the requesting user to the requested room
+            Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
+            requestingSession.getUser().addRoom(newRoom);
+            colisToSend.addParameter(newRoom);
+            requestingSession.send(colisToSend);
     }
 
     private void handleJoinRoom(ColisClient toHandle){
         SessionJob session = toHandle.getMySession();
-
-        int roomID = (int)toHandle.getMyColis().popParameter();
-        Room roomToJoin = myRoomManager.getRoom(roomID);
-
+        //Retrieve the roomID from the colis that the user wishes to join
+            int roomID = (int)toHandle.getMyColis().popParameter();
+            Room roomToJoin = myRoomManager.getRoom(roomID);
         //Envoi un update user sur la room aux autres users deja la
-        myRoomManager.updateUser(roomID, session.getUser());
-
-        roomToJoin.addUser(session.getUser());
-
-        Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
-        colisToSend.addParameter(roomToJoin);
-
-        session.send(colisToSend);
+            myRoomManager.updateUser(roomID, session.getUser());
+            roomToJoin.addUser(session.getUser());
+        //Join the requesting user to the room
+            Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
+            session.getUser().addRoom(roomToJoin);
+            colisToSend.addParameter(roomToJoin);
+            session.send(colisToSend);
     }
 
     private void addNewUser(User toAdd, SessionJob mySession){
@@ -128,5 +125,4 @@ public class ColisHandler {
         }
         myUserManager.removeUser(toRemove);
     }
-
 }

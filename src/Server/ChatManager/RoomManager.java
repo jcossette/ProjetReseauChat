@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This class manages the rooms currently on the server, it keeps a record of the conversation and it is it who has the
+ * responsibility of creating the proper colis when updates get made to the rooms in order to warn its users of changes.
  * Created by Julien Cossette on 11/29/2014.
  */
 public class RoomManager{
@@ -30,8 +32,7 @@ public class RoomManager{
     }
 
     public ArrayList<Room> getRoomList(){
-        ArrayList<Room> myRoomList = new ArrayList(myRooms.values());
-        return myRoomList;
+        return new ArrayList<>(myRooms.values());
     }
 
     public Room getRoom(Integer ID){
@@ -50,19 +51,19 @@ public class RoomManager{
     public void updateUser(Integer roomID, User user){
         Room toUpdate = getRoom(roomID);
         ArrayList<User> concernedUsers = toUpdate.getMyUsers();
-
-        Colis updateUserColis = new Colis(TypeColisEnum.updateAddUser);
-        updateUserColis.addParameter(toUpdate.getName());
-        updateUserColis.addParameter(user);
-
-        for (User u : concernedUsers){
-            myUserManager.getUserSession(u).send(updateUserColis);
-        }
+        //Create the update colis that warns clients of a new user
+            Colis updateUserColis = new Colis(TypeColisEnum.updateAddUser);
+            updateUserColis.addParameter(toUpdate.getName());
+            updateUserColis.addParameter(user);
+        //Dispatch the colis to each user in this room
+            for (User u : concernedUsers){
+                myUserManager.getUserSession(u).send(updateUserColis);
+            }
     }
 
     private void sendUpdateColis(SessionJob destination, Room concernedRoom, String text){
         Colis updateColis = new Colis(TypeColisEnum.updateText);
-        updateColis.addParameter(concernedRoom.getName());
+        updateColis.addParameter(concernedRoom.getID());
         updateColis.addParameter(text);
         destination.send(updateColis);
     }
@@ -72,7 +73,6 @@ public class RoomManager{
         newRoom.setName(roomName);
         newRoom.addUser(userToAdd);
         myRooms.put(newRoom.getID(), newRoom);
-
         return newRoom;
     }
 }
