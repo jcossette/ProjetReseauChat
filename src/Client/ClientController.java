@@ -125,7 +125,7 @@ public class ClientController {
      *  Demande pour joiner une room
      */
     public void joinRoom(Integer roomId){
-        typeColis = TypeColisEnum.joinRoom;
+        typeColis = TypeColisEnum.joinRoomRequest;
 
         Colis colisToSend = new Colis(typeColis);
         colisToSend.addParameter(roomId);
