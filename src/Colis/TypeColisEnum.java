@@ -21,6 +21,7 @@ public enum TypeColisEnum implements Serializable
     updateRemoveUserFromRoom,   //String room, User user
     updateRemoveUser,   //User user
     createRoom,         //String roomName
+    joinRoomRequest,    //int roomID
     joinRoom,           //Room room
     roomInfos,          //Room room
     getRoomList,        //vide
