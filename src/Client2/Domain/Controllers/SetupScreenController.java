@@ -87,7 +87,11 @@ public class SetupScreenController implements Observer{
         return myUserContext.getServerList();
     }
 
-    public void joinServer(ServerInfo toJoin){
-        System.out.println("Joining :" + toJoin.toString());
+    public void joinServer(ServerInfo toJoin, String nickname){
+        JOptionPane.showMessageDialog(null, "Connection en cour");
+
+        //TODO
+        //Connect to server
+        //Open Chat Window
     }
 }

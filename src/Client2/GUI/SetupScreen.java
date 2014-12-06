@@ -27,6 +27,7 @@ public class SetupScreen extends JFrame{
     private JButton addServerButton;
     private JTextField nicknameField;
     private JButton joinButton;
+    private JLabel nicknameLabel;
     private JFormattedTextField IPTextField;
 
     public SetupScreen(){
@@ -125,10 +126,13 @@ public class SetupScreen extends JFrame{
         myController.addServer(newServerName, newServerIP, newServerPort);
     }
 
+    /**
+     * Handles the Join Button
+     */
     private void handleJoinButton(){
         String myNickName = nicknameField.getText();
         if(myNickName.length() > 3){
-            myController.joinServer(getServerInfoFromList());
+            myController.joinServer(getServerInfoFromList(), myNickName);
         }
     }
 
