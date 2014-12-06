@@ -38,7 +38,7 @@ public class ColisHandler {
             case createRoom:
                 handleCreateRoom(toHandle);
                 break;
-            case joinRoom:
+            case joinRoomRequest:
                 handleJoinRoom(toHandle);
                 break;
             default:
@@ -91,13 +91,13 @@ public class ColisHandler {
      * @param toHandle The Colis and its relation session
      */
     private void handleCreateRoom(ColisClient toHandle){
-        SessionJob requestingSession = toHandle.getMySession();
-        Room newRoom = myRoomManager.createRoom((String)toHandle.getMyColis().popParameter(), requestingSession.getUser());
+        SessionJob session = toHandle.getMySession();
+        Room newRoom = myRoomManager.createRoom((String)toHandle.getMyColis().popParameter(), session.getUser());
         //Automatically join the requesting user to the requested room
             Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
-            requestingSession.getUser().addRoom(newRoom);
+            session.getUser().addRoom(newRoom);
             colisToSend.addParameter(newRoom);
-            requestingSession.send(colisToSend);
+            session.send(colisToSend);
     }
 
     private void handleJoinRoom(ColisClient toHandle){
