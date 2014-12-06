@@ -117,6 +117,7 @@ public class ColisHandler {
         toAdd.addRoom(myRoomManager.getRoom(0));
         myRoomManager.getRoom(0).addUser(toAdd);
         myUserManager.addUser(toAdd, mySession);
+        myRoomManager.updateUser(0, toAdd);
     }
 
     public void removeUser(User toRemove){

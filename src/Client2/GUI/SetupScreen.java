@@ -136,6 +136,10 @@ public class SetupScreen extends JFrame{
         }
     }
 
+    /**
+     * Returns the ServerInfo object linked to the selected server.
+     * @return
+     */
     private ServerInfo getServerInfoFromList(){
         String selected = (String)serverList.getSelectedValue();
         return myMapServerInfo.get(selected);
