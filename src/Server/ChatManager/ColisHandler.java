@@ -14,6 +14,8 @@ public class ColisHandler {
     private UserManager myUserManager;
     private RoomManager myRoomManager;
 
+    private Room test;
+
     public ColisHandler(){
         myUserManager = new UserManager();
         myRoomManager = new RoomManager();
@@ -92,27 +94,26 @@ public class ColisHandler {
      */
     private void handleCreateRoom(ColisClient toHandle){
         SessionJob session = toHandle.getMySession();
-        Room newRoom = myRoomManager.createRoom((String)toHandle.getMyColis().popParameter(), session.getUser());
-        //Automatically join the requesting user to the requested room
-            Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
-            session.getUser().addRoom(newRoom);
-            colisToSend.addParameter(newRoom);
-            session.send(colisToSend);
+        Room newRoom = myRoomManager.createRoom((String)toHandle.getMyColis().popParameter());
+        joinRoom(newRoom, session);
     }
 
     private void handleJoinRoom(ColisClient toHandle){
         SessionJob session = toHandle.getMySession();
         //Retrieve the roomID from the colis that the user wishes to join
-            int roomID = (int)toHandle.getMyColis().popParameter();
-            Room roomToJoin = myRoomManager.getRoom(roomID);
-        //Envoi un update user sur la room aux autres users deja la
-            myRoomManager.updateUser(roomID, session.getUser());
-            roomToJoin.addUser(session.getUser());
-        //Join the requesting user to the room
-            Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
-            session.getUser().addRoom(roomToJoin);
-            colisToSend.addParameter(roomToJoin);
-            session.send(colisToSend);
+        int roomID = (int)toHandle.getMyColis().popParameter();
+        Room roomToJoin = myRoomManager.getRoom(roomID);
+        joinRoom(roomToJoin, session);
+    }
+
+    private void joinRoom(Room toJoin, SessionJob joining){
+        Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
+        toJoin.addUser(joining.getUser());
+        joining.getUser().addRoom(toJoin);
+        colisToSend.addParameter(toJoin);
+        colisToSend.addParameter(joining.getUser());
+        joining.send(colisToSend);
+        myRoomManager.updateUser(toJoin.getID(), joining.getUser());
     }
 
     private void addNewUser(User toAdd, SessionJob mySession){

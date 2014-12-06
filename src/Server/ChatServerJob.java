@@ -51,12 +51,12 @@ public class ChatServerJob extends Job{
             try{
                 newClientSocket = this.myServerSocket.accept();
                 if(newClientSocket != null){
-                    newSessionJob = new SessionJob(newClientSocket, this, myChatManagerJob);
+                    newSessionJob = new SessionJob(newClientSocket, this);
                     myChatManagerJob.addSession(newSessionJob);
                     myWorkerPool.addJob(newSessionJob);
                 }
             }catch(IOException ie){
-                myController.writeMessage("Server listening for connections: " + ie.getMessage());        //Temp message for testing
+                //myController.writeMessage("Server listening for connections: " + ie.getMessage());        //Temp message for testing
             }
         }
     }

@@ -22,7 +22,7 @@ public class SessionJob extends Job{
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
-    public SessionJob(Socket myWorkingSocket, ChatServerJob myServer, ChatManagerJob myManager){
+    public SessionJob(Socket myWorkingSocket, ChatServerJob myServer){
         this.myManager = ChatManagerJob.getInstance();
         this.mySocket = myWorkingSocket;
         this.myChatServerJob = myServer;
@@ -41,6 +41,7 @@ public class SessionJob extends Job{
 
     public synchronized void send(Colis toSend){
         try{
+            outputStream.reset();
             outputStream.writeObject(toSend);
             myChatServerJob.writeMessage(
                 "SENT COLIS // Type: " +

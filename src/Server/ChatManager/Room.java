@@ -16,9 +16,10 @@ public class Room implements Serializable{
     private static int IDticker = 0;
 
     public Room(){
-        messageChain = new LinkedList();
-        myUsers = new ArrayList();
-        myID = new Integer(IDticker++);
+        messageChain = new LinkedList<>();
+        myUsers = new ArrayList<>();
+        myID = IDticker;
+        IDticker++;
     }
 
     public String getName(){
