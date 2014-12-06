@@ -57,7 +57,9 @@ public class RoomManager{
             updateUserColis.addParameter(user);
         //Dispatch the colis to each user in this room
             for (User u : concernedUsers){
-                myUserManager.getUserSession(u).send(updateUserColis);
+                if(user != u){
+                    myUserManager.getUserSession(u).send(updateUserColis);
+                }
             }
     }
 
