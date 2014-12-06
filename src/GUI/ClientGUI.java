@@ -215,9 +215,9 @@ public class ClientGUI extends JFrame
     public void joinRoom(Room room){
         createRoomTab(room);
 
-        for (User user : room.getMyUsers()){
+        /*for (User user : room.getMyUsers()){
             updateNameFromList(user.getUsername());
-        }
+        }*/
     }
 
     private void updateNameFromList(String name)

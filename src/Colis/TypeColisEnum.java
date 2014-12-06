@@ -1,9 +1,11 @@
 package Colis;
 
+import java.io.Serializable;
+
 /**
  * Created by pewtroof on 2014-11-17.
  */
-public enum TypeColisEnum
+public enum TypeColisEnum implements Serializable
 {
     communication,      //String roomName, String message
     connection,         //String username

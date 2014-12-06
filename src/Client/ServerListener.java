@@ -108,6 +108,16 @@ public class ServerListener implements Runnable{
                     JOptionPane.showMessageDialog(null, colis.popParameter(), "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                     break;
+                case updateListRequest:
+                    //afficher la liste des clientsn  dans un JoptionPane
+                    ArrayList<User> userList = (ArrayList<User>)colis.popParameter();
+                    String stringList = "";
+                    for (User u : userList){
+                        stringList = stringList + u.getUsername() + "\n";
+                    }
+                    JOptionPane.showMessageDialog(null, stringList, "Liste d'utilisateurs",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    break;
                 default:
                     break;
             }
