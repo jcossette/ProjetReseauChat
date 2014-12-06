@@ -59,6 +59,8 @@ public class ColisHandler {
         myRoomManager.appendText(roomID, sender.getUsername() + ":= " + message);
     }
 
+
+
     private void handleConnection(ColisClient toHandle){
         String username = (String)toHandle.getMyColis().popParameter();
         if(myUserManager.hasUser(username)){
