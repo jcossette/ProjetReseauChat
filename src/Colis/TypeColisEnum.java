@@ -12,7 +12,7 @@ public enum TypeColisEnum
     disconnection,      //vide
     getFullUpdate,      //vide
     fullUpdate,         //List<Room> roomList, List<User> userLists
-    listRequest,        //String roomName
+    updateListRequest,        //List<User> userList
     updateText,         //String roomName, String textToUpdate
     updateAddUser,      //String room, User user
     updateRemoveUserFromRoom,   //String room, User user
