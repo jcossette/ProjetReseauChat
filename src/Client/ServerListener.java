@@ -86,7 +86,7 @@ public class ServerListener implements Runnable{
                     clientGui.updateText((Integer)colis.popParameter(), (String)colis.popParameter());
                     break;
                 case updateRemoveUserFromRoom:
-                    clientGui.removeNameFromRoom((String)colis.popParameter(), (User)colis.popParameter());
+                    clientGui.removeNameFromRoom((Room)colis.popParameter(), (User)colis.popParameter());
                     break;
                 case updateRemoveUser:
                     clientGui.removeNameFromAllRooms((User)colis.popParameter());

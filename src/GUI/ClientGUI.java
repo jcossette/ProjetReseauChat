@@ -13,10 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by pewtroof on 2014-11-05.
@@ -154,23 +152,30 @@ public class ClientGUI extends JFrame
     {
         Room room = getRoom(roomName);
         if(isCurrentRoom(room)) {
-                    updateAddName(user.getUsername());
-                }
-       room.addUser(user);
+            updateAddName(user.getUsername());
+        }
+        room.addUser(user);
     }
 
-    public void removeNameFromRoom(String roomName, User user)
+    public void removeNameFromRoom(Room room, User userToRemove)
     {
-        Room room = getRoom(roomName);
         if(isCurrentRoom(room)) {
-            updateRemoveName(user.getUsername());
+            updateRemoveName(userToRemove.getUsername());
         }
-        room.removeUser(user);
+
+        //Necessaire a cause que les references d'user du server et du client ne sont pas les memes
+        for (Iterator<User> userIterator = room.getMyUsers().iterator(); userIterator.hasNext(); ) {
+            User user = userIterator.next();
+            if (user.getUsername().equals(userToRemove.getUsername())) {
+                userIterator.remove();
+            }
+        }
+        //room.removeUserFromName(user.getUsername());
     }
 
     public void removeNameFromAllRooms(User user) {
         for (Room room : roomList){
-            removeNameFromRoom(room.getName(), user);
+            removeNameFromRoom(room, user);
         }
     }
 
@@ -247,7 +252,7 @@ public class ClientGUI extends JFrame
     private Room getRoom(Integer ID){
         Room room = null;
         for (Room r : roomList){
-            if (r.getID() == ID){
+            if (r.getID().equals(ID)){
                 room = r;
                 break;
             }
