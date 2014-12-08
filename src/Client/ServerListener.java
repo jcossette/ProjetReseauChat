@@ -67,11 +67,13 @@ public class ServerListener implements Runnable{
         TypeColisEnum type = colis.getType();
         ClientGUI clientGui;
         if (type == TypeColisEnum.fullUpdate){
+            /** Affiche le GUI principal avec les informations du lobby */
             clientGui = new ClientGUI();
             guiController.setClientGui(clientGui);
             clientGui.fullUpdate((ArrayList<Room>) colis.popParameter());
         }
         else if(type == TypeColisEnum.roomList) {
+            /** Affiche le GUI de d'ajout de Room */
             ArrayList<Room> roomList = (ArrayList<Room>)colis.popParameter();
             new RoomSelectionGUI(roomList);
         }
@@ -79,31 +81,38 @@ public class ServerListener implements Runnable{
             clientGui = guiController.getClientGUI();
             switch (type) {
                 case updateText:
+                    /** Update le texte de la room concernee */
                     clientGui.updateText((Integer)colis.popParameter(), (String)colis.popParameter());
                     break;
                 case updateRemoveUserFromRoom:
+                    /** Update la liste de user de la room concernee */
                     clientGui.removeNameFromRoom((int)colis.popParameter(), (User)colis.popParameter());
                     break;
                 case updateRemoveUser:
+                    /** Update la liste de user de toute les rooms */
                     clientGui.removeNameFromAllRooms((User)colis.popParameter());
                     break;
                 case updateAddUser:
+                    /** Update la liste de user de la room concernee */
                     clientGui.addNameToRoom((String) colis.popParameter(), (User)colis.popParameter());
                     break;
                 case joinRoom:
+                    /** Cree une tab pour la room cree ou jointe */
                     clientGui.createRoomTab((Room) colis.popParameter());
                     break;
                 case acceptedConnection:
+                    /** Affiche le GUI de chat principal lorsque la connexion est aceptee */
                     UserConnectionGUI connectionGui = guiController.getConnectionGUI();
                     connectionGui.closeWindow();
                     controller.getFullUpdate();
                     break;
                 case refusedConnection:
+                    /** Affiche un message d'ereur lorsque le nom d'utilisateur n'est pas disponible */
                     JOptionPane.showMessageDialog(null, colis.popParameter(), "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                     break;
                 case updateListRequest:
-                    //afficher la liste des clientsn  dans un JoptionPane
+                    /** Affiche la liste des clients  dans un JoptionPane */
                     ArrayList<User> userList = (ArrayList<User>)colis.popParameter();
                     String stringList = "";
                     for (User u : userList){

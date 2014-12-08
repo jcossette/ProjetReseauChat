@@ -52,6 +52,8 @@ public class ClientGUI extends JFrame
         roomList = new ArrayList();
         roomMap = new HashMap();
 
+        buttonLeaveRoom.setEnabled(false); /**Disable le boutton de leaveRoom car il est impossible de quitter le lobby */
+
         /** Envoi le texte lorsqu'on appuie sur le bouton Send */
         buttonSend.addActionListener(new ActionListener()
         {
@@ -82,9 +84,16 @@ public class ClientGUI extends JFrame
             public void stateChanged(ChangeEvent e)
             {
                 model.clear();
-
-                Room room = roomList.get(tabbedPaneRoom.getSelectedIndex());
+                int tabIndex = tabbedPaneRoom.getSelectedIndex();
+                Room room = roomList.get(tabIndex);
                 fillTab(room);
+
+                /** Disable le bouton de leaveRoom si la Room courante est le lobby */
+                if (tabIndex == 0){
+                    buttonLeaveRoom.setEnabled(false);
+                } else {
+                    buttonLeaveRoom.setEnabled(true);
+                }
             }
         });
 
