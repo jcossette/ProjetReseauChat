@@ -51,7 +51,7 @@ public class SetupScreenController implements Observer{
     }
 
     public void removeServer(ServerInfo toRemove){
-        myUserContext.removeServer();
+        myUserContext.removeServer(toRemove);
     }
 
     private int checkServerPort(String toCheck){
