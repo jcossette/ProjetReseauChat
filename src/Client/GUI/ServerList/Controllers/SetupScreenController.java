@@ -94,10 +94,8 @@ public class SetupScreenController implements Observer{
     }
 
     public void joinServer(ServerInfo toJoin, String nickname){
-        JOptionPane.showMessageDialog(null, "Connection en cour");
-
         ClientController myClientController = ClientController.getInstance();
-        try {
+        try{
             myClientController.createSocket(toJoin.getMyAddress().getHostAddress(), String.valueOf(toJoin.getMyPort()));
 
             /**
@@ -108,7 +106,7 @@ public class SetupScreenController implements Observer{
             myClientController.connect(nickname);
             myUI.setVisible(false);
             myUI.dispose();
-        } catch (IOException e1) {
+        }catch(IOException e1){
             JOptionPane.showMessageDialog(null, "Échec de connection au serveur", "Ereurr",
                     JOptionPane.ERROR_MESSAGE);
             e1.printStackTrace();

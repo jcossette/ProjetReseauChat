@@ -124,6 +124,12 @@ public class SetupScreen extends JFrame{
      */
     private void handleJoinButton(){
         String myNickName = nicknameField.getText();
+
+        if(getServerInfoFromList() == null){
+            JOptionPane.showMessageDialog(null, "Veuillez selectionner un serveur");
+            return;
+        }
+
         if(myNickName.length() > 2){
             myController.joinServer(getServerInfoFromList(), myNickName);
         }else{

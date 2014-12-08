@@ -65,7 +65,7 @@ public class RoomManager{
     private void updateRemoveUser(Room toLeave, User leaving){
         ArrayList<User> concernedUsers = toLeave.getMyUsers();
         //Create the update colis that warns clients of a new user
-        Colis updateUserColis = new Colis(TypeColisEnum.updateRemoveUser);
+        Colis updateUserColis = new Colis(TypeColisEnum.updateRemoveUserFromRoom);
         updateUserColis.addParameter(toLeave.getID());
         updateUserColis.addParameter(leaving);
         //Dispatch the colis to each user in this room

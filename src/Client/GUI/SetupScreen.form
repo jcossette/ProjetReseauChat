@@ -111,7 +111,7 @@
               <component id="bb343" class="javax.swing.JList" binding="serverList" custom-create="true">
                 <constraints/>
                 <properties>
-                  <foreground color="-9736591"/>
+                  <foreground color="-16777216"/>
                   <model>
                     <item value="new DefaultListModel&lt;String&gt;();"/>
                   </model>
@@ -143,7 +143,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <foreground color="-9736591"/>
+                  <foreground color="-16777216"/>
                   <text value="Name"/>
                 </properties>
               </component>

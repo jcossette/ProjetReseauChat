@@ -55,9 +55,19 @@ public class ColisHandler {
         myRoomManager.leaveRoom(toLeave, toHandle.getMySession().getUser());
     }
 
+    /**
+     * Returns the list of room on the server except the lobby.
+     * @param toHandle
+     */
     private void handleGetRoomList(ColisClient toHandle){
         Colis toSend = new Colis(TypeColisEnum.roomList);
-        toSend.addParameter(myRoomManager.getRoomList());
+        ArrayList<Room> toReturn = new ArrayList<>();
+        for(Room r : myRoomManager.getRoomList()){
+            if(!r.getName().equals("Lobby")){
+                toReturn.add(r);
+            }
+        }
+        toSend.addParameter(toReturn);
         toHandle.getMySession().send(toSend);
     }
 
