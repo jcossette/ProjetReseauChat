@@ -45,8 +45,8 @@ public class RoomSelectionGUI extends JFrame{
                 boolean canJoin = true;
 
                 for (Room r : clientRoomList){
-                    if (r.getID() == roomToJoin.getID()){
-                        JOptionPane.showMessageDialog(null, "Erreur, vous êtes déjà présent dans cette room.", "Erreur",
+                    if (r.getID().equals(roomToJoin.getID())){
+                        JOptionPane.showMessageDialog(null, "Erreur, vous etes deja present dans cette room.", "Erreur",
                                 JOptionPane.ERROR_MESSAGE);
                         canJoin = false;
                         break;
