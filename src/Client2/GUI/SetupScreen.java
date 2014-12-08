@@ -37,7 +37,6 @@ public class SetupScreen extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(rootPanel);
         pack();
-        initTheme();
         setVisible(true);
     }
 
@@ -64,20 +63,20 @@ public class SetupScreen extends JFrame{
                 handleAddServerButton();
             }
         });
-        joinButton.addActionListener(new ActionListener(){
+        joinButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 handleJoinButton();
             }
         });
-        serverList.addMouseListener(new MouseAdapter(){
+        serverList.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 selectServer();
             }
         });
-        deleteServerButton.addActionListener(new ActionListener(){
+        deleteServerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deleteServer();
@@ -88,9 +87,9 @@ public class SetupScreen extends JFrame{
     private void deleteServer(){
         String newSelection = (String)serverList.getSelectedValue();
         ServerInfo selectedServerInfo = myMapServerInfo.get(newSelection);
-        serverList.remove(serverList.getSelectedIndex());
         myMapServerInfo.remove(newSelection);
         myController.removeServer(selectedServerInfo);
+        updateServerList();
     }
 
     private void selectServer(){
@@ -101,36 +100,16 @@ public class SetupScreen extends JFrame{
         serverPortField.setText(String.valueOf(selectedServerInfo.getMyPort()));
     }
 
-    public void updateServerList(){
+    public void updateServerList() {
         ArrayList<ServerInfo> myServers = myController.getServerList();
 
-        DefaultListModel myModel = (DefaultListModel)serverList.getModel();
+        DefaultListModel myModel = (DefaultListModel) serverList.getModel();
         myModel.clear();
 
-        for(ServerInfo si : myServers){
+        for (ServerInfo si : myServers) {
             String serverInfoString = si.toString();
             myMapServerInfo.put(serverInfoString, si);
             myModel.addElement(serverInfoString);
-        }
-    }
-
-    /**
-     * Initiate the right theme for the window
-     */
-    private void initTheme(){
-        try{
-            for(UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()){
-                if("Nimbus".equals(info.getName())){
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }catch(Exception e){
-            try{
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            }catch(Exception ex){
-                //Error?!? This is madness
-            }
         }
     }
 

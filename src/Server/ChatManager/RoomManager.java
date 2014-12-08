@@ -17,7 +17,7 @@ public class RoomManager{
     private UserManager myUserManager;
 
     public RoomManager(){
-        myRooms = new HashMap();
+        myRooms = new HashMap<>();
         initLobby();
     }
 
@@ -48,8 +48,7 @@ public class RoomManager{
         }
     }
 
-    public void updateUser(Integer roomID, User user){
-        Room toUpdate = getRoom(roomID);
+    private void updateAddUser(Room toUpdate, User user){
         ArrayList<User> concernedUsers = toUpdate.getMyUsers();
         //Create the update colis that warns clients of a new user
             Colis updateUserColis = new Colis(TypeColisEnum.updateAddUser);
@@ -61,6 +60,20 @@ public class RoomManager{
                     myUserManager.getUserSession(u).send(updateUserColis);
                 }
             }
+    }
+
+    private void updateRemoveUser(Room toLeave, User leaving){
+        ArrayList<User> concernedUsers = toLeave.getMyUsers();
+        //Create the update colis that warns clients of a new user
+        Colis updateUserColis = new Colis(TypeColisEnum.updateRemoveUser);
+        updateUserColis.addParameter(toLeave.getID());
+        updateUserColis.addParameter(leaving);
+        //Dispatch the colis to each user in this room
+        for (User u : concernedUsers){
+            if(leaving != u){
+                myUserManager.getUserSession(u).send(updateUserColis);
+            }
+        }
     }
 
     private void sendUpdateColis(SessionJob destination, Room concernedRoom, String text){
@@ -75,5 +88,17 @@ public class RoomManager{
         newRoom.setName(roomName);
         myRooms.put(newRoom.getID(), newRoom);
         return newRoom;
+    }
+
+    public void joinRoom(Room toJoin, User joining){
+        toJoin.addUser(joining);
+        joining.addRoom(toJoin);
+        updateAddUser(toJoin, joining);
+    }
+
+    public void leaveRoom(Room toLeave, User leaving){
+        toLeave.removeUser(leaving);
+        leaving.removeRoom(toLeave);
+        updateRemoveUser(toLeave, leaving);
     }
 }

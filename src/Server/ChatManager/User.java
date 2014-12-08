@@ -31,4 +31,8 @@ public class User implements Serializable{
     public void addRoom(Room toAdd){
         myRooms.add(toAdd);
     }
+
+    public void removeRoom(Room toRemove){
+        myRooms.remove(toRemove);
+    }
 }

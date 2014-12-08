@@ -14,8 +14,6 @@ public class ColisHandler {
     private UserManager myUserManager;
     private RoomManager myRoomManager;
 
-    private Room test;
-
     public ColisHandler(){
         myUserManager = new UserManager();
         myRoomManager = new RoomManager();
@@ -53,7 +51,8 @@ public class ColisHandler {
 
     private void handleLeaveRoom(ColisClient toHandle){
         int roomID = (int)toHandle.getMyColis().popParameter();
-        myRoomManager.getRoom(roomID);
+        Room toLeave = myRoomManager.getRoom(roomID);
+        myRoomManager.leaveRoom(toLeave, toHandle.getMySession().getUser());
     }
 
     private void handleGetRoomList(ColisClient toHandle){
@@ -125,25 +124,20 @@ public class ColisHandler {
 
     private void joinRoom(Room toJoin, SessionJob joining){
         Colis colisToSend = new Colis(TypeColisEnum.joinRoom);
-        toJoin.addUser(joining.getUser());
-        joining.getUser().addRoom(toJoin);
+        myRoomManager.joinRoom(toJoin, joining.getUser());
         colisToSend.addParameter(toJoin);
         colisToSend.addParameter(joining.getUser());
         joining.send(colisToSend);
-        myRoomManager.updateUser(toJoin.getID(), joining.getUser());
     }
 
     private void addNewUser(User toAdd, SessionJob mySession){
         toAdd.addRoom(myRoomManager.getRoom(0));
-        myRoomManager.getRoom(0).addUser(toAdd);
+        Room lobby = myRoomManager.getRoom(0);
         myUserManager.addUser(toAdd, mySession);
-        myRoomManager.updateUser(0, toAdd);
+        myRoomManager.joinRoom(lobby, toAdd);
     }
 
     public void removeUser(User toRemove){
-        for(Room r : toRemove.getMyRooms()){
-            r.removeUser(toRemove);
-        }
         myUserManager.removeUser(toRemove);
     }
 }

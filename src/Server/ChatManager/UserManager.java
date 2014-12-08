@@ -40,6 +40,9 @@ public class UserManager {
     }
 
     public void removeUser(User toRemove){
+        for(Room r : toRemove.getMyRooms()){
+            r.removeUser(toRemove);
+        }
         myUsers.remove(toRemove);
     }
 

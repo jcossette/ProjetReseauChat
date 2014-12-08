@@ -99,7 +99,7 @@ public class SetupScreenController implements Observer{
 
         ClientController myClientController = ClientController.getInstance();
         try {
-            myClientController.createSocket(toJoin.getMyAddress().toString(), String.valueOf(toJoin.getMyPort()));
+            myClientController.createSocket(toJoin.getMyAddress().getHostAddress(), String.valueOf(toJoin.getMyPort()));
 
             /**
              * Executes after socket is created
