@@ -29,13 +29,11 @@ public class ClientGUI extends JFrame
     private JTextArea textAreaOutputText;
     private JButton buttonAddRoom;
     private JPanel lobbyPanel;
+    private JButton buttonLeaveRoom;
 
     private ClientController clientController;
-
     private DefaultListModel<String> model;
-
     private List<Room> roomList;
-
     private Map<Room, JTextArea> roomMap;
 
     public ClientGUI()
@@ -83,8 +81,6 @@ public class ClientGUI extends JFrame
                 model.clear();
 
                 Room room = roomList.get(tabbedPaneRoom.getSelectedIndex());
-                //Room room = roomMap.get(tabbedPaneRoom.getSelectedComponent());
-
                 fillTab(room);
             }
         });
@@ -94,24 +90,32 @@ public class ClientGUI extends JFrame
                 clientController.getRoomList();
             }
         });
+        buttonLeaveRoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clientController.leaveRoom(getCurrentRoom().getID());
+                roomList.remove(tabbedPaneRoom.getSelectedIndex());
+                tabbedPaneRoom.remove(tabbedPaneRoom.getSelectedIndex());
+            }
+        });
     }
 
+    //Envoi un paquet communication lors"on appuie sur "Enter" ou sur le bouton "Send"
     private void sendCommunication(){
         if(!textFieldInputText.getText().isEmpty())
         {
-            if (textFieldInputText.getText().equals("list")){
-                clientController.listRequest(getCurrentRoom().getID());
-            }
             clientController.communication(getCurrentRoom().getID(), textFieldInputText.getText());
             textFieldInputText.setText("");
         }
     }
 
+    //Retourne la room courante
     public Room getCurrentRoom(){
         Room currentRoom = roomList.get(tabbedPaneRoom.getSelectedIndex());
         return currentRoom;
     }
 
+    //Update le JTextArea output lorsqu'on recoit un colis updateText du serveur
     public void updateText(Integer roomID, String text)
     {
         Room toUpdate = getRoom(roomID);
@@ -121,20 +125,16 @@ public class ClientGUI extends JFrame
         JTextArea toUpdateField = roomMap.get(toUpdate);
         toUpdateField.append(text + "\n");
         toUpdateField.repaint();
-
-        /*if (isCurrentRoom(toUpdate)){
-            textAreaOutputText.append(text + "\n");
-        }*/
     }
 
-
+    //Ajoute un nom a la liste d'utilisateur
     private void updateAddName(String name)
     {
-        //model = (DefaultListModel)listName.getModel();
         model.addElement(name);
         listName.setModel(model);
     }
 
+    //Enleve un nom de la liste d'utilisateur
     public  void updateRemoveName(String userName)
     {
         for(int i = 0; i<model.getSize(); i++)
@@ -148,6 +148,7 @@ public class ClientGUI extends JFrame
         listName.setModel(model);
     }
 
+    //Ajoute un utilisateur a une room particuliere
     public void addNameToRoom(String roomName, User user)
     {
         Room room = getRoom(roomName);
@@ -157,6 +158,7 @@ public class ClientGUI extends JFrame
         room.addUser(user);
     }
 
+    //Enleve un utilisateur d'une room particuliere
     public void removeNameFromRoom(Room room, User userToRemove)
     {
         if(isCurrentRoom(room)) {
@@ -170,43 +172,44 @@ public class ClientGUI extends JFrame
                 userIterator.remove();
             }
         }
-        //room.removeUserFromName(user.getUsername());
     }
 
+    public void removeNameFromRoom(int roomID, User userToRemove){
+        Room roomToRemove = getRoom(roomID);
+        removeNameFromRoom(roomToRemove, userToRemove);
+    }
+
+    //Enleve un utilisateur de toutes les rooms
     public void removeNameFromAllRooms(User user) {
         for (Room room : roomList){
             removeNameFromRoom(room, user);
         }
     }
 
+    //Recoi les informations du lobby du serveur
     public void fullUpdate(List<Room> roomList)
     {
         Room lobby = roomList.get(0);
         this.roomList.add(lobby);
 
-        /*for (Room room : roomList) {
-            if (room.getName().equals(lobby.getName())){
-
-            } else {
-                createRoomTab(room);
-            }
-        }*/
         roomMap.put(lobby, textAreaOutputText);
         fillTab(lobby);
     }
 
+    //Va chercher la room qu'on vient de selectionner et affiche le texte et la liste d'utilisateurs
     private void fillTab(Room room){
         for(User user : room.getMyUsers()) {
             updateNameFromList(user.getUsername());
         }
 
-        textAreaOutputText.setText(""); // A changer pour mettre le textarea du tab de la room a ""
+        textAreaOutputText.setText("");
         for(String line : room.getMessageChain()){
             updateTextAreaFromList(line);
         }
     }
 
-    private void createRoomTab(Room room){
+    //Cree une tab pour une nouvelle room
+    public void createRoomTab(Room room){
         JPanel panel = new JPanel(new BorderLayout());
         JTextArea textArea = new JTextArea();
         panel.add(textArea);
@@ -216,15 +219,6 @@ public class ClientGUI extends JFrame
         roomMap.put(room, textArea);
     }
 
-
-    public void joinRoom(Room room){
-        createRoomTab(room);
-
-        /*for (User user : room.getMyUsers()){
-            updateNameFromList(user.getUsername());
-        }*/
-    }
-
     private void updateNameFromList(String name)
     {
         model.addElement(name);
@@ -232,10 +226,10 @@ public class ClientGUI extends JFrame
 
     private void updateTextAreaFromList(String text)
     {
-        //Gerer les diff/rentes rooms
         textAreaOutputText.append(text + "\n");
     }
 
+    //Va chercher l'objet Room a partir de son nom
     private Room getRoom(String roomName){
         Room room = new Room();
 
@@ -249,6 +243,7 @@ public class ClientGUI extends JFrame
         return room;
     }
 
+    //Va chercher l'objet Room a partir de son ID
     private Room getRoom(Integer ID){
         Room room = null;
         for (Room r : roomList){
@@ -260,15 +255,12 @@ public class ClientGUI extends JFrame
         return room;
     }
 
+    //Verifie si la Room passe en parametre est la Room courante
     private boolean isCurrentRoom(Room room){
         if (room.getName().equals(getCurrentRoom().getName())) {
             return true;
         } else {
             return false;
         }
-    }
-
-    public void setRoomList(List<Room> roomList){
-        this.roomList = roomList;
     }
 }

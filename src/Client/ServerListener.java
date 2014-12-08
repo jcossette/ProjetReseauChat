@@ -75,10 +75,6 @@ public class ServerListener implements Runnable{
             ArrayList<Room> roomList = (ArrayList<Room>)colis.popParameter();
             new RoomSelectionGUI(roomList);
         }
-        else if(type == TypeColisEnum.roomInfos) {
-            clientGui = guiController.getClientGUI();
-            clientGui.joinRoom((Room) colis.popParameter());
-        }
         else {
             clientGui = guiController.getClientGUI();
             switch (type) {
@@ -86,7 +82,7 @@ public class ServerListener implements Runnable{
                     clientGui.updateText((Integer)colis.popParameter(), (String)colis.popParameter());
                     break;
                 case updateRemoveUserFromRoom:
-                    clientGui.removeNameFromRoom((Room)colis.popParameter(), (User)colis.popParameter());
+                    clientGui.removeNameFromRoom((int)colis.popParameter(), (User)colis.popParameter());
                     break;
                 case updateRemoveUser:
                     clientGui.removeNameFromAllRooms((User)colis.popParameter());
@@ -95,9 +91,7 @@ public class ServerListener implements Runnable{
                     clientGui.addNameToRoom((String) colis.popParameter(), (User)colis.popParameter());
                     break;
                 case joinRoom:
-                    clientGui.joinRoom((Room) colis.popParameter());
-                    break;
-                case error:
+                    clientGui.createRoomTab((Room) colis.popParameter());
                     break;
                 case acceptedConnection:
                     UserConnectionGUI connectionGui = guiController.getConnectionGUI();
