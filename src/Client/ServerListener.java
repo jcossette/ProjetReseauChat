@@ -101,9 +101,7 @@ public class ServerListener implements Runnable{
                     clientGui.createRoomTab((Room) colis.popParameter());
                     break;
                 case acceptedConnection:
-                    /** Affiche le GUI de chat principal lorsque la connexion est aceptee */
-                    UserConnectionGUI connectionGui = guiController.getConnectionGUI();
-                    connectionGui.closeWindow();
+                    /** Affiche le GUI de chat principal lorsque la connexion est acceptee */
                     controller.getFullUpdate();
                     break;
                 case refusedConnection:

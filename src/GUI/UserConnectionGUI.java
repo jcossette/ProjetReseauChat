@@ -37,7 +37,6 @@ public class UserConnectionGUI extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 controller.connect(textFieldUsername.getText());
-
             }
         });
     }

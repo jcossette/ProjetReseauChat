@@ -107,7 +107,6 @@ public class SetupScreenController implements Observer{
              */
             myClientController.initListener();
             myClientController.connect(nickname);
-            new ClientGUI();
             myUI.setVisible(false);
             myUI.dispose();
         } catch (IOException e1) {

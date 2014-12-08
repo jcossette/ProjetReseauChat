@@ -20,10 +20,10 @@ public enum TypeColisEnum implements Serializable
     //Envoye par le serveur
     acceptedConnection, //vide
     refusedConnection,  //String message
-    fullUpdate,         //List<Room> roomList, List<User> userLists
+    fullUpdate,         //List<Room> roomList
     updateListRequest,  //List<User> userList
     updateText,         //String roomName, String textToUpdate
-    updateAddUser,      //String room, User user
+    updateAddUser,      //String roomName, User user
     updateRemoveUserFromRoom,   //int roomID, User user
     updateRemoveUser,   //User user
     joinRoom,           //Room room
