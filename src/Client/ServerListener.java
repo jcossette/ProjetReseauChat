@@ -60,7 +60,6 @@ public class ServerListener implements Runnable{
 
     public void handleColis(Colis colis) {
         TypeColisEnum type = colis.getType();
-        ClientGUI clientGui;
         if (type == TypeColisEnum.fullUpdate){
             /** Affiche le GUI principal avec les informations du lobby */
             myGUI = new ClientGUI();
@@ -69,7 +68,7 @@ public class ServerListener implements Runnable{
         else if(type == TypeColisEnum.roomList) {
             /** Affiche le GUI de d'ajout de Room */
             ArrayList<Room> roomList = (ArrayList<Room>)colis.popParameter();
-            new RoomSelectionGUI(roomList);
+            new RoomSelectionGUI(roomList, myGUI);
         }
         else {
             switch (type) {

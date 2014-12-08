@@ -304,4 +304,11 @@ public class ClientGUI extends JFrame
             return false;
         }
     }
+
+    /**
+     * Retourne la liste des rooms contenue dans le Client
+     **/
+    public List<Room> getRoomList(){
+        return roomList;
+    }
 }
