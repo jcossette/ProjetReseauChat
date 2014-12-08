@@ -43,9 +43,17 @@ public class ColisHandler {
             case joinRoomRequest:
                 handleJoinRoom(toHandle);
                 break;
+            case leaveRoom:
+                handleLeaveRoom(toHandle);
+                break;
             default:
                 break;
         }
+    }
+
+    private void handleLeaveRoom(ColisClient toHandle){
+        int roomID = (int)toHandle.getMyColis().popParameter();
+        myRoomManager.getRoom(roomID);
     }
 
     private void handleGetRoomList(ColisClient toHandle){
@@ -68,6 +76,7 @@ public class ColisHandler {
     private void sendUserList(SessionJob toSendTo){
         ArrayList<User> toSendBack = myUserManager.getUserList();
         Colis toReturn = new Colis(TypeColisEnum.updateListRequest);
+        toReturn.addParameter(toSendBack);
         toSendTo.send(toReturn);
     }
 
