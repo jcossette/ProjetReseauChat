@@ -58,10 +58,18 @@ public class ColisHandler {
         User sender = toHandle.getMySession().getUser();
         Integer roomID = (Integer)toHandle.getMyColis().popParameter();
         String message = (String)toHandle.getMyColis().popParameter();
-        myRoomManager.appendText(roomID, sender.getUsername() + ":= " + message);
+        if(message.equals("/list")){
+            sendUserList(toHandle.getMySession());
+        }else {
+            myRoomManager.appendText(roomID, sender.getUsername() + ":= " + message);
+        }
     }
 
-
+    private void sendUserList(SessionJob toSendTo){
+        ArrayList<User> toSendBack = myUserManager.getUserList();
+        Colis toReturn = new Colis(TypeColisEnum.updateListRequest);
+        toSendTo.send(toReturn);
+    }
 
     private void handleConnection(ColisClient toHandle){
         String username = (String)toHandle.getMyColis().popParameter();

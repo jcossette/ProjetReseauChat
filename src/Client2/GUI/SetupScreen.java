@@ -28,6 +28,7 @@ public class SetupScreen extends JFrame{
     private JTextField nicknameField;
     private JButton joinButton;
     private JLabel nicknameLabel;
+    private JButton deleteServerButton;
     private JFormattedTextField IPTextField;
 
     public SetupScreen(){
@@ -76,6 +77,20 @@ public class SetupScreen extends JFrame{
                 selectServer();
             }
         });
+        deleteServerButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteServer();
+            }
+        });
+    }
+
+    private void deleteServer(){
+        String newSelection = (String)serverList.getSelectedValue();
+        ServerInfo selectedServerInfo = myMapServerInfo.get(newSelection);
+        serverList.remove(serverList.getSelectedIndex());
+        myMapServerInfo.remove(newSelection);
+        myController.removeServer(selectedServerInfo);
     }
 
     private void selectServer(){
@@ -131,8 +146,10 @@ public class SetupScreen extends JFrame{
      */
     private void handleJoinButton(){
         String myNickName = nicknameField.getText();
-        if(myNickName.length() > 3){
+        if(myNickName.length() > 2){
             myController.joinServer(getServerInfoFromList(), myNickName);
+        }else{
+            JOptionPane.showMessageDialog(null, "Le nickname doit avoir au moin 3 lettres.");
         }
     }
 

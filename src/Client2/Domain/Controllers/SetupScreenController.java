@@ -1,11 +1,14 @@
 package Client2.Domain.Controllers;
 
+import Client.ClientController;
 import Client2.Domain.Context;
 import Client2.Domain.Interfaces.Observer;
 import Client2.Domain.ServerInfo;
 import Client2.GUI.SetupScreen;
+import GUI.ClientGUI;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -45,6 +48,10 @@ public class SetupScreenController implements Observer{
         ){
             myUserContext.addServer(myName, myIP, myPort);
         }
+    }
+
+    public void removeServer(ServerInfo toRemove){
+        myUserContext.removeServer();
     }
 
     private int checkServerPort(String toCheck){
@@ -90,8 +97,23 @@ public class SetupScreenController implements Observer{
     public void joinServer(ServerInfo toJoin, String nickname){
         JOptionPane.showMessageDialog(null, "Connection en cour");
 
-        //TODO
-        //Connect to server
-        //Open Chat Window
+        ClientController myClientController = ClientController.getInstance();
+        try {
+            myClientController.createSocket(toJoin.getMyAddress().toString(), String.valueOf(toJoin.getMyPort()));
+
+            /**
+             * Executes after socket is created
+             * Initialize the serverListener thread and shows the UserConnectionGUI
+             */
+            myClientController.initListener();
+            myClientController.connect(nickname);
+            new ClientGUI();
+            myUI.setVisible(false);
+            myUI.dispose();
+        } catch (IOException e1) {
+            JOptionPane.showMessageDialog(null, "Échec de connection au serveur", "Ereurr",
+                    JOptionPane.ERROR_MESSAGE);
+            e1.printStackTrace();
+        }
     }
 }

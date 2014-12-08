@@ -100,4 +100,7 @@ public class Context implements Observable{
         return myServerList;
     }
 
+    public void removeServer(ServerInfo toRemove) {
+        myServerList.remove(toRemove);
+    }
 }
