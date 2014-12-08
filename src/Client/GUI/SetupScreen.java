@@ -131,7 +131,11 @@ public class SetupScreen extends JFrame{
         }
 
         if(myNickName.length() > 2){
-            myController.joinServer(getServerInfoFromList(), myNickName);
+            try{
+                myController.joinServer(getServerInfoFromList(), myNickName);
+            }catch(Exception ConnectException){
+                JOptionPane.showMessageDialog(null, "Echec de connection.");
+            }
         }else{
             JOptionPane.showMessageDialog(null, "Le nickname doit avoir au moin 3 lettres.");
         }
