@@ -7,24 +7,25 @@ import java.io.Serializable;
  */
 public enum TypeColisEnum implements Serializable
 {
-    communication,      //String roomName, String message
+    //Envoye par le client
+    communication,      //int roomID, String message
     connection,         //String username
+    getFullUpdate,      //vide
+    createRoom,         //String roomName
+    joinRoomRequest,    //int roomID
+    leaveRoom,          //int roomID
+    getRoomList,        //vide
+
+
+    //Envoye par le serveur
     acceptedConnection, //vide
     refusedConnection,  //String message
-    disconnection,      //vide
-    getFullUpdate,      //vide
     fullUpdate,         //List<Room> roomList, List<User> userLists
-    listRequest,        //String roomName
     updateListRequest,  //List<User> userList
     updateText,         //String roomName, String textToUpdate
     updateAddUser,      //String room, User user
-    updateRemoveUserFromRoom,   //String room, User user
+    updateRemoveUserFromRoom,   //int roomID, User user
     updateRemoveUser,   //User user
-    createRoom,         //String roomName
-    joinRoomRequest,    //int roomID
     joinRoom,           //Room room
-    roomInfos,          //Room room
-    getRoomList,        //vide
-    roomList,           //List<Room> roomList
-    error               //String message
+    roomList           //List<Room> roomList
 }

@@ -88,17 +88,6 @@ public class ClientController {
     }
 
     /**
-     * Déconnexion
-     */
-    public void disconnect(){
-        typeColis = TypeColisEnum.disconnection;
-
-        Colis colisToSend = new Colis(typeColis);
-
-        sendColis(colisToSend);
-    }
-
-    /**
      * Demande une liste des rooms courantes
      */
     public void getRoomList(){
@@ -134,6 +123,18 @@ public class ClientController {
     }
 
     /**
+     *  Envoi un colis pour signaler qu<on quitte une room en particulier
+     */
+    public void leaveRoom(Integer roomId){
+        typeColis = TypeColisEnum.leaveRoom;
+
+        Colis colisToSend = new Colis(typeColis);
+        colisToSend.addParameter(roomId);
+
+        sendColis(colisToSend);
+    }
+
+    /**
      *  Envoi d'un message dans une room donnée
      */
     public void communication(Integer roomId, String message){
@@ -142,18 +143,6 @@ public class ClientController {
         Colis colisToSend = new Colis(typeColis);
         colisToSend.addParameter(roomId);
         colisToSend.addParameter(message);
-
-        sendColis(colisToSend);
-    }
-
-    /**
-     * Demande de la liste des usagers dans la room
-     */
-    public void listRequest(Integer roomId){
-        typeColis = TypeColisEnum.listRequest;
-
-        Colis colisToSend = new Colis(typeColis);
-        colisToSend.addParameter(roomId);
 
         sendColis(colisToSend);
     }
