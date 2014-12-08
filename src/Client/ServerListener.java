@@ -2,10 +2,8 @@ package Client;
 
 import Colis.Colis;
 import Colis.TypeColisEnum;
-import GUI.ClientGUI;
-import GUI.ListServerGUI;
-import GUI.RoomSelectionGUI;
-import GUI.UserConnectionGUI;
+import Client.GUI.ClientGUI;
+import Client.GUI.RoomSelectionGUI;
 import Server.ChatManager.Room;
 import Server.ChatManager.User;
 
@@ -14,7 +12,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by fillioca on 2014-11-19.
@@ -22,14 +19,13 @@ import java.util.List;
 public class ServerListener implements Runnable{
 
     ClientController controller;
-    GUIController guiController;
+    ClientGUI myGUI;
     Thread myThread;
     ObjectInputStream in;
     boolean running;
 
     public ServerListener(){
         controller = ClientController.getInstance();
-        guiController = GUIController.getInstance();
         running = true;
 
         myThread = new Thread(this, "serverListener");
@@ -54,7 +50,6 @@ public class ServerListener implements Runnable{
                 running = false;
                 JOptionPane.showMessageDialog(null, "Connection to server lost", "Erreur",
                         JOptionPane.ERROR_MESSAGE);
-                guiController.getClientGUI().dispose();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -68,9 +63,8 @@ public class ServerListener implements Runnable{
         ClientGUI clientGui;
         if (type == TypeColisEnum.fullUpdate){
             /** Affiche le GUI principal avec les informations du lobby */
-            clientGui = new ClientGUI();
-            guiController.setClientGui(clientGui);
-            clientGui.fullUpdate((ArrayList<Room>) colis.popParameter());
+            myGUI = new ClientGUI();
+            myGUI.fullUpdate((ArrayList<Room>) colis.popParameter());
         }
         else if(type == TypeColisEnum.roomList) {
             /** Affiche le GUI de d'ajout de Room */
@@ -78,27 +72,26 @@ public class ServerListener implements Runnable{
             new RoomSelectionGUI(roomList);
         }
         else {
-            clientGui = guiController.getClientGUI();
             switch (type) {
                 case updateText:
                     /** Update le texte de la room concernee */
-                    clientGui.updateText((Integer)colis.popParameter(), (String)colis.popParameter());
+                    myGUI.updateText((Integer)colis.popParameter(), (String)colis.popParameter());
                     break;
                 case updateRemoveUserFromRoom:
                     /** Update la liste de user de la room concernee */
-                    clientGui.removeNameFromRoom((int)colis.popParameter(), (User)colis.popParameter());
+                    myGUI.removeNameFromRoom((int)colis.popParameter(), (User)colis.popParameter());
                     break;
                 case updateRemoveUser:
                     /** Update la liste de user de toute les rooms */
-                    clientGui.removeNameFromAllRooms((User)colis.popParameter());
+                    myGUI.removeNameFromAllRooms((User) colis.popParameter());
                     break;
                 case updateAddUser:
                     /** Update la liste de user de la room concernee */
-                    clientGui.addNameToRoom((String) colis.popParameter(), (User)colis.popParameter());
+                    myGUI.addNameToRoom((String) colis.popParameter(), (User)colis.popParameter());
                     break;
                 case joinRoom:
                     /** Cree une tab pour la room cree ou jointe */
-                    clientGui.createRoomTab((Room) colis.popParameter());
+                    myGUI.createRoomTab((Room) colis.popParameter());
                     break;
                 case acceptedConnection:
                     /** Affiche le GUI de chat principal lorsque la connexion est acceptee */

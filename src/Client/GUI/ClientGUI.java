@@ -1,7 +1,6 @@
-package GUI;
+package Client.GUI;
 
 import Client.ClientController;
-import Client.GUIController;
 import Server.ChatManager.Room;
 import Server.ChatManager.User;
 
@@ -55,10 +54,8 @@ public class ClientGUI extends JFrame
         buttonLeaveRoom.setEnabled(false); /**Disable le boutton de leaveRoom car il est impossible de quitter le lobby */
 
         /** Envoi le texte lorsqu'on appuie sur le bouton Send */
-        buttonSend.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
+        buttonSend.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
                 //Execute when button is pressed
                 sendCommunication();
             }
@@ -66,12 +63,9 @@ public class ClientGUI extends JFrame
 
         /** Envoi le texte lorsqu'on appuie sur Enter */
         textFieldInputText.addKeyListener(
-                new KeyAdapter()
-                {
-                    public void keyPressed(KeyEvent e)
-                    {
-                        if(e.getKeyChar() == KeyEvent.VK_ENTER)
-                        {
+                new KeyAdapter() {
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                             sendCommunication();
                         }
                     }

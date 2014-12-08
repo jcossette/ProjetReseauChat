@@ -1,4 +1,4 @@
-package GUI;
+package Client.GUI;
 
 import Client.ClientController;
 import Server.ChatManager.Room;
