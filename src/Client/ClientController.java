@@ -12,6 +12,7 @@ import java.net.Socket;
  * Created by fillioca on 2014-11-19.
  */
 public class ClientController {
+    private String myNickname;
     private static ClientController instance;
     private ObjectOutputStream out;
     private TypeColisEnum typeColis;
@@ -80,6 +81,7 @@ public class ClientController {
      */
     public void connect(String userName) {
         typeColis = TypeColisEnum.connection;
+        this.myNickname = userName;
 
         Colis colisToSend = new Colis(typeColis);
         colisToSend.addParameter(userName);
@@ -156,5 +158,9 @@ public class ClientController {
         Colis colisToSend = new Colis(typeColis);
 
         sendColis(colisToSend);
+    }
+
+    public String getMyNickname(){
+        return myNickname;
     }
 }

@@ -39,10 +39,9 @@ public class ClientGUI extends JFrame
     public ClientGUI()
     {
         model = (DefaultListModel)listName.getModel();
-
         clientController = ClientController.getInstance();
 
-        setTitle("Super chat");
+        setTitle("Super chat of " + clientController.getMyNickname());
         setContentPane(entryPanel);
         setLocationRelativeTo(null);
         pack();
@@ -109,8 +108,13 @@ public class ClientGUI extends JFrame
                 tabbedPaneRoom.remove(tabbedPaneRoom.getSelectedIndex());
             }
         });
+
+        /**Sets the caret enabling the auto-scrolling of the chat window*/
         DefaultCaret caret = (DefaultCaret)textAreaOutputText.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        /**Sets the font on the chat panel*/
+        Font font = new Font("Calibri", Font.BOLD, 14);
+        textAreaOutputText.setFont(font);
     }
 
     /**
@@ -252,6 +256,8 @@ public class ClientGUI extends JFrame
         JTextArea textArea = new JTextArea();
         DefaultCaret caret = (DefaultCaret)textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        Font font = new Font("Calibri", Font.BOLD, 14);
+        textArea.setFont(font);
         panel.add(textArea);
         tabbedPaneRoom.addTab(room.getName(), panel);
 
