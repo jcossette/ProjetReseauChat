@@ -43,10 +43,8 @@ public class ServerListener implements Runnable{
             Colis receivedColis;
             try {
                 receivedColis = (Colis)in.readObject();
-                System.out.println("Colis received");
                 handleColis(receivedColis);
             } catch (SocketException e) {
-                System.out.println("Connection with server lost");
                 running = false;
                 JOptionPane.showMessageDialog(null, "Connection to server lost", "Erreur",
                         JOptionPane.ERROR_MESSAGE);

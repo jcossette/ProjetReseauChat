@@ -254,11 +254,12 @@ public class ClientGUI extends JFrame
     public void createRoomTab(Room room){
         JPanel panel = new JPanel(new BorderLayout());
         JTextArea textArea = new JTextArea();
+        JScrollPane myNewScrollPane = new JScrollPane(textArea);
         DefaultCaret caret = (DefaultCaret)textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         Font font = new Font("Calibri", Font.BOLD, 14);
         textArea.setFont(font);
-        panel.add(textArea);
+        panel.add(myNewScrollPane);
         tabbedPaneRoom.addTab(room.getName(), panel);
 
         roomList.add(room);
