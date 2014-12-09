@@ -21,7 +21,7 @@ public class ServerConsoleGUI extends JFrame
 
     public ServerConsoleGUI()
     {
-        setTitle("Form 1");
+        setTitle("Server Console");
         setContentPane(entryPanel);
         setLocationRelativeTo(null);
         pack();

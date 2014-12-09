@@ -7,6 +7,7 @@ import Server.ChatManager.User;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,6 +109,8 @@ public class ClientGUI extends JFrame
                 tabbedPaneRoom.remove(tabbedPaneRoom.getSelectedIndex());
             }
         });
+        DefaultCaret caret = (DefaultCaret)textAreaOutputText.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     }
 
     /**
@@ -174,7 +177,7 @@ public class ClientGUI extends JFrame
     public void addNameToRoom(String roomName, User user)
     {
         Room room = getRoom(roomName);
-        if(isCurrentRoom(room)) {
+        if (isCurrentRoom(room)) {
             updateAddName(user.getUsername());
         }
         room.addUser(user);
@@ -247,6 +250,8 @@ public class ClientGUI extends JFrame
     public void createRoomTab(Room room){
         JPanel panel = new JPanel(new BorderLayout());
         JTextArea textArea = new JTextArea();
+        DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         panel.add(textArea);
         tabbedPaneRoom.addTab(room.getName(), panel);
 
