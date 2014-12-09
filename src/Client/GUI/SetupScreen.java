@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by Julien Cossette on 12/5/2014.
  */
-public class SetupScreen extends JFrame{
+public class SetupScreen extends JFrame {
     private SetupScreenController myController;
     private Map<String, ServerInfo> myMapServerInfo;
 
@@ -34,7 +34,7 @@ public class SetupScreen extends JFrame{
     private JButton deleteServerButton;
     private JFormattedTextField IPTextField;
 
-    public SetupScreen(){
+    public SetupScreen() {
         super("Select Server");
         myMapServerInfo = new LinkedHashMap<>();
         $$$setupUI$$$();
@@ -44,7 +44,7 @@ public class SetupScreen extends JFrame{
         setVisible(true);
     }
 
-    public void assignController(SetupScreenController myNewController){
+    public void assignController(SetupScreenController myNewController) {
         this.myController = myNewController;
         init();
     }
@@ -52,7 +52,7 @@ public class SetupScreen extends JFrame{
     /**
      * Manual initiation of components
      */
-    private void init(){
+    private void init() {
         addListeners();
         updateServerList();
     }
@@ -60,35 +60,35 @@ public class SetupScreen extends JFrame{
     /**
      * This method adds the listener to the different items of the form
      */
-    private void addListeners(){
-        addServerButton.addActionListener(new ActionListener(){
+    private void addListeners() {
+        addServerButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 handleAddServerButton();
             }
         });
-        joinButton.addActionListener(new ActionListener(){
+        joinButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 handleJoinButton();
             }
         });
-        serverList.addMouseListener(new MouseAdapter(){
+        serverList.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 selectServer();
             }
         });
-        deleteServerButton.addActionListener(new ActionListener(){
+        deleteServerButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 deleteServer();
             }
         });
     }
 
-    private void deleteServer(){
+    private void deleteServer() {
         String newSelection = (String) serverList.getSelectedValue();
         ServerInfo selectedServerInfo = myMapServerInfo.get(newSelection);
         myMapServerInfo.remove(newSelection);
@@ -96,7 +96,7 @@ public class SetupScreen extends JFrame{
         updateServerList();
     }
 
-    private void selectServer(){
+    private void selectServer() {
         String newSelection = (String) serverList.getSelectedValue();
         ServerInfo selectedServerInfo = myMapServerInfo.get(newSelection);
         serverNameField.setText(selectedServerInfo.getServerName());
@@ -104,20 +104,20 @@ public class SetupScreen extends JFrame{
         serverPortField.setText(String.valueOf(selectedServerInfo.getMyPort()));
     }
 
-    public void updateServerList(){
+    public void updateServerList() {
         ArrayList<ServerInfo> myServers = myController.getServerList();
 
         DefaultListModel myModel = (DefaultListModel) serverList.getModel();
         myModel.clear();
 
-        for(ServerInfo si : myServers){
+        for (ServerInfo si : myServers) {
             String serverInfoString = si.toString();
             myMapServerInfo.put(serverInfoString, si);
             myModel.addElement(serverInfoString);
         }
     }
 
-    private void handleAddServerButton(){
+    private void handleAddServerButton() {
         String newServerName = serverNameField.getText();
         String newServerIP = serverIPField.getText();
         String newServerPort = serverPortField.getText();
@@ -127,35 +127,36 @@ public class SetupScreen extends JFrame{
     /**
      * Handles the Join Button
      */
-    private void handleJoinButton(){
+    private void handleJoinButton() {
         String myNickName = nicknameField.getText();
 
-        if(getServerInfoFromList() == null){
+        if (getServerInfoFromList() == null) {
             JOptionPane.showMessageDialog(null, "Veuillez selectionner un serveur");
             return;
         }
 
-        if(myNickName.length() > 2){
-            try{
+        if (myNickName.length() > 2) {
+            try {
                 myController.joinServer(getServerInfoFromList(), myNickName);
-            }catch(Exception ConnectException){
+            } catch (Exception ConnectException) {
                 JOptionPane.showMessageDialog(null, "Echec de connection.");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Le nickname doit avoir au moin 3 lettres.");
         }
     }
 
     /**
      * Returns the ServerInfo object linked to the selected server.
+     *
      * @return
      */
-    private ServerInfo getServerInfoFromList(){
+    private ServerInfo getServerInfoFromList() {
         String selected = (String) serverList.getSelectedValue();
         return myMapServerInfo.get(selected);
     }
 
-    private void createUIComponents(){
+    private void createUIComponents() {
         serverList = new JList<String>(new DefaultListModel<String>());
     }
 
@@ -163,9 +164,10 @@ public class SetupScreen extends JFrame{
      * Method generated by IntelliJ IDEA GUI Designer
      * >>> IMPORTANT!! <<<
      * DO NOT edit this method OR call it in your code!
+     *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$(){
+    private void $$$setupUI$$$() {
         createUIComponents();
         rootPanel = new JPanel();
         rootPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -238,7 +240,7 @@ public class SetupScreen extends JFrame{
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$(){
+    public JComponent $$$getRootComponent$$$() {
         return rootPanel;
     }
 }
